@@ -1,3 +1,5 @@
+import { ElLoading } from 'element-plus'
+import { nextTick } from 'vue'
 const getLinkToApp = (app) => `${window.location.origin}/${app}`
 
 const redirectToApp = (app, path) => {
@@ -26,7 +28,16 @@ const focusFirstControl = (container) => {
   }
 }
 class CommonFn {
-
+  showMask (container) {
+    const loadingInstance = ElLoading.service(
+      {
+        target: container
+      }
+    )
+    nextTick(() => {
+      loadingInstance.close()
+    })
+  }
 }
 export default new CommonFn()
 

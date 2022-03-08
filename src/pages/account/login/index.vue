@@ -1,6 +1,9 @@
 <template>
   <the-container>
-    <div class="login">
+    <div
+      class="login"
+      ref="container"
+    >
       <div class="title">
         Đăng nhập
       </div>
@@ -64,13 +67,14 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import TheContainer from '../common/the-container.vue'
 import { setAuthToken } from '@/utils/auth'
 import { useRoute } from 'vue-router'
-import { redirectToApp } from '@/common/common-fn'
+import commonFn, { redirectToApp } from '@/common/common-fn'
 import { App } from '@/common/constant'
 import { useStore } from 'vuex'
+
 const MODULE_NAME = 'auth'
 
 export default {
@@ -84,8 +88,11 @@ export default {
       Password: null,
       IsActive: true
     })
+    const container = ref(null)
 
     const onLogin = async () => {
+      commonFn.showMask(container)
+      debugger
       const res = await store.dispatch(`${MODULE_NAME}/login`, account)
       if (res) {
         onLoginSuccess(res.jwtToken)
@@ -98,7 +105,8 @@ export default {
     }
     return {
       account,
-      onLogin
+      onLogin,
+      container
     }
   }
 
