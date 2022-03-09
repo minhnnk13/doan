@@ -31,12 +31,17 @@ class CommonFn {
   showMask (container) {
     const loadingInstance = ElLoading.service(
       {
-        target: container
+        target: container,
+        lock: true,
+        text: 'Đang tải'
       }
     )
-    nextTick(() => {
-      loadingInstance.close()
-    })
+
+    window.loadingInstance = loadingInstance
+  }
+
+  hideMask () {
+    window.loadingInstance.close()
   }
 }
 export default new CommonFn()

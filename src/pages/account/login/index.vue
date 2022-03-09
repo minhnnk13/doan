@@ -74,7 +74,6 @@ import { useRoute } from 'vue-router'
 import commonFn, { redirectToApp } from '@/common/common-fn'
 import { App } from '@/common/constant'
 import { useStore } from 'vuex'
-
 const MODULE_NAME = 'auth'
 
 export default {
@@ -84,6 +83,7 @@ export default {
     const route = useRoute()
     const store = useStore()
     const account = reactive({
+
       UserName: null,
       Password: null,
       IsActive: true
@@ -91,9 +91,9 @@ export default {
     const container = ref(null)
 
     const onLogin = async () => {
-      commonFn.showMask(container)
-      debugger
+      commonFn.showMask(container.value)
       const res = await store.dispatch(`${MODULE_NAME}/login`, account)
+      commonFn.hideMask()
       if (res) {
         onLoginSuccess(res.jwtToken)
       }
