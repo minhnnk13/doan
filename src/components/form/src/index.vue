@@ -24,12 +24,12 @@ export default {
   },
 
   setup (props) {
-    const { form, reset, isVaid, focusFirstError } = useContainer(props.autoFocus)
+    const { form, reset, isValid, focusFirstError } = useContainer(props.autoFocus)
 
     return {
       form,
       reset,
-      isVaid,
+      isValid,
       focusFirstError
     }
   }

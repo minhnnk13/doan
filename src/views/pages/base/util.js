@@ -2,7 +2,7 @@ import enumeration from '../../../common/enumeration'
 
 const fefaultConfig = {
   title: '',
-  actionMode: enumeration.EditMode.view,
+  actionMode: enumeration.ActionMode.view,
   autoLoad: true,
   storeConfig: {
     moduleName: '',
