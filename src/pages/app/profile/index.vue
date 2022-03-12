@@ -1,5 +1,8 @@
 <template>
-  <div class="profile">
+  <div
+    class="profile"
+    ref="container"
+  >
     <div class="profile__left">
       <div class="page-name">
         Thông tin tài khoản
@@ -13,22 +16,26 @@
       </el-button> -->
     </div>
     <div class="profile__right">
-      <div class="form">
+      <base-form class="form">
         <text-field
           label="Họ và tên"
           v-model="account.Username"
           :disabled="!changeMode"
+          :allow-blank="false"
         />
         <text-field
           label="Số điện thọai"
           v-model="account.Phone"
           :disabled="!changeMode"
+          :is-phone="true"
         />
 
         <text-field
           label="Email"
           v-model="account.Email"
           :disabled="!changeMode"
+          :is-email="true"
+          :allow-blank="false"
         />
         <div class="birthday">
           <label>Ngày sinh</label>
@@ -46,7 +53,7 @@
           v-model="account.Address"
           :disabled="!changeMode"
         />
-      </div>
+      </base-form>
 
       <div class="toolbar">
         <div
@@ -95,10 +102,12 @@
 <script>
 import { ref } from 'vue'
 import changePasswordPopup from './change-password-popup.vue'
+import baseStore from '@/views/pages/base/base-store'
 export default {
   components: { changePasswordPopup },
   setup () {
     const changePassDialog = ref(null)
+    const { container, validate } = baseStore()
     const defaultAccount = {
       Username: 'account',
       Phone: '1234567890',
@@ -125,13 +134,19 @@ export default {
       changePassDialog.value.openPopup()
     }
 
+    const onSave = () => {
+      validate()
+    }
+
     return {
+      container,
       changePassDialog,
       account,
       changeMode,
       onEdit,
       onCancel,
-      onShowChangePassForm
+      onShowChangePassForm,
+      onSave
     }
   }
 }
