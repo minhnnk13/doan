@@ -9,15 +9,20 @@
       </div>
 
       <div class="logo">
-        CompanyName
+        CompanyNamesdâ
       </div>
 
-      <base-form class="form">
+      <base-form
+        ref="form"
+        class="form"
+      >
         <div class="user-name">
           <text-field
             label="Tên đăng nhập"
             placeholder="Your full name"
             v-model="account.UserName"
+            :allow-blank="false"
+            :show-require="false"
           />
         </div>
 
@@ -28,6 +33,8 @@
             placeholder="Your password"
             label="Mật khẩu"
             v-model="account.Password"
+            :allow-blank="false"
+            :show-require="false"
           />
         </div>
 
@@ -74,26 +81,30 @@ import { useRoute } from 'vue-router'
 import commonFn, { redirectToApp } from '@/common/common-fn'
 import { App } from '@/common/constant'
 import { useStore } from 'vuex'
+import baseStore from '@/views/pages/base/base-store'
 const MODULE_NAME = 'auth'
 
 export default {
   components: { TheContainer },
 
   setup () {
+    const { container, store, validate, showMask, hideMask } = baseStore()
+
     const route = useRoute()
-    const store = useStore()
     const account = reactive({
 
       UserName: null,
       Password: null,
       IsActive: true
     })
-    const container = ref(null)
 
     const onLogin = async () => {
-      commonFn.showMask(container.value)
+      if (!validate()) {
+        return
+      }
+      showMask()
       const res = await store.dispatch(`${MODULE_NAME}/login`, account)
-      commonFn.hideMask()
+      hideMask()
       if (res) {
         onLoginSuccess(res.jwtToken)
       }

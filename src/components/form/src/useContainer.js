@@ -40,7 +40,7 @@ const useContainer = (autoFocus) => {
     }
   }
 
-  const isVaid = () => {
+  const isValid = () => {
     let isValid = true
 
     validated.value = true
@@ -68,7 +68,7 @@ const useContainer = (autoFocus) => {
     form,
     validated,
     focusFirstError,
-    isVaid,
+    isValid,
     reset
   }
 }
