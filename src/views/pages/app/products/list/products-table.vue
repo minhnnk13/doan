@@ -6,6 +6,7 @@
         <el-button
           class="btn-style"
           type="primary"
+          @click="handleCreateClick"
         >
           Thêm sản phẩm
         </el-button>
@@ -81,23 +82,29 @@
 import { useStore } from 'vuex'
 import commonFn, { redirectToApp } from '@/common/common-fn'
 import { reactive, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const PRODUCT_MODULE = 'product'
 export default {
   setup () {
     const store = useStore()
     const route = useRoute()
+    const router = useRouter()
     store.dispatch(`${PRODUCT_MODULE}/getProducts`)
     const products = store.state.product.products
     const activeName = ref('first')
-    debugger
     // products = products.forEach(
     //   (product) => (product.createdDate = new Date(product.createdDate))
     // )
+
+    const handleCreateClick = () => {
+      router.push('/app/create')
+    }
+
     return {
       products,
-      activeName
+      activeName,
+      handleCreateClick
     }
   }
 }
