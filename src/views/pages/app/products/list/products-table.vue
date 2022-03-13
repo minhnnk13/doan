@@ -34,8 +34,10 @@
         </div>
         <el-table
           :data="products"
+          ref="table"
           style="width: 100%"
           class="table-style"
+          @row-click="handleDetailClick"
         >
           <el-table-column
             prop="date"
@@ -46,11 +48,13 @@
             prop="image"
             label="Ảnh"
             width="150"
+            class="cursor-pointer"
           />
           <el-table-column
             prop="productName"
             label="Sản phẩm"
             width="600"
+            class="cursor-pointer"
           />
           <el-table-column
             prop="tag"
@@ -93,18 +97,20 @@ export default {
     store.dispatch(`${PRODUCT_MODULE}/getProducts`)
     const products = store.state.product.products
     const activeName = ref('first')
-    // products = products.forEach(
-    //   (product) => (product.createdDate = new Date(product.createdDate))
-    // )
-
+    const table = ref('table')
     const handleCreateClick = () => {
       router.push('/app/create')
+    }
+
+    const handleDetailClick = (product) => {
+      router.push(`/app/detail/${product?.productId}`)
     }
 
     return {
       products,
       activeName,
-      handleCreateClick
+      handleCreateClick,
+      handleDetailClick
     }
   }
 }
@@ -142,6 +148,9 @@ export default {
     .table-style {
       height: calc(100% - 87px);
       overflow-y: auto;
+      .cursor-pointer {
+        cursor: pointer;
+      }
     }
   }
 }

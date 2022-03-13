@@ -1,10 +1,13 @@
 export default {
   namespaced: true,
-  state: { products: [] },
+  state: { products: [], product: {} },
   getters: {},
   mutations: {
     setProducts (state, products) {
       state.products = products
+    },
+    setProduct (state, product) {
+      state.product = product
     }
   },
   actions: {
@@ -184,7 +187,9 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+            'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         },
         {
           productId: 2,
@@ -231,7 +236,9 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+          'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         },
         {
           productId: 3,
@@ -278,7 +285,9 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+          'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         },
         {
           productId: 4,
@@ -325,7 +334,9 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+          'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         },
         {
           productId: 5,
@@ -372,7 +383,9 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+          'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         },
         {
           productId: 6,
@@ -419,7 +432,9 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+          'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         },
         {
           productId: 7,
@@ -466,7 +481,9 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+          'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         },
         {
           productId: 8,
@@ -513,7 +530,9 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+          'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         },
         {
           productId: 9,
@@ -560,7 +579,9 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+          'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         },
         {
           productId: 10,
@@ -607,7 +628,9 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+          'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         },
         {
           productId: 11,
@@ -654,7 +677,9 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+          'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         },
         {
           productId: 12,
@@ -701,10 +726,17 @@ export default {
             status: true,
             taxIdentificationNumber: 43
           },
-          sale: true
+          sale: true,
+          image:
+          'https://toigingiuvedep.vn/wp-content/uploads/2021/01/hinh-anh-cute-de-thuong.jpg'
         }
       ]
       context.commit('setProducts', data)
+    },
+
+    getProduct: async (context, params) => {
+      const product = context.state.products.find(x => x.productId === Number(params))
+      context.commit('setProduct', product)
     }
   }
 }

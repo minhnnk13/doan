@@ -81,7 +81,6 @@ const baseForm = (config = defautConfig) => {
   const validate = () => {
     let isValid = false
     const formEL = container.value.querySelector('.base-form')
-    debugger
     if (formEL) {
       isValid = formEL.__vue__.isValid()
     }

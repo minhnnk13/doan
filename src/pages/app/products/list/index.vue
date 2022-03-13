@@ -1,5 +1,5 @@
 <template>
-  <products-table />
+  <products-table class="product-table" />
 </template>
 
 <script>
@@ -17,11 +17,14 @@ export default {
   setup () {
     const store = useStore()
     const route = useRoute()
-    return {
-    }
+    return {}
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.product-table {
+  width: 100%;
+  height: 100%;
+}
 </style>
