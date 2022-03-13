@@ -56,6 +56,15 @@ const routes = [
           import(/* webpackChunkName: "list-product" */ '@/pages/app/products/list')
       },
       {
+        path: 'create',
+        name: 'CreateProduct',
+        meta: {
+          pageName: 'Thêm sản phẩm'
+        },
+        component: () =>
+          import(/* webpackChunkName: "create-product" */ '@/pages/app/products/list/create')
+      },
+      {
         path: 'manage-warehouse',
         name: 'ManageWarehouse',
         meta: {
