@@ -37,10 +37,9 @@ export default {
 
     .content {
       background: $color--bg-primary;
-      padding: 24px 48px;
+      padding: 48px;
       width: 100%;
       height: calc(100% - 56px);
-      overflow: hidden;
     }
   }
 }
