@@ -1,6 +1,7 @@
 
 import axios from 'axios'
-const HOST = 'http://localhost:8087'
+import { API_PATH } from '@/apis/api'
+
 export default {
   namespaced: true,
   state: {
@@ -21,17 +22,15 @@ export default {
   mutations: {},
   actions: {
     login: async (context, data) => {
-      return await axios.post(`${HOST}/authenticate`, data)
-        .then((res) => {
-          return res.data
-        })
+      return await axios.post(`${API_PATH}/authenticate`, data)
+        .then((res) => res.data)
         .catch(() => {
           return false
         })
     },
 
     register: async (context, data) => {
-      return await axios.post(`${HOST}/user/register`, data)
+      return await axios.post(`${API_PATH}/register`, data)
         .then((res) => res)
         .catch(() => {
           return false

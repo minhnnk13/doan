@@ -34,43 +34,41 @@
         </div>
         <el-table
           :data="products"
+          ref="table"
           style="width: 100%"
           class="table-style"
+          table-layout="auto"
+          @row-click="handleDetailClick"
         >
           <el-table-column
             prop="date"
             label=""
-            width="50"
           />
           <el-table-column
             prop="image"
             label="Ảnh"
-            width="150"
+            class="cursor-pointer"
           />
           <el-table-column
             prop="productName"
             label="Sản phẩm"
-            width="600"
+            class="cursor-pointer"
           />
           <el-table-column
             prop="tag"
             label="Loại"
-            width="120"
           />
           <el-table-column
             prop="saleQuantity"
             label="Có thể bán"
-            width="150"
           />
           <el-table-column
             prop="stockQuantity"
             label="Tồn kho"
-            width="150"
           />
           <el-table-column
             prop="createdDate"
             label="Ngày khởi tạo"
-            width="150"
           />
         </el-table>
       </el-tab-pane>
@@ -83,6 +81,7 @@ import { useStore } from 'vuex'
 import commonFn, { redirectToApp } from '@/common/common-fn'
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { getAuthToken } from '@/utils/auth'
 
 const PRODUCT_MODULE = 'product'
 export default {
@@ -90,21 +89,27 @@ export default {
     const store = useStore()
     const route = useRoute()
     const router = useRouter()
-    store.dispatch(`${PRODUCT_MODULE}/getProducts`)
-    const products = store.state.product.products
     const activeName = ref('first')
-    // products = products.forEach(
-    //   (product) => (product.createdDate = new Date(product.createdDate))
-    // )
+    const table = ref('table')
+    const params = { pageIndex: 0, pageSize: 5 }
+    store.dispatch(`${PRODUCT_MODULE}/getProducts`, params)
+    const products = store.state.product.products
 
+    // xu li event nut back
     const handleCreateClick = () => {
       router.push('/app/create')
+    }
+
+    // xem chi tiet san pham
+    const handleDetailClick = (product) => {
+      router.push(`/app/detail/${product?.productId}`)
     }
 
     return {
       products,
       activeName,
-      handleCreateClick
+      handleCreateClick,
+      handleDetailClick
     }
   }
 }
@@ -142,6 +147,9 @@ export default {
     .table-style {
       height: calc(100% - 87px);
       overflow-y: auto;
+      .cursor-pointer {
+        cursor: pointer;
+      }
     }
   }
 }

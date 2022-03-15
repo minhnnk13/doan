@@ -93,7 +93,6 @@ export default {
 
     const route = useRoute()
     const account = reactive({
-
       username: null,
       password: null,
       isActive: true
