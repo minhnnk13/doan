@@ -21,6 +21,7 @@
       @change="onChange"
       @focus="onFocus"
       @blur="onBlur"
+      ref="input"
     >
       <!-- <template #prefix>
         <el-icon>
@@ -41,7 +42,7 @@
 // import { computed, toRefs } from 'vue'
 import { getValidationProps, validate } from '../utils/validate'
 import { Search } from '@element-plus/icons-vue'
-import { computed } from 'vue-demi'
+import { computed, onMounted, ref } from 'vue'
 const UPDATE_MODEL = 'update:modelValue'
 
 export default {
@@ -98,16 +99,27 @@ export default {
     suffixIcon: {
       type: String,
       default: null
+    },
+
+    showPasswordState: {
+      type: Boolean,
+      default: false
     }
 
   },
 
   setup (props, { emit }) {
     const validation = getValidationProps(props, emit)
+    const input = ref(null)
 
+    onMounted(() => {
+      if (props.showPasswordState) {
+        input.value.handlePasswordVisible()
+      }
+    })
     return {
-      ...validation
-
+      ...validation,
+      input
     }
   }
 }

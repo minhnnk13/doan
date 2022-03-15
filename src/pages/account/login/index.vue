@@ -20,7 +20,7 @@
           <text-field
             label="Tên đăng nhập"
             placeholder="Your full name"
-            v-model="account.UserName"
+            v-model="account.username"
             :allow-blank="false"
             :show-require="false"
           />
@@ -32,7 +32,7 @@
             :show-password="true"
             placeholder="Your password"
             label="Mật khẩu"
-            v-model="account.Password"
+            v-model="account.password"
             :allow-blank="false"
             :show-require="false"
           />
@@ -41,7 +41,7 @@
         <div class="options">
           <el-switch
             active-text="Duy trì đăng nhập"
-            v-model="account.IsActive"
+            v-model="account.isActive"
           />
           <div class="vertical" />
           <router-link to="forget-password">
@@ -78,10 +78,11 @@ import { reactive, ref } from 'vue'
 import TheContainer from '../common/the-container.vue'
 import { setAuthToken } from '@/utils/auth'
 import { useRoute } from 'vue-router'
-import commonFn, { redirectToApp } from '@/common/common-fn'
+import commonFn, { redirectToApp, focusFirstControl } from '@/common/common-fn'
 import { App } from '@/common/constant'
-import { useStore } from 'vuex'
 import baseStore from '@/views/pages/base/base-store'
+import { ElMessage } from 'element-plus'
+
 const MODULE_NAME = 'auth'
 
 export default {
@@ -93,9 +94,9 @@ export default {
     const route = useRoute()
     const account = reactive({
 
-      UserName: null,
-      Password: null,
-      IsActive: true
+      username: null,
+      password: null,
+      isActive: true
     })
 
     const onLogin = async () => {
@@ -104,10 +105,14 @@ export default {
       }
       showMask()
       const res = await store.dispatch(`${MODULE_NAME}/login`, account)
-      hideMask()
+
       if (res) {
         onLoginSuccess(res.jwtToken)
+      } else {
+        focusFirstControl(container.value)
+        ElMessage.error('Tên tài khoản hoặc mật khẩu không đúng')
       }
+      hideMask()
     }
     const onLoginSuccess = (token) => {
       const redirect = route.query.redirect

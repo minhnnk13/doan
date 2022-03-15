@@ -1,6 +1,6 @@
 
 import axios from 'axios'
-const HOST = 'https://62248def6c0e396620415932.mockapi.io'
+const HOST = 'http://localhost:8087'
 export default {
   namespaced: true,
   state: {
@@ -22,14 +22,16 @@ export default {
   actions: {
     login: async (context, data) => {
       return await axios.post(`${HOST}/authenticate`, data)
-        .then((res) => res.data)
+        .then((res) => {
+          return res.data
+        })
         .catch(() => {
           return false
         })
     },
 
     register: async (context, data) => {
-      return await axios.post(`${HOST}/register`, data)
+      return await axios.post(`${HOST}/user/register`, data)
         .then((res) => res)
         .catch(() => {
           return false
