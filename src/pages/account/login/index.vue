@@ -20,7 +20,7 @@
           <text-field
             label="Tên đăng nhập"
             placeholder="Your full name"
-            v-model="account.UserName"
+            v-model="account.username"
             :allow-blank="false"
             :show-require="false"
           />
@@ -32,7 +32,7 @@
             :show-password="true"
             placeholder="Your password"
             label="Mật khẩu"
-            v-model="account.Password"
+            v-model="account.password"
             :allow-blank="false"
             :show-require="false"
           />
@@ -92,10 +92,8 @@ export default {
 
     const route = useRoute()
     const account = reactive({
-
-      UserName: null,
-      Password: null,
-      IsActive: true
+      username: null,
+      password: null
     })
 
     const onLogin = async () => {

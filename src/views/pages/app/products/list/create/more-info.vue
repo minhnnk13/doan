@@ -48,7 +48,10 @@
         <div class="state-title">
           Cho phép bán
         </div>
-        <el-checkbox size="large" />
+        <el-checkbox
+          size="large"
+          v-model="product.isSale"
+        />
       </div>
       <div class="mt-12px">
         Thuế
@@ -64,7 +67,13 @@
 </template>
 
 <script>
-export default {}
+import { mapState, mapActions } from 'vuex'
+
+export default {
+  computed: {
+    ...mapState('product', ['product'])
+  }
+}
 </script>
 
 <style lang="scss" scoped>

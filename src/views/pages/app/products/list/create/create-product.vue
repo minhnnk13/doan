@@ -9,7 +9,10 @@
       </div>
       <div class="btn-container">
         <el-button>Thoát</el-button>
-        <el-button type="primary">
+        <el-button
+          type="primary"
+          @click="handleSaveClick"
+        >
           Lưu
         </el-button>
       </div>
@@ -17,7 +20,7 @@
 
     <div class="create-content-container">
       <div class="left-container">
-        <div class="content-wrapper management-container">
+        <!-- <div class="content-wrapper management-container">
           <div class="title-container">
             Hình thức quản lý
           </div>
@@ -31,7 +34,7 @@
               </el-radio>
             </el-radio-group>
           </div>
-        </div>
+        </div> -->
         <div class="content-wrapper detail-container">
           <div class="title-container">
             Thông tin chung
@@ -45,7 +48,7 @@
                 label="Tên sản phẩm"
                 label-position="top"
               >
-                <el-input v-model="input" />
+                <el-input v-model="product.productName" />
               </el-form-item>
 
               <div class="product-code-unit-container">
@@ -54,7 +57,7 @@
                     label="Mã sản phẩm/SKU"
                     label-position="top"
                   >
-                    <el-input v-model="input" />
+                    <el-input v-model="product.productCode" />
                   </el-form-item>
                 </div>
                 <div class="unit-contaienr">
@@ -62,7 +65,7 @@
                     label="Đơn vị tính"
                     label-position="top"
                   >
-                    <el-input v-model="input" />
+                    <el-input v-model="product.unitName" />
                   </el-form-item>
                 </div>
               </div>
@@ -72,7 +75,7 @@
                   label-position="top"
                 >
                   <el-input
-                    v-model="textarea"
+                    v-model="product.stockQuantity"
                     :rows="2"
                     type="textarea"
                   />
@@ -95,7 +98,7 @@
                   label="Giá bán lẻ"
                   label-position="top"
                 >
-                  <el-input v-model="input" />
+                  <el-input v-model="product.retailPrice" />
                 </el-form-item>
               </div>
               <div class="sub-price-2">
@@ -103,7 +106,7 @@
                   label="Giá bán buôn"
                   label-position="top"
                 >
-                  <el-input v-model="input" />
+                  <el-input v-model="product.wholesalePrice" />
                 </el-form-item>
               </div>
             </div>
@@ -112,7 +115,7 @@
                 label="Giá nhập"
                 label-position="top"
               >
-                <el-input v-model="input" />
+                <el-input v-model="product.unitPrice" />
               </el-form-item>
             </div>
           </el-form>
@@ -144,11 +147,14 @@
 </template>
 <script>
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import Uploader from '@/views/pages/common/uploader.vue'
 import MoreInfo from './more-info'
+import { mapState, mapActions, mapMutations } from 'vuex'
+
+const PRODUCT_MODULE = 'product'
 
 export default {
   components: {
@@ -157,15 +163,31 @@ export default {
   },
   setup () {
     const router = useRouter()
-
-    const radio = ref(3)
     const handleBackClick = () => {
       router.push('/app/list-product')
     }
     return {
-      handleBackClick,
-      radio
+      handleBackClick
     }
+  },
+
+  computed: {
+    ...mapState(PRODUCT_MODULE, ['product'])
+  },
+
+  methods: {
+    ...mapMutations(PRODUCT_MODULE, ['setProduct']),
+    ...mapActions(PRODUCT_MODULE, ['createProduct']),
+
+    handleSaveClick () {
+      this.createProduct(this.product)
+    }
+  },
+
+  mounted () {},
+
+  beforeUnmount () {
+    this.setProduct({})
   }
 }
 </script>

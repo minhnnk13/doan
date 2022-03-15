@@ -122,6 +122,7 @@ import { useRoute } from 'vue-router'
 
 const PRODUCT_MODULE = 'product'
 export default {
+
   setup () {
     const store = useStore()
     const route = useRoute()
