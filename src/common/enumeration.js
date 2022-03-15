@@ -10,6 +10,13 @@ const enumeration = {
   ExecuteStoreType: {
     mutation: 0,
     action: 1
+  },
+
+  actionManageWarehouse: {
+    None: 0,
+    ApplyTax: 1,
+    AllowSell: 2,
+    DeleteProduct: 3
   }
 }
 
