@@ -156,7 +156,7 @@ export default {
     },
 
     createProduct: async (context, params) => {
-      axios.post(`${API_PATH}/product`, params)
+      authAxios.post('/product', params)
     }
   }
 }

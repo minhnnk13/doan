@@ -11,12 +11,10 @@
         >
           <el-select placeholder="Chọn loại sản phẩm">
             <el-option
-              label="Zone one"
-              value="shanghai"
-            />
-            <el-option
-              label="Zone two"
-              value="beijing"
+              :label="category.name"
+              :value="category.categoryId"
+              v-for="(category, index) in categories"
+              :key="index"
             />
           </el-select>
         </el-form-item>
@@ -29,12 +27,10 @@
         >
           <el-select placeholder="Chọn nhãn hiệu">
             <el-option
-              label="Zone one"
-              value="shanghai"
-            />
-            <el-option
-              label="Zone two"
-              value="beijing"
+              :label="brand.brandName"
+              :value="brand.brandId"
+              v-for="(brand, index) in brands"
+              :key="index"
             />
           </el-select>
         </el-form-item>
@@ -71,7 +67,9 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapState('product', ['product'])
+    ...mapState('product', ['product']),
+    ...mapState('category', ['categories']),
+    ...mapState('brand', ['brands'])
   }
 }
 </script>
