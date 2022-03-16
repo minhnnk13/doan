@@ -148,7 +148,6 @@ export default {
   },
   setup () {
     const router = useRouter()
-
     // quay lai man danh sach san pham
     const handleBackClick = () => {
       router.push('/app/list-product')

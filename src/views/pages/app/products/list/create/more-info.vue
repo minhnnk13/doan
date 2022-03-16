@@ -76,6 +76,14 @@ export default {
     ...mapState('product', ['product']),
     ...mapState('category', ['categories']),
     ...mapState('brand', ['brands'])
+  },
+  methods: {
+    ...mapActions('category', ['getCategories']),
+    ...mapActions('brand', ['getBrands'])
+  },
+  mounted () {
+    this.getBrands()
+    this.getCategories()
   }
 }
 </script>
