@@ -1,6 +1,6 @@
 <template>
   <div class="detail-container">
-    <div class="title-container">
+    <div class="product-name-container">
       {{ product.productName }}
     </div>
     <div class="content-wrapper">
@@ -14,7 +14,7 @@
               Tên phiên bản sản phẩm
             </div>
             <div class="value">
-              {{ `:${product.productName}` }}
+              {{ product.productName }}
             </div>
           </div>
           <div class="product-info">
@@ -22,7 +22,7 @@
               Mã SKU
             </div>
             <div class="value">
-              {{ `:${product.productCode}` }}
+              {{ product.productCode }}
             </div>
           </div>
           <div class="product-info">
@@ -30,23 +30,23 @@
               Đơn vị tính
             </div>
             <div class="value">
-              {{ `:${product.unitId.unitName}` }}
+              {{ product.unitId.unitName }}
             </div>
           </div>
-          <div class="product-info">
+          <!-- <div class="product-info">
             <div class="title">
               Phân loại
             </div>
             <div class="value">
-              {{ `:${product.name}` }}
+              {{ product.name }}
             </div>
-          </div>
+          </div> -->
           <div class="product-info">
             <div class="title">
               Loại sản phẩm
             </div>
             <div class="value">
-              {{ `:${product.name}` }}
+              {{ product.name }}
             </div>
           </div>
           <div class="product-info">
@@ -54,7 +54,7 @@
               Nhãn hiệu
             </div>
             <div class="value">
-              {{ `:${product.brandId.brandName}` }}
+              {{ product.brandId.brandName }}
             </div>
           </div>
           <div class="product-info">
@@ -62,7 +62,7 @@
               Ngày tạo
             </div>
             <div class="value">
-              {{ `:${product.createdDate}` }}
+              {{ product.createdDate }}
             </div>
           </div>
           <div class="product-info">
@@ -70,7 +70,7 @@
               Ngày cập nhật cuối
             </div>
             <div class="value">
-              {{ `:${product.modifyCreate}` }}
+              {{ product.modifyCreate }}
             </div>
           </div>
         </div>
@@ -115,19 +115,40 @@
       </div>
     </div>
   </div>
+  <div class="common-info-container content-wrapper">
+    <div class="title-container">
+      Thông tin thêm
+    </div>
+    <div class="common-info">
+      <div>
+        <el-checkbox
+          v-model="product.sale"
+          label="Cho phép bán"
+          size="large"
+          disabled
+        />
+        <!-- <el-checkbox
+          v-model="checked2"
+          label="Áp dụng thuế"
+          size="large"
+          disabled
+        /> -->
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 
 const PRODUCT_MODULE = 'product'
 export default {
-
   setup () {
     const store = useStore()
     const route = useRoute()
     store.dispatch(`${PRODUCT_MODULE}/getProduct`, route.params.productId)
-    const product = store.state.product.product
+    const product = computed(() => store.state.product.product)
     return {
       product
     }
@@ -137,6 +158,12 @@ export default {
 <style lang="scss" scoped>
 .detail-container {
   width: 100%;
+
+  .product-name-container {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
 
   .product-detail {
     display: flex;
@@ -184,6 +211,24 @@ export default {
     width: 50%;
     div {
       float: left;
+    }
+  }
+}
+
+.common-info-container {
+  margin-top: 24px;
+  padding: 12px;
+
+  .common-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 12px;
+    div {
+      width: 100%;
+    }
+    .el-checkbox {
+      width: 40%;
     }
   }
 }

@@ -145,14 +145,12 @@ export default {
 
     getProducts: async (context, params) => {
       const res = await authAxios.get('/product', { params })
-      context.commit('setProducts', res)
+      context.commit('setProducts', res.data)
     },
 
     getProduct: async (context, params) => {
-      const product = context.state.products.find(
-        (x) => x.productId === Number(params)
-      )
-      context.commit('setProduct', product)
+      const res = await authAxios.get(`/product/${params}`)
+      context.commit('setProduct', res.data)
     },
 
     createProduct: async (context, params) => {

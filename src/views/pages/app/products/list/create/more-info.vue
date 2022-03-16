@@ -9,7 +9,10 @@
           class="product-category"
           label="Loại sản phẩm"
         >
-          <el-select placeholder="Chọn loại sản phẩm">
+          <el-select
+            placeholder="Chọn loại sản phẩm"
+            v-model="product.categoryId"
+          >
             <el-option
               :label="category.name"
               :value="category.categoryId"
@@ -25,7 +28,10 @@
           class="product-brand"
           label="Nhãn hiệu"
         >
-          <el-select placeholder="Chọn nhãn hiệu">
+          <el-select
+            placeholder="Chọn nhãn hiệu"
+            v-model="product.brandId"
+          >
             <el-option
               :label="brand.brandName"
               :value="brand.brandId"

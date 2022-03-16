@@ -20,21 +20,6 @@
 
     <div class="create-content-container">
       <div class="left-container">
-        <!-- <div class="content-wrapper management-container">
-          <div class="title-container">
-            Hình thức quản lý
-          </div>
-          <div class="content-container choice-container">
-            <el-radio-group v-model="radio">
-              <el-radio :label="3">
-                Sản phẩm thường
-              </el-radio>
-              <el-radio :label="6">
-                Sản phẩm lô date/HSD
-              </el-radio>
-            </el-radio-group>
-          </div>
-        </div> -->
         <div class="content-wrapper detail-container">
           <div class="title-container">
             Thông tin chung
