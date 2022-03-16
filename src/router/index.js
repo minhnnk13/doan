@@ -6,7 +6,6 @@ import { redirectToApp } from '@/common/common-fn'
 import { App } from '@/common/constant'
 
 const routes = [
-
   {
     path: '/app',
 
@@ -53,7 +52,9 @@ const routes = [
           pageName: 'Danh sách sản phẩm'
         },
         component: () =>
-          import(/* webpackChunkName: "list-product" */ '@/pages/app/products/list')
+          import(
+            /* webpackChunkName: "list-product" */ '@/pages/app/products/list'
+          )
       },
       {
         path: 'create',
@@ -62,7 +63,20 @@ const routes = [
           pageName: 'Thêm sản phẩm'
         },
         component: () =>
-          import(/* webpackChunkName: "create-product" */ '@/pages/app/products/list/create')
+          import(
+            /* webpackChunkName: "create-product" */ '@/pages/app/products/list/create'
+          )
+      },
+      {
+        path: 'edit/:productId',
+        name: 'EditProduct',
+        meta: {
+          pageName: 'Sửa sản phẩm'
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "edit-product" */ '@/pages/app/products/list/edit'
+          )
       },
       {
         path: 'detail/:productId',
@@ -71,7 +85,9 @@ const routes = [
           pageName: 'Chi tiết sản phẩm'
         },
         component: () =>
-          import(/* webpackChunkName: "create-product" */ '@/pages/app/products/list/detail')
+          import(
+            /* webpackChunkName: "create-product" */ '@/pages/app/products/list/detail'
+          )
       },
       {
         path: 'manage-warehouse',
@@ -80,7 +96,9 @@ const routes = [
           pageName: 'Quản lý kho'
         },
         component: () =>
-          import(/* webpackChunkName: "manage-warehouse" */ '@/pages/app/products/manage-warehouse')
+          import(
+            /* webpackChunkName: "manage-warehouse" */ '@/pages/app/products/manage-warehouse'
+          )
       },
       {
         path: 'import',
@@ -89,7 +107,9 @@ const routes = [
           pageName: 'Nhập hàng'
         },
         component: () =>
-          import(/* webpackChunkName: "import" */ '@/pages/app/products/import')
+          import(
+            /* webpackChunkName: "import" */ '@/pages/app/products/import'
+          )
       },
       {
         path: 'control',
@@ -98,7 +118,9 @@ const routes = [
           pageName: 'Kiểm hàng'
         },
         component: () =>
-          import(/* webpackChunkName: "control" */ '@/pages/app/products/control')
+          import(
+            /* webpackChunkName: "control" */ '@/pages/app/products/control'
+          )
       },
       {
         path: 'manufacture',
@@ -107,7 +129,9 @@ const routes = [
           pageName: 'Nhà cung cấp'
         },
         component: () =>
-          import(/* webpackChunkName: "manufacture" */ '@/pages/app/products/manufacture')
+          import(
+            /* webpackChunkName: "manufacture" */ '@/pages/app/products/manufacture'
+          )
       },
       {
         path: 'capital',
@@ -116,7 +140,9 @@ const routes = [
           pageName: 'Điều chỉnh giá vốn'
         },
         component: () =>
-          import(/* webpackChunkName: "capital" */ '@/pages/app/products/capital')
+          import(
+            /* webpackChunkName: "capital" */ '@/pages/app/products/capital'
+          )
       },
 
       // #endregion
@@ -139,7 +165,9 @@ const routes = [
           pageName: 'Danh sách khách hàng'
         },
         component: () =>
-          import(/* webpackChunkName: "list-customer" */ '@/pages/app/customers/list')
+          import(
+            /* webpackChunkName: "list-customer" */ '@/pages/app/customers/list'
+          )
       },
       {
         path: 'group-customer',
@@ -148,7 +176,9 @@ const routes = [
           pageName: 'Nhóm khách hàng'
         },
         component: () =>
-          import(/* webpackChunkName: "group-customer" */ '@/pages/app/customers/group')
+          import(
+            /* webpackChunkName: "group-customer" */ '@/pages/app/customers/group'
+          )
       },
       // #endregion
 
@@ -170,7 +200,9 @@ const routes = [
           pageName: 'Phiếu thu'
         },
         component: () =>
-          import(/* webpackChunkName: "receipt" */ '@/pages/app/cash-book/receipt')
+          import(
+            /* webpackChunkName: "receipt" */ '@/pages/app/cash-book/receipt'
+          )
       },
       {
         path: 'payment',
@@ -179,7 +211,9 @@ const routes = [
           pageName: 'Phiếu chi'
         },
         component: () =>
-          import(/* webpackChunkName: "payment" */ '@/pages/app/cash-book/payment')
+          import(
+            /* webpackChunkName: "payment" */ '@/pages/app/cash-book/payment'
+          )
       },
 
       // #endregion
@@ -228,9 +262,10 @@ const routes = [
           ignoreAuth: true
         },
         component: () =>
-          import(/* webpackChunkName: "forget-password" */ '@/pages/account/forget-password')
+          import(
+            /* webpackChunkName: "forget-password" */ '@/pages/account/forget-password'
+          )
       }
-
     ]
   },
 
@@ -239,7 +274,6 @@ const routes = [
     name: 'NotFound',
     component: NotFound
   }
-
 ]
 
 const router = createRouter({
