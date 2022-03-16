@@ -155,6 +155,10 @@ export default {
 
     createProduct: async (context, params) => {
       authAxios.post('/product', params)
+    },
+
+    deleteProduct: async (context, params) => {
+      console.log('DELETED: ' + params)
     }
   }
 }

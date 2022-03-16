@@ -1,5 +1,19 @@
 <template>
   <div class="detail-container">
+    <div class="btn-container">
+      <el-button @click="handleExitClick">
+        Thoát
+      </el-button>
+      <el-button @click="handleDeleteClick">
+        Xóa
+      </el-button>
+      <el-button
+        type="primary"
+        @click="handleEditClick"
+      >
+        Sửa sản phẩm
+      </el-button>
+    </div>
     <div class="product-name-container">
       {{ product.productName }}
     </div>
@@ -139,7 +153,7 @@
 </template>
 <script>
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { computed } from 'vue'
 
 const PRODUCT_MODULE = 'product'
@@ -147,10 +161,29 @@ export default {
   setup () {
     const store = useStore()
     const route = useRoute()
+    const router = useRouter()
     store.dispatch(`${PRODUCT_MODULE}/getProduct`, route.params.productId)
     const product = computed(() => store.state.product.product)
+
+    // xu li xoa san pham
+    const handleDeleteClick = () => {
+      store.dispatch(`${PRODUCT_MODULE}/deleteProduct`, route.params.productId)
+    }
+
+    // xu li thoat man chi tiet
+    const handleExitClick = () => {
+      router.push('/app/list-product')
+    }
+
+    // xu li sua san pham
+    const handleEditClick = () => {
+      router.push(`/app/edit/${route.params.productId}`)
+    }
     return {
-      product
+      product,
+      handleDeleteClick,
+      handleEditClick,
+      handleExitClick
     }
   }
 }
@@ -158,6 +191,11 @@ export default {
 <style lang="scss" scoped>
 .detail-container {
   width: 100%;
+
+  .btn-container {
+    display: flex;
+    justify-content: flex-end;
+  }
 
   .product-name-container {
     font-size: 28px;

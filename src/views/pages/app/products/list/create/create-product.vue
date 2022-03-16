@@ -8,7 +8,9 @@
         {{ "Quay lại danh sách sản phẩm " }}
       </div>
       <div class="btn-container">
-        <el-button>Thoát</el-button>
+        <el-button @click="handleBackClick">
+          Thoát
+        </el-button>
         <el-button
           type="primary"
           @click="handleSaveClick"
@@ -17,7 +19,12 @@
         </el-button>
       </div>
     </div>
-
+    <div
+      class="product-name-container"
+      v-if="isEdit"
+    >
+      {{ product.productName }}
+    </div>
     <div class="create-content-container">
       <div class="left-container">
         <div class="content-wrapper detail-container">
@@ -131,13 +138,13 @@
   </div>
 </template>
 <script>
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { useStore, mapState, mapActions, mapMutations } from 'vuex'
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import Uploader from '@/views/pages/common/uploader.vue'
 import MoreInfo from './more-info'
-import { mapState, mapActions, mapMutations } from 'vuex'
 
 const PRODUCT_MODULE = 'product'
 
@@ -148,18 +155,31 @@ export default {
   },
   setup () {
     const router = useRouter()
+    const route = useRoute()
+    const store = useStore()
+    let isEdit = ref(false)
+    if (route.params?.productId) {
+      store.dispatch(`${PRODUCT_MODULE}/getProduct`, route.params.productId)
+      isEdit = true
+    }
+
     // quay lai man danh sach san pham
     const handleBackClick = () => {
       router.push('/app/list-product')
     }
 
     return {
-      handleBackClick
+      handleBackClick,
+      isEdit
     }
   },
 
   computed: {
-    ...mapState(PRODUCT_MODULE, ['product'])
+    ...mapState(PRODUCT_MODULE, ['product']),
+
+    imgCount () {
+      return this.product?.image?.length
+    }
   },
 
   methods: {
@@ -189,7 +209,16 @@ export default {
 
     .back-container {
       cursor: pointer;
+
+      &:hover {
+        color: #409eff;
+      }
     }
+  }
+
+  .product-name-container {
+    font-size: 28px;
+    font-weight: 700;
   }
 
   .create-content-container {
