@@ -1,38 +1,64 @@
 <template>
   <the-container>
-    <div class="register">
+    <div
+      class="register"
+      ref="container"
+    >
       <div class="title">
         Đăng ký
       </div>
 
-      <div class="form">
+      <base-form
+        ref="form"
+        class="form"
+      >
         <div class="user-name">
           <text-field
-            placeholder="Your full name"
+            placeholder="Tên đăng nhập"
             label="Tên đăng nhập"
-            v-model="account.UserName"
+            v-model="account.username"
+            :allow-blank="false"
+            :show-require="false"
           />
         </div>
         <div class="email">
           <text-field
-            placeholder="Your email address"
+            placeholder="Email của bạn"
             label="email"
-            v-model="account.Email"
+            v-model="account.email"
+            :is-email="true"
+            :allow-blank="false"
+            :show-require="false"
           />
         </div>
 
         <div class="password">
           <text-field
-            placeholder="Your password"
+            placeholder="Nhập mật khẩu"
             type="password"
             label="Mật khẩu"
-            v-model="account.Password"
+            v-model="account.password"
+            :show-password="true"
+            :show-password-state="true"
+            :allow-blank="false"
+            :show-require="false"
           />
         </div>
 
+        <!-- <div class="confirm-password">
+          <text-field
+            placeholder="Nhập lại mật khẩu"
+            type="password"
+            label="Nhập lại mất khẩu"
+            v-model="account.password"
+            :show-password="true"
+            :show-password-state="true"
+          />
+        </div> -->
+
         <el-switch
           active-text="Duy trì đăng nhập"
-          v-model="account.IsActive"
+          v-model="account.isActive"
         />
 
         <el-button
@@ -42,7 +68,7 @@
         >
           Đăng ký
         </el-button>
-      </div>
+      </base-form>
       <div class="footer">
         Bạn có tài khoản?
 
@@ -60,7 +86,9 @@
 import { reactive } from 'vue'
 import theContainer from '../common/the-container.vue'
 import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import baseStore from '@/views/pages/base/base-store'
+import { ElMessage } from 'element-plus'
+import { focusFirstControl } from '@/common/common-fn'
 
 const MODULE_NAME = 'auth'
 
@@ -68,24 +96,33 @@ export default {
   components: { theContainer },
 
   setup () {
-    const store = useStore()
+    const { container, store, validate, showMask, hideMask } = baseStore()
     const router = useRouter()
     const account = reactive({
-      UserName: null,
-      Email: null,
-      Password: null,
-      IsActive: true
+      username: null,
+      email: null,
+      password: null,
+      isActive: true
     })
 
     const onRegister = async () => {
+      if (!validate()) {
+        return
+      }
+      showMask()
       const res = await store.dispatch(`${MODULE_NAME}/register`, account)
       if (res) {
         router.push('login')
+      } else {
+        focusFirstControl(container.value)
+        ElMessage.error('Đăng ký không thành công, vui lòng thử lại sau')
       }
+      hideMask()
     }
     return {
       account,
-      onRegister
+      onRegister,
+      container
     }
   }
 
