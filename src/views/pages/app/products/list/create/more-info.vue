@@ -14,7 +14,7 @@
             v-model="product.categoryId"
           >
             <el-option
-              :label="category.name"
+              :label="category.categoryName"
               :value="category.categoryId"
               v-for="(category, index) in categories"
               :key="index"
@@ -55,7 +55,7 @@
           v-model="product.isSale"
         />
       </div>
-      <div class="mt-12px">
+      <!-- <div class="mt-12px">
         Thuế
       </div>
       <div class="checkbox-container">
@@ -63,7 +63,7 @@
           Áp dụng thuế
         </div>
         <el-checkbox size="large" />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

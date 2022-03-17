@@ -57,7 +57,17 @@
                     label="Đơn vị tính"
                     label-position="top"
                   >
-                    <el-input v-model="product.unitName" />
+                    <el-select
+                      placeholder="Chọn loại sản phẩm"
+                      v-model="product.unitId"
+                    >
+                      <el-option
+                        :label="category.unitName"
+                        :value="category.unitId"
+                        v-for="(category, index) in units"
+                        :key="index"
+                      />
+                    </el-select>
                   </el-form-item>
                 </div>
               </div>
@@ -67,7 +77,7 @@
                   label-position="top"
                 >
                   <el-input
-                    v-model="product.stockQuantity"
+                    v-model="product.description"
                     :rows="2"
                     type="textarea"
                   />
@@ -115,7 +125,7 @@
         <div class="content-wrapper img-container">
           <div class="img-container-header">
             <div class="img-description">
-              {{ `Ảnh sản phẩm (${imgCount})` }}
+              {{ `Ảnh sản phẩm` }}
             </div>
             <div class="delete-all">
               Xóa tất cả
@@ -162,6 +172,7 @@ export default {
       store.dispatch(`${PRODUCT_MODULE}/getProduct`, route.params.productId)
       isEdit = true
     }
+    store.dispatch('unit/getUnits')
 
     // quay lai man danh sach san pham
     const handleBackClick = () => {
@@ -176,15 +187,13 @@ export default {
 
   computed: {
     ...mapState(PRODUCT_MODULE, ['product']),
-
-    imgCount () {
-      return this.product?.image?.length
-    }
+    ...mapState('unit', ['units'])
   },
 
   methods: {
     ...mapMutations(PRODUCT_MODULE, ['setProduct']),
     ...mapActions(PRODUCT_MODULE, ['createProduct']),
+    ...mapActions('unit', ['getUnits']),
 
     handleSaveClick () {
       this.createProduct(this.product)

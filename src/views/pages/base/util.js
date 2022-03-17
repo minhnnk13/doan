@@ -1,6 +1,6 @@
 import enumeration from '../../../common/enumeration'
 
-const fefaultConfig = {
+const defaultConfig = {
   title: '',
   actionMode: enumeration.ActionMode.view,
   autoLoad: true,
@@ -17,4 +17,4 @@ const fefaultConfig = {
   }
 }
 
-export default fefaultConfig
+export default defaultConfig
