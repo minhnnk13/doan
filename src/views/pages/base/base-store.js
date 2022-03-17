@@ -1,9 +1,9 @@
 import { ref, onMounted, nextTick } from 'vue'
-import defautConfig from './util'
+import defaultConfig from './util'
 import { useStore } from 'vuex'
 import enumeration from '../../../common/enumeration'
 import commonFn from '../../../common/common-fn'
-const baseForm = (config = defautConfig) => {
+const baseForm = (config = defaultConfig) => {
   const store = useStore()
   const form = ref(null)
   const container = ref(null)
@@ -29,7 +29,7 @@ const baseForm = (config = defautConfig) => {
     let data = []
 
     if (config.storeConfig?.entityKey) {
-      await store.dispatch(`${config.storeConfig.moduleName}/get${config.storeConfig.entityName}`, config.entityKey).then((res) => {
+      await store.dispatch(`${config.storeConfig.moduleName}/get${config.storeConfig.entityName}`, config.storeConfig.entityKey).then((res) => {
         if (res) {
           data = res
         }

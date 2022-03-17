@@ -74,7 +74,7 @@
           >
             <template #default="props">
               <img
-                :src="props.row.image"
+                :src="props.row?.image"
                 width="100"
               >
             </template>

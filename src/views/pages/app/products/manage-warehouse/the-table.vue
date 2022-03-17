@@ -18,7 +18,7 @@
     >
       <template #default="props">
         <img
-          :src="props.row.image "
+          :src="props.row?.image "
           width="100"
         >
       </template>
@@ -38,7 +38,7 @@
     />
     <el-table-column
       label="Ngày khởi tạo"
-      prop="createDate"
+      prop="createdDate"
     />
     <el-table-column
       label="Giá bán lẻ"
@@ -51,7 +51,7 @@
 
     <el-table-column
       label="Giá bán buôn"
-      prop="whosalePrice"
+      prop="wholesalePrice"
     />
 
     <template #append>
