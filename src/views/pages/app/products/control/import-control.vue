@@ -8,7 +8,7 @@
           type="primary"
           @click="handleCreateClick"
         >
-          Thêm sản phẩm
+          Tạo phiếu kiểm
         </el-button>
       </div>
     </div>
@@ -17,7 +17,7 @@
       active-name="first"
     >
       <el-tab-pane
-        label="Tất cả sản phẩm"
+        label="Tất cả"
         name="first"
       >
         <div class="search">
@@ -25,31 +25,9 @@
             v-model="inputSearch"
             class="w-50 m-2"
             size="large"
-            placeholder="Tìm kiếm theo mã sản phẩm, tên sản phẩm, barcode"
+            placeholder="Tìm kiếm theo mã phiếu kiểm hàng"
             :prefix-icon="searchIcon"
           />
-        </div>
-        <div
-          class="header-table"
-          v-if="!isShowHeaderTable"
-        >
-          <el-checkbox
-            @change="selectAll"
-            :model-value="selectedHeader"
-          />
-          Đã chọn {{ selectedProduct?.length }} trên trang này
-          <el-select
-            v-model="selectedAction"
-            @change="selectAction"
-            placeholder="Chọn thao tác"
-          >
-            <el-option
-              v-for="(action, index) in actions"
-              :key="index"
-              :label="action.lable"
-              :value="action.value"
-            />
-          </el-select>
         </div>
         <el-table
           :data="products"
@@ -68,39 +46,36 @@
             align="center"
           />
           <el-table-column
-            prop="image"
-            label="Ảnh"
+            prop="code"
+            label="Mã phiếu"
             class="cursor-pointer"
-          >
-            <template #default="props">
-              <img
-                :src="props.row?.image"
-                width="100"
-              >
-            </template>
-          </el-table-column>
+          />
+
           <el-table-column
-            prop="productName"
-            label="Sản phẩm"
+            prop="storeName"
+            label="Kho kiểm hàng"
             class="cursor-pointer"
           />
           <el-table-column
-            prop="tag"
-            label="Loại"
-          />
-          <el-table-column
-            prop="saleQuantity"
-            label="Có thể bán"
-          />
-          <el-table-column
-            prop="stockQuantity"
-            label="Tồn kho"
+            prop="status"
+            label="Trạng thái"
           />
           <el-table-column
             prop="createdDate"
-            label="Ngày khởi tạo"
+            label="Ngày tạo"
           />
-
+          <el-table-column
+            prop="checkDate"
+            label="Ngày kiểm"
+          />
+          <el-table-column
+            prop="user"
+            label="Nhân viên tạo"
+          />
+          <el-table-column
+            prop="note"
+            label="ghi chú"
+          />
           <template #append>
             <el-pagination
               v-model:currentPage="currentPage4"
@@ -137,12 +112,10 @@ export default {
     const searchIcon = ref(Search)
     const selectedHeader = ref(true)
     const selectedAction = ref(null)
-    const inputSearch = ref('')
+
     const selectedProduct = ref([])
-    const params = computed(() => {
-      return { pageIndex: 0, pageSize: 5, search: inputSearch.value }
-    })
-    store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
+    const params = { pageIndex: 0, pageSize: 5 }
+    store.dispatch(`${PRODUCT_MODULE}/getProducts`, params)
     const products = computed(() => store.state.product.products)
     const tableHeight = ref(window.innerHeight - 300)
 

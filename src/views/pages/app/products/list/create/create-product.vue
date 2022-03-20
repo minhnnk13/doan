@@ -155,6 +155,7 @@ import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import Uploader from '@/views/pages/common/uploader.vue'
 import MoreInfo from './more-info'
+import { getUserInfo } from '@/utils/auth'
 
 const PRODUCT_MODULE = 'product'
 
@@ -196,6 +197,12 @@ export default {
     ...mapActions('unit', ['getUnits']),
 
     handleSaveClick () {
+      this.product.userId = getUserInfo().userId
+      if (!this.product.productId) {
+        this.product.createdDate = new Date()
+      }
+      this.product.modifyCreate = new Date()
+      this.product.supplierId = 1
       this.createProduct(this.product)
     }
   },

@@ -1,5 +1,6 @@
 const localStorageKey = {
-  TOKEN: 'Token'
+  TOKEN: 'Token',
+  USER_INFO: 'UserInfo'
 }
 
 const sessionStorageKey = {

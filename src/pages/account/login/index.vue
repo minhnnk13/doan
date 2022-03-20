@@ -9,7 +9,7 @@
       </div>
 
       <div class="logo">
-        CompanyNamesdâ
+        CompanyName
       </div>
 
       <base-form
@@ -76,7 +76,7 @@
 <script>
 import { reactive, ref } from 'vue'
 import TheContainer from '../common/the-container.vue'
-import { setAuthToken } from '@/utils/auth'
+import { setAuthToken, setUserInfo } from '@/utils/auth'
 import { useRoute } from 'vue-router'
 import commonFn, { redirectToApp, focusFirstControl } from '@/common/common-fn'
 import { App } from '@/common/constant'
@@ -104,18 +104,18 @@ export default {
       }
       showMask()
       const res = await store.dispatch(`${MODULE_NAME}/login`, account)
-
       if (res) {
-        onLoginSuccess(res.jwtToken)
+        onLoginSuccess(res)
       } else {
         focusFirstControl(container.value)
         ElMessage.error('Tên tài khoản hoặc mật khẩu không đúng')
       }
       hideMask()
     }
-    const onLoginSuccess = (token) => {
+    const onLoginSuccess = (loginInfo) => {
       const redirect = route.query.redirect
-      setAuthToken(token)
+      setAuthToken(loginInfo.jwtToken)
+      setUserInfo(loginInfo.account)
       redirectToApp(App.app, redirect)
     }
     return {

@@ -1,5 +1,7 @@
 import { API_PATH, authAxios } from '@/apis/api'
 import dayjs from 'dayjs'
+import firebase from 'firebase/app'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 export default {
   namespaced: true,
@@ -164,8 +166,14 @@ export default {
       context.commit('setProduct', res.data)
     },
 
-    createProduct: async (context, params) => {
-      authAxios.post('/product', params)
+    createProduct: async (context, payload) => {
+      const storage = getStorage()
+      const storageRef = ref(storage, payload.image.name)
+      const img = await fetch(payload.image.url)
+      await uploadBytes(storageRef, await img.blob())
+      payload.image = await getDownloadURL(storageRef)
+      debugger
+      authAxios.post('/product', payload)
     },
 
     deleteProduct: async (context, params) => {
