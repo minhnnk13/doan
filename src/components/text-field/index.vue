@@ -16,10 +16,19 @@
       :placeholder="placeholder"
       :disabled="disabled"
       :show-password="showPassword"
+      :prefix-icon="prefixIcon"
+      :suffix-icon="suffixIcon"
       @change="onChange"
       @focus="onFocus"
       @blur="onBlur"
-    />
+      ref="input"
+    >
+      <!-- <template #prefix>
+        <el-icon>
+          <search />
+        </el-icon>
+      </template> -->
+    </el-input>
 
     <div
       class="error-message"
@@ -32,10 +41,14 @@
 <script>
 // import { computed, toRefs } from 'vue'
 import { getValidationProps, validate } from '../utils/validate'
-
+import { Search } from '@element-plus/icons-vue'
+import { computed, onMounted, ref } from 'vue'
 const UPDATE_MODEL = 'update:modelValue'
 
 export default {
+  // components: {
+  //   Search
+  // },
   name: 'TextField',
 
   mixins: [validate],
@@ -76,15 +89,37 @@ export default {
     showRequire: {
       type: Boolean,
       default: true
+    },
+
+    prefixIcon: {
+      type: String,
+      default: null
+    },
+
+    suffixIcon: {
+      type: String,
+      default: null
+    },
+
+    showPasswordState: {
+      type: Boolean,
+      default: false
     }
 
   },
 
   setup (props, { emit }) {
     const validation = getValidationProps(props, emit)
+    const input = ref(null)
 
+    onMounted(() => {
+      if (props.showPasswordState) {
+        input.value.handlePasswordVisible()
+      }
+    })
     return {
-      ...validation
+      ...validation,
+      input
     }
   }
 }

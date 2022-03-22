@@ -1,13 +1,19 @@
 <template>
-  cash-book
+  <manage-warehouse />
 </template>
 
-<script>
+<script >
+import ManageWarehouse from '@/views/pages/app/products/manage-warehouse'
+
 export default {
+
+  components: {
+    ManageWarehouse
+  }
 
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 </style>

@@ -10,7 +10,12 @@
     :destroy-on-close="true"
     :close-on-click-modal="false"
   >
-    <dialog-body />
+    <div
+      class="container"
+      ref="container"
+    >
+      <dialog-body />
+    </div>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="closePopup">Hủy</el-button>
@@ -28,9 +33,12 @@
 <script>
 import { ref } from 'vue'
 import dialogBody from './dialog-body.vue'
+import baseStore from '@/views/pages/base/base-store'
+
 export default {
   components: { dialogBody },
   setup () {
+    const { container, validate } = baseStore()
     const dialogVisible = ref(false)
 
     const dialog = ref(null)
@@ -40,7 +48,8 @@ export default {
     }
 
     const onSave = () => {
-      closePopup()
+      validate()
+      // closePopup()
     }
 
     const openPopup = () => {
@@ -48,7 +57,7 @@ export default {
     }
     return {
       dialog,
-
+      container,
       closePopup,
       onSave,
       openPopup,

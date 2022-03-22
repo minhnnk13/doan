@@ -1,5 +1,6 @@
 import { localStorage } from '../storage/util'
 import { localStorageKey } from '../storage/key'
+
 const setAuthToken = (token) => {
   if (token) {
     localStorage.set(localStorageKey.TOKEN, token)
@@ -14,4 +15,14 @@ const removeAuthToken = () => {
   localStorage.remove(localStorageKey.TOKEN)
 }
 
-export { setAuthToken, getAuthToken, removeAuthToken }
+const setUserInfo = (userInfo) => {
+  if (userInfo) {
+    localStorage.set(localStorageKey.USER_INFO, userInfo)
+  }
+}
+
+const getUserInfo = () => {
+  return JSON.parse(localStorage.get(localStorageKey.USER_INFO))
+}
+
+export { setAuthToken, getAuthToken, removeAuthToken, setUserInfo, getUserInfo }

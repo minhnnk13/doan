@@ -16,6 +16,7 @@
       <text-field
         label="Nhập lại mật khẩu mới"
         v-model="data.confirmPassword"
+        :confirm-password="passwordConfirm"
         type="password"
       />
     </div>
@@ -23,7 +24,8 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
+
 export default {
   setup () {
     const data = reactive({
@@ -31,8 +33,10 @@ export default {
       newPassword: null,
       confirmPassword: null
     })
+    const passwordConfirm = computed(() => data.newPassword)
     return {
-      data
+      data,
+      passwordConfirm
     }
   }
 }

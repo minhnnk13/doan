@@ -1,6 +1,7 @@
 
 import axios from 'axios'
-const HOST = 'https://62248def6c0e396620415932.mockapi.io'
+import { API_PATH } from '@/apis/api'
+
 export default {
   namespaced: true,
   state: {
@@ -21,7 +22,7 @@ export default {
   mutations: {},
   actions: {
     login: async (context, data) => {
-      return await axios.post(`${HOST}/authenticate`, data)
+      return await axios.post(`${API_PATH}/authenticate`, data)
         .then((res) => res.data)
         .catch(() => {
           return false
@@ -29,7 +30,7 @@ export default {
     },
 
     register: async (context, data) => {
-      return await axios.post(`${HOST}/register`, data)
+      return await axios.post(`${API_PATH}/register`, data)
         .then((res) => res)
         .catch(() => {
           return false

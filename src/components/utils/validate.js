@@ -1,12 +1,12 @@
 import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
+import { required, email, sameAs } from '@vuelidate/validators'
 import { inject, toRefs, ref, computed } from 'vue'
 import { PROVIDE_KEY } from '../form'
 const VALIDATE_CLS = 'validatable'
 
-const CHANGE_EVENT = 'change'
-const BLUR_EVENT = 'blur'
-const FOCUS_EVENT = 'focus'
+const CHANGE_EVENT = 'onChange'
+const BLUR_EVENT = 'onBlur'
+const FOCUS_EVENT = 'Focus'
 const UPDATE_VALUE = 'update:modelValue'
 
 const validate = {
@@ -22,9 +22,15 @@ const validate = {
     },
 
     isEmail: {
-      type: String,
+      type: Boolean,
       default: false
+    },
+
+    isPhone: {
+      type: String,
+      default: null
     }
+
   }
 }
 const useValidate = (props, emit) => {
@@ -40,8 +46,14 @@ const useValidate = (props, emit) => {
     }
   })
 
+  const phone = (value) => {
+    const regExp = /^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}/
+
+    return value.match(regExp)
+  }
+
   const getValidations = (propValues) => {
-    const { allowBlank, isEmail } = propValues
+    const { allowBlank, isEmail, isPhone } = propValues
     const validations = {}
 
     if (!allowBlank.value) {
@@ -50,6 +62,10 @@ const useValidate = (props, emit) => {
 
     if (isEmail.value) {
       validations.email = email
+    }
+
+    if (isPhone.value) {
+      validations.phone = phone
     }
 
     return validations
@@ -104,6 +120,11 @@ const useValidate = (props, emit) => {
       case 'email':
         message = 'Địa chỉ email không hợp lệ.'
         break
+      case 'matchPassword':
+        message = 'Mật khẩu không khớp'
+        break
+      case 'phone':
+        message = 'Số điện thoại không hợp lệ'
     }
     return message
   }
