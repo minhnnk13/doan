@@ -62,10 +62,7 @@ export default {
   components: { theHeader, HeaderTable, TheTable },
 
   setup () {
-    const inputSearch = ref('')
-    const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
     const pageSize = ref(5)
-    const store = useStore()
     const params = computed(() => {
       return {
         pageIndex: 0,
@@ -73,6 +70,10 @@ export default {
         search: inputSearch.value
       }
     })
+
+    const inputSearch = ref('')
+    const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
+    const store = useStore()
     const config = reactive({
       storeConfig: {
         moduleName: 'product',
@@ -84,10 +85,11 @@ export default {
     const tableRef = ref(null)
     const tableData = ref([])
     const selectedProduct = ref([])
+    const checkedSelectProduct = ref(true)
+
     const isShowHeaderTable = computed(() => {
       return !selectedProduct.value?.length
     })
-    const checkedSelectProduct = ref(true)
 
     const changeCBB = (val) => {
       val
@@ -134,7 +136,8 @@ export default {
       tableRef,
       clearSelected,
       pageSizes,
-      pageSize
+      pageSize,
+      handleChangePageSize
     }
   }
 }

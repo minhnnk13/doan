@@ -273,15 +273,14 @@ export default {
         position: fixed;
         right: 24px;
         bottom: 27px;
-
-        .el-input {
-          width: 50px;
+        .paging-container {
+          display: flex;
+          .el-input {
+            width: 50px;
+          }
         }
       }
     }
   }
-}
-.paging-container {
-  display: flex;
 }
 </style>

@@ -6,7 +6,7 @@
         <el-button
           class="btn-style"
           type="primary"
-          @click="handleCreateClick"
+          @click="$emit('onCreateClick')"
         >
           Tạo phiếu kiểm
         </el-button>
@@ -77,15 +77,28 @@
             label="Ghi chú"
           />
           <template #append>
-            <el-pagination
-              v-model:currentPage="currentPage4"
-              v-model:page-size="pageSize4"
-              :page-sizes="5"
-              :default-page-size="5"
-              :pager-count="4"
-              layout="sizes, prev, pager, next"
-              :total="400"
-            />
+            <div class="paging-container">
+              <div style="margin-right: 12px; margin-top: 6px">
+                {{ "Hiển thị" }}
+              </div>
+              <el-select
+                v-model="pageSize"
+                @change="handleChangePageSize"
+                size="small"
+              >
+                <el-option
+                  v-for="(pageSizeIndex, index) in pageSizes"
+                  :key="index"
+                  :label="pageSizeIndex"
+                  :value="pageSizeIndex"
+                />
+              </el-select>
+              <div
+                style="margin-right: 12px; margin-left: 12px; margin-top: 6px"
+              >
+                {{ "Kết quả" }}
+              </div>
+            </div>
           </template>
         </el-table>
       </el-tab-pane>
@@ -103,7 +116,10 @@ import { Search } from '@element-plus/icons-vue'
 
 const PRODUCT_MODULE = 'product'
 export default {
+  emits: ['onCreateClick'],
+
   setup () {
+    // #declare
     const store = useStore()
     const route = useRoute()
     const router = useRouter()
@@ -112,21 +128,23 @@ export default {
     const searchIcon = ref(Search)
     const selectedHeader = ref(true)
     const selectedAction = ref(null)
-
+    const pageSize = ref(5)
     const selectedProduct = ref([])
-    const params = { pageIndex: 0, pageSize: 5 }
-    store.dispatch(`${PRODUCT_MODULE}/getProducts`, params)
     const products = computed(() => store.state.product.products)
     const tableHeight = ref(window.innerHeight - 300)
+    const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
+    // #enddeclare
 
+    // #Computed
     const isShowHeaderTable = computed(() => {
       return !selectedProduct.value?.length
     })
 
+    const params = computed(() => { return { pageIndex: 0, pageSize: pageSize.value, search: '' } })
+    // #endComputed
+
+    // #region Methods
     // xu li event nut back
-    const handleCreateClick = () => {
-      router.push('/app/create')
-    }
 
     // xem chi tiet san pham
     const handleDetailClick = (product) => {
@@ -141,10 +159,17 @@ export default {
       value ? table.value.toggleAllSelection() : table.value.clearSelection()
     }
 
+    const handleChangePageSize = () => {
+      store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
+    }
+
+    // #endregion
+
+    store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
+
     return {
       products,
       activeName,
-      handleCreateClick,
       handleDetailClick,
       searchIcon,
       tableHeight,
@@ -154,7 +179,10 @@ export default {
       table,
       isShowHeaderTable,
       selectAll,
-      selectedProduct
+      selectedProduct,
+      pageSize,
+      pageSizes,
+      handleChangePageSize
     }
   }
 }
@@ -220,7 +248,13 @@ export default {
         justify-content: flex-end;
         position: fixed;
         right: 24px;
-        bottom: 24px;
+        bottom: 32px;
+        .paging-container {
+          display: flex;
+          .el-select {
+            width: 50px !important;
+          }
+        }
       }
     }
   }
