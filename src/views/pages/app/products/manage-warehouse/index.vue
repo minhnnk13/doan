@@ -1,6 +1,6 @@
 <template>
   <div class="manage-warehouse">
-    <the-header v-model="productSearchValue" />
+    <the-header v-model="inputSearch" />
     <header-table
       v-if="!isShowHeaderTable"
       v-model="checkedSelectProduct"
@@ -15,31 +15,64 @@
       ref="tableRef"
     >
       <template #pagination>
-        <el-pagination
+        <!-- <el-pagination
           v-model:currentPage="currentPage4"
           v-model:page-size="pageSize4"
           :default-page-size="5"
           :pager-count="4"
           layout="prev, pager, next"
           :total="100"
-        />
+        /> -->
+        <div class="paging-container">
+          <div style="margin-right: 12px; margin-top: 6px">
+            {{ "Hiển thị" }}
+          </div>
+          <el-select
+            v-model="pageSize"
+            @change="handleChangePageSize"
+            size="small"
+          >
+            <el-option
+              v-for="(pageSizeIndex, index) in pageSizes"
+              :key="index"
+              :label="pageSizeIndex"
+              :value="pageSizeIndex"
+            />
+          </el-select>
+          <div style="margin-right: 12px; margin-left: 12px; margin-top: 6px">
+            {{ "Kết quả" }}
+          </div>
+        </div>
       </template>
     </the-table>
   </div>
 </template>
 
 <script>
-
 import { computed, reactive, ref, watch } from 'vue'
 import theHeader from './the-header.vue'
 import HeaderTable from './header-table.vue'
 import TheTable from './the-table.vue'
 import baseStore from '@/views/pages/base/base-store'
+import { useStore } from 'vuex'
+
+const PRODUCT_MODULE = 'product'
+
 export default {
   components: { theHeader, HeaderTable, TheTable },
 
   setup () {
-    const params = { pageIndex: 0, pageSize: 5 }
+    const inputSearch = ref('')
+    const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
+    const pageSize = ref(5)
+    const store = useStore()
+    const params = computed(() => {
+      return {
+        pageIndex: 0,
+        pageSize: pageSize.value,
+        search: inputSearch.value
+      }
+    })
     const config = reactive({
       storeConfig: {
         moduleName: 'product',
@@ -54,7 +87,6 @@ export default {
     const isShowHeaderTable = computed(() => {
       return !selectedProduct.value?.length
     })
-    const productSearchValue = ref(null)
     const checkedSelectProduct = ref(true)
 
     const changeCBB = (val) => {
@@ -67,25 +99,30 @@ export default {
       tableRef.value.tableRef.clearSelection()
     }
 
-    const filterTableData = computed(() => tableData.value.filter(data =>
-      !productSearchValue.value || data.productName.toLowerCase().includes(productSearchValue.value.toLowerCase())
-    ))
-    loadData().then(res => {
+    const filterTableData = computed(() =>
+      tableData.value.filter(
+        (data) =>
+          !inputSearch.value ||
+          data.productName
+            .toLowerCase()
+            .includes(inputSearch.value.toLowerCase())
+      )
+    )
+    loadData().then((res) => {
       tableData.value = res
     })
 
     const handleSelectionChange = (val) => {
       val.length
-        ? checkedSelectProduct.value = true
-        : checkedSelectProduct.value = false
+        ? (checkedSelectProduct.value = true)
+        : (checkedSelectProduct.value = false)
 
       selectedProduct.value = val
     }
 
-    // const selectAll = (value) => {
-    //   value
-    //
-    // }
+    const handleChangePageSize = () => {
+      store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
+    }
 
     return {
       filterTableData,
@@ -93,10 +130,11 @@ export default {
       handleSelectionChange,
       changeCBB,
       selectedProduct,
-      productSearchValue,
       checkedSelectProduct,
       tableRef,
-      clearSelected
+      clearSelected,
+      pageSizes,
+      pageSize
     }
   }
 }
@@ -110,5 +148,12 @@ export default {
   background-color: #fff;
   position: relative;
   margin-bottom: -56px;
+
+  .paging-container {
+    display: flex;
+    :deep(.el-input) {
+      width: 50px !important;
+    }
+  }
 }
 </style>

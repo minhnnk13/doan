@@ -5,31 +5,20 @@
         class="back-container"
         @click="handleBackClick"
       >
-        {{ "Quay lại danh sách sản phẩm " }}
+        {{ "Đơn nhập hàng" }}
       </div>
-      <div class="btn-container">
-        <el-button @click="handleBackClick">
-          Thoát
-        </el-button>
-        <el-button
-          type="primary"
-          @click="handleSaveClick"
-        >
-          Lưu
-        </el-button>
-      </div>
+      <div class="process-container" />
     </div>
     <div
       class="product-name-container"
-      v-if="isEdit"
     >
-      {{ product.productName }}
+      {{ "Tạo đơn nhập hàng" }}
     </div>
     <div class="create-content-container">
-      <div class="left-container">
+      <div class="">
         <div class="content-wrapper detail-container">
           <div class="title-container">
-            Thông tin chung
+            Thông tin phiếu kiểm hàng
           </div>
           <el-form
             :model="form"
@@ -44,21 +33,13 @@
               </el-form-item>
 
               <div class="product-code-unit-container">
-                <div class="product-code">
+                <div class="branch-contaienr">
                   <el-form-item
-                    label="Mã sản phẩm/SKU"
-                    label-position="top"
-                  >
-                    <el-input v-model="product.productCode" />
-                  </el-form-item>
-                </div>
-                <div class="unit-contaienr">
-                  <el-form-item
-                    label="Đơn vị tính"
+                    label="Chi nhánh kiểm"
                     label-position="top"
                   >
                     <el-select
-                      placeholder="Chọn loại sản phẩm"
+                      placeholder="Chi nhánh mặc định"
                       v-model="product.unitId"
                     >
                       <el-option
@@ -70,88 +51,56 @@
                     </el-select>
                   </el-form-item>
                 </div>
-              </div>
-              <div class="description-container">
-                <el-form-item
-                  label="Mô tả sản phẩm"
-                  label-position="top"
-                >
-                  <el-input
-                    v-model="product.description"
-                    :rows="2"
-                    type="textarea"
-                  />
-                </el-form-item>
+                <div class="employee-contaienr">
+                  <el-form-item
+                    label="Nhân viên kiểm hàng"
+                    label-position="top"
+                  >
+                    <el-select
+                      placeholder="Tên nhân viên"
+                      v-model="product.unitId"
+                    >
+                      <el-option
+                        :label="unit.unitName"
+                        :value="unit.unitId"
+                        v-for="(unit, index) in units"
+                        :key="index"
+                      />
+                    </el-select>
+                  </el-form-item>
+                </div>
+                <div class="description-container">
+                  <el-form-item
+                    label="Ghi chú"
+                    label-position="top"
+                  >
+                    <el-input
+                      v-model="product.note"
+                    />
+                  </el-form-item>
+                </div>
               </div>
             </div>
           </el-form>
         </div>
-        <div class="content-wrapper price-container">
-          <div class="title-container">
-            Giá sản phẩm
-          </div>
-          <el-form
-            :model="form"
-            label-position="top"
-          >
-            <div class="sub-price-container">
-              <div class="sub-price-1">
-                <el-form-item
-                  label="Giá bán lẻ"
-                  label-position="top"
-                >
-                  <el-input v-model="product.retailPrice" />
-                </el-form-item>
-              </div>
-              <div class="sub-price-2">
-                <el-form-item
-                  label="Giá bán buôn"
-                  label-position="top"
-                >
-                  <el-input v-model="product.wholesalePrice" />
-                </el-form-item>
-              </div>
-            </div>
-            <div class="content-container">
-              <el-form-item
-                label="Giá nhập"
-                label-position="top"
-              >
-                <el-input v-model="product.unitPrice" />
-              </el-form-item>
-            </div>
-          </el-form>
-        </div>
-        <div class="content-wrapper img-container">
-          <div class="img-container-header">
-            <div class="img-description">
-              {{ `Ảnh sản phẩm` }}
-            </div>
-          </div>
-          <el-form
-            :model="form"
-            label-position="top"
-          >
-            <div class="content-container">
-              <uploader />
-            </div>
-          </el-form>
-        </div>
-      </div>
-      <div class="right-container">
-        <more-info />
+        <div class="content-wrapper price-container" />
       </div>
     </div>
   </div>
 </template>
 <script>
+
+// to do: sử dụng emits trong thằng con để thay đổi dữ liệu ở thằng cha
+// tạo computed cho dynamic component
+// viết hàm switch - case để đổi component
+// truyền vào hàm emits
+// computed lưu dữ liệu
+
 import { useRouter, useRoute } from 'vue-router'
 import { useStore, mapState, mapActions, mapMutations } from 'vuex'
 import { ref, reactive, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import Uploader from '@/views/pages/common/uploader.vue'
-import MoreInfo from './more-info'
 import { getUserInfo } from '@/utils/auth'
 import messageBox from '@/utils/message-box'
 import dayjs from 'dayjs'
@@ -159,10 +108,6 @@ import dayjs from 'dayjs'
 const PRODUCT_MODULE = 'product'
 
 export default {
-  components: {
-    Uploader,
-    MoreInfo
-  },
   setup () {
     const router = useRouter()
     const route = useRoute()

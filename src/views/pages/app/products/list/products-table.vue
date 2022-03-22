@@ -85,7 +85,7 @@
             class="cursor-pointer"
           />
           <el-table-column
-            prop="tag"
+            prop="categoryName"
             label="Loại"
           />
           <el-table-column
@@ -102,15 +102,28 @@
           />
 
           <template #append>
-            <el-pagination
-              v-model:currentPage="currentPage4"
-              v-model:page-size="pageSize4"
-              :page-sizes="5"
-              :default-page-size="5"
-              :pager-count="4"
-              layout="sizes, prev, pager, next"
-              :total="400"
-            />
+            <div class="paging-container">
+              <div style="margin-right: 12px; margin-top: 6px">
+                {{ "Hiển thị" }}
+              </div>
+              <el-select
+                v-model="pageSize"
+                @change="handleChangePageSize"
+                size="small"
+              >
+                <el-option
+                  v-for="(pageSizeIndex, index) in pageSizes"
+                  :key="index"
+                  :label="pageSizeIndex"
+                  :value="pageSizeIndex"
+                />
+              </el-select>
+              <div
+                style="margin-right: 12px; margin-left: 12px; margin-top: 6px"
+              >
+                {{ "Kết quả" }}
+              </div>
+            </div>
           </template>
         </el-table>
       </el-tab-pane>
@@ -139,13 +152,18 @@ export default {
     const selectedAction = ref(null)
     const inputSearch = ref('')
     const selectedProduct = ref([])
+    const pageSize = ref(5)
     const params = computed(() => {
-      return { pageIndex: 0, pageSize: 5, search: inputSearch.value }
+      return {
+        pageIndex: 0,
+        pageSize: pageSize.value,
+        search: inputSearch.value
+      }
     })
     store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
     const products = computed(() => store.state.product.products)
     const tableHeight = ref(window.innerHeight - 300)
-
+    const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
     const isShowHeaderTable = computed(() => {
       return !selectedProduct.value?.length
     })
@@ -168,6 +186,10 @@ export default {
       value ? table.value.toggleAllSelection() : table.value.clearSelection()
     }
 
+    const handleChangePageSize = () => {
+      store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
+    }
+
     return {
       products,
       activeName,
@@ -181,7 +203,10 @@ export default {
       table,
       isShowHeaderTable,
       selectAll,
-      selectedProduct
+      selectedProduct,
+      pageSize,
+      pageSizes,
+      handleChangePageSize
     }
   }
 }
@@ -247,9 +272,16 @@ export default {
         justify-content: flex-end;
         position: fixed;
         right: 24px;
-        bottom: 24px;
+        bottom: 27px;
+
+        .el-input {
+          width: 50px;
+        }
       }
     }
   }
+}
+.paging-container {
+  display: flex;
 }
 </style>

@@ -74,7 +74,7 @@
           />
           <el-table-column
             prop="note"
-            label="ghi chú"
+            label="Ghi chú"
           />
           <template #append>
             <el-pagination

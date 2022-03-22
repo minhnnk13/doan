@@ -44,17 +44,9 @@
               Đơn vị tính
             </div>
             <div class="value">
-              {{ product.unitId.unitName }}
+              {{ product.unitId?.unitName }}
             </div>
           </div>
-          <!-- <div class="product-info">
-            <div class="title">
-              Phân loại
-            </div>
-            <div class="value">
-              {{ product.name }}
-            </div>
-          </div> -->
           <div class="product-info">
             <div class="title">
               Loại sản phẩm
@@ -68,7 +60,7 @@
               Nhãn hiệu
             </div>
             <div class="value">
-              {{ product.brandId.brandName }}
+              {{ product.brandId?.brandName }}
             </div>
           </div>
           <div class="product-info">
@@ -141,12 +133,6 @@
           size="large"
           disabled
         />
-        <!-- <el-checkbox
-          v-model="checked2"
-          label="Áp dụng thuế"
-          size="large"
-          disabled
-        /> -->
       </div>
     </div>
   </div>
@@ -155,6 +141,8 @@
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { computed } from 'vue'
+import { ElMessage } from 'element-plus'
+import messageBox from '@/utils/message-box'
 
 const PRODUCT_MODULE = 'product'
 export default {
@@ -167,7 +155,31 @@ export default {
 
     // xu li xoa san pham
     const handleDeleteClick = () => {
-      store.dispatch(`${PRODUCT_MODULE}/deleteProduct`, route.params.productId)
+      messageBox.showConfirm(
+        'Thao tác này sẽ xóa sản phẩm này, bạn có chắc chắn muốn xóa không?',
+        callbackMessageBox,
+        {
+          confirmButtonText: 'Xóa',
+          cancelButtonText: 'Thoát'
+        }
+      )
+    }
+
+    // confirm xoa
+    const callbackMessageBox = (action) => {
+      if (action === 'confirm') {
+        store
+          .dispatch(`${PRODUCT_MODULE}/deleteProduct`, route.params.productId)
+          .then((res) => {
+            if (res) {
+              ElMessage({
+                type: 'success',
+                message: 'Xóa sản phẩm thành công'
+              })
+              router.push('/app/list-product')
+            }
+          })
+      }
     }
 
     // xu li thoat man chi tiet
@@ -246,9 +258,10 @@ export default {
     display: flex;
     justify-content: space-between;
     padding: 12px;
-    width: 50%;
+    width: 51%;
     div {
-      float: left;
+      width: 50%;
+      display: flex;
     }
   }
 }

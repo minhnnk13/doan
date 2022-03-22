@@ -6,7 +6,9 @@
     @change="handlePickFile"
   >
     <template #default>
-      <el-icon><plus-icon /></el-icon>
+      <el-icon :src="iconPlus">
+        <Plus />
+      </el-icon>
     </template>
     <template #file="{ file }">
       <div>
@@ -16,12 +18,7 @@
           alt=""
         >
         <span class="el-upload-list__item-actions">
-          <span
-            class="el-upload-list__item-preview"
-            @click="handlePictureCardPreview(file)"
-          >
-            <el-icon><zoom-in /></el-icon>
-          </span>
+
           <span
             v-if="!disabled"
             class="el-upload-list__item-delete"
@@ -44,7 +41,6 @@
 <script>
 import { ref, computed } from 'vue'
 import { Plus, ZoomIn, Download, Delete } from '@element-plus/icons-vue'
-import UploadFile from 'element-plus'
 
 import { useStore } from 'vuex'
 
