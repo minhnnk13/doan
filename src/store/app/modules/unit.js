@@ -1,5 +1,4 @@
-import { API_PATH, authAxios } from '@/apis/api'
-import axios from 'axios'
+import { authAxios } from '@/apis/api'
 
 export default {
   namespaced: true,
