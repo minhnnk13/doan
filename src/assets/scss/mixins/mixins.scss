@@ -34,3 +34,7 @@
     -webkit-line-clamp: $line-clamp;
     -webkit-box-orient: vertical;
 }
+
+@mixin box-shadow () {
+    box-shadow: 0 0 0 1px rgb(63 63 68 / 5%), 0 1px 3px 0 rgb(63 63 68 / 15%);
+}

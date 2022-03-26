@@ -88,6 +88,10 @@ const baseForm = (config = defautConfig) => {
     return isValid
   }
 
+  const reset = () => {
+    const formEL = container.value.querySelector('.base-form')
+    formEL.__vue__.reset()
+  }
   // const validateComponent = () => {
   //   const intance = container.value.querySelector('.base-form')
   //   let isValid = false
@@ -183,6 +187,7 @@ const baseForm = (config = defautConfig) => {
     executeMutation,
     execute,
     validate,
+    reset,
     addModel,
     editModel,
     deleteModel,
