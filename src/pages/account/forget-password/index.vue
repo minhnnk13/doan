@@ -1,6 +1,9 @@
 <template>
   <the-container>
-    <div class="reset-password">
+    <div
+      class="reset-password"
+      ref="container"
+    >
       <div
         class="title"
       >
@@ -20,16 +23,20 @@
         {{ componentActive.hint }}
       </div>
 
-      <div class="form">
+      <base-form
+        ref="form "
+        class="form"
+        @submit="onClick(componentActive.action)"
+      >
         <component
           :is="componentActive.component"
-          ref="form"
+          ref="formData"
         />
-      </div>
+      </base-form>
 
       <el-button
         type="info"
-        @click="onClick"
+        @click="onClick(componentActive.action)"
       >
         {{ componentActive.buttonName }}
       </el-button>
@@ -45,6 +52,11 @@ import SendEmail from './send-email'
 import CheckEmail from './check-email'
 import ConfirmPassword from './confirm-password'
 import { useRouter } from 'vue-router'
+
+import baseStore from '@/views/pages/base/base-store'
+import { ElMessage } from 'element-plus'
+const MODULE_NAME = 'auth'
+
 const component = {
   sendEmail: 0,
   checkEmail: 1,
@@ -59,23 +71,37 @@ export default {
 
   setup () {
     const router = useRouter()
-    const email = ref('abcdfads@mail.com')
+    const email = computed(() => {
+      return store.state[MODULE_NAME].currentEmail
+    })
     const userName = ref('userName')
     const activeNumber = ref(0)
-    const form = ref({})
+    const formData = ref(null)
 
-    const sendEmail = () => {
-      //
+    const { container, store, validate, showMask, hideMask } = baseStore()
+
+    const sendEmail = async (data) => {
+      let res = false
+
+      res = await store.dispatch(`${MODULE_NAME}/sendEmail`, data)
+
+      if (!res.data) {
+        ElMessage.error('Email không tồn tại!')
+      }
+
+      return res.data
     }
 
-    const goResetPassComponent = () => {
-
+    const goResetPassComponent = (data) => {
+      store.commit(`${MODULE_NAME}/setToken`, data)
+      return true
     }
-    const submitResetPass = () => {
-
+    const submitResetPass = async (data) => {
+      const res = await store.dispatch(`${MODULE_NAME}/changePassword`, data.newPassword)
+      return res
     }
 
-    const components = reactive([
+    const components = computed(() => [
       {
         active: component.sendEmail,
         component: SendEmail,
@@ -101,28 +127,39 @@ export default {
       }
     ])
     const componentActive = computed(() => {
-      const component = components.find(element => element.active === activeNumber.value)
+      const component = components.value.find(element => element.active === activeNumber.value)
       return component
     })
 
-    const onClick = () => {
+    const onClick = async (callBback) => {
       // componentActive.value.action()
-      const MAX_STEP = 3
-      if (activeNumber.value < MAX_STEP) {
-        activeNumber.value += 1
-      }
+      const data = formData.value.data
+      const isValid = validate()
+      if (isValid) {
+        showMask()
+        const res = await callBback(data)
 
-      if (activeNumber.value === MAX_STEP) {
-        router.push('login')
+        if (res) {
+          const MAX_STEP = 3
+
+          if (activeNumber.value < MAX_STEP) {
+            activeNumber.value += 1
+          }
+
+          if (activeNumber.value === MAX_STEP) {
+            router.push('login')
+          }
+        }
+        hideMask()
       }
     }
 
     return {
       email,
-      form,
       componentActive,
-      onClick
-
+      onClick,
+      container,
+      formData
     }
   }
 

@@ -90,7 +90,9 @@ const useValidate = (props, emit) => {
 
   const isValid = () => {
     touch()
-    return hasError.value
+    const isError = hasError.value
+
+    return isError
   }
 
   const onChange = (value) => {

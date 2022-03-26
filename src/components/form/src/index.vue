@@ -2,7 +2,7 @@
   <form
     class="base-form"
     ref="form"
-    @submit="$emit('submit')"
+    @submit.prevent="$emit('submit')"
   >
     <slot />
   </form>

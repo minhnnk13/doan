@@ -56,10 +56,10 @@
           />
         </div> -->
 
-        <el-switch
+        <!-- <el-switch
           active-text="Duy trì đăng nhập"
           v-model="account.isActive"
-        />
+        /> -->
 
         <el-button
           class="btn-login"
