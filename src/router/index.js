@@ -107,9 +107,50 @@ const routes = [
           pageName: 'Nhập hàng'
         },
         component: () =>
-          import(
-            /* webpackChunkName: "import" */ '@/pages/app/products/import'
-          )
+          import(/* webpackChunkName: "import" */ '@/pages/app/products/import'),
+        children: [
+          {
+            path: '',
+            name: 'ListGoods',
+            meta: {
+              pageName: 'Đơn nhập hàng'
+            },
+            component: () =>
+              import(/* webpackChunkName: "import-goods" */ '@/pages/app/products/import/list')
+          },
+          {
+            path: 'create',
+            name: 'CreateGoods',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(/* webpackChunkName: "create-goods" */ '@/pages/app/products/import/create')
+          },
+
+          {
+            path: 'returns',
+            name: 'ReturnGoods',
+            props: true,
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(/* webpackChunkName: "return-goods" */ '@/pages/app/products/import/return')
+          },
+
+          {
+            path: ':id',
+            name: 'BrowseGoods',
+            props: true,
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(/* webpackChunkName: "browse-goods" */ '@/pages/app/products/import/browse')
+          }
+
+        ]
       },
       {
         path: 'control',
@@ -282,16 +323,19 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const token = getAuthToken()
   if (to.matched.some((record) => !record.meta.ignoreAuth)) {
-    const token = getAuthToken()
-
     if (!token) {
       next()
       redirectToApp(App.account)
     } else {
+      // redirectToApp(App.app)
       next()
     }
   } else {
+    if (token) {
+      redirectToApp(App.app)
+    }
     next()
   }
 })

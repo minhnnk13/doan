@@ -3,6 +3,9 @@
     <text-field
       placeholder="Địa chỉ email"
       v-model="data.email"
+      :is-email="true"
+      :allow-blank="false"
+      :show-require="false"
     />
     <div
       class="label"
@@ -15,18 +18,16 @@
 
 <script>
 import { reactive } from 'vue'
+
 export default {
   setup () {
     const data = reactive({
       email: null
     })
 
-    const validate = () => {
-      return true
-    }
     return {
-      data,
-      validate
+      data
+
     }
   }
 }
