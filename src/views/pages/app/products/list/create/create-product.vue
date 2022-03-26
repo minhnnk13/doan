@@ -8,7 +8,9 @@
         {{ "Quay lại danh sách sản phẩm " }}
       </div>
       <div class="btn-container">
-        <el-button>Thoát</el-button>
+        <el-button @click="handleBackClick">
+          Thoát
+        </el-button>
         <el-button
           type="primary"
           @click="handleSaveClick"
@@ -17,24 +19,14 @@
         </el-button>
       </div>
     </div>
-
+    <div
+      class="product-name-container"
+      v-if="isEdit"
+    >
+      {{ product.productName }}
+    </div>
     <div class="create-content-container">
       <div class="left-container">
-        <!-- <div class="content-wrapper management-container">
-          <div class="title-container">
-            Hình thức quản lý
-          </div>
-          <div class="content-container choice-container">
-            <el-radio-group v-model="radio">
-              <el-radio :label="3">
-                Sản phẩm thường
-              </el-radio>
-              <el-radio :label="6">
-                Sản phẩm lô date/HSD
-              </el-radio>
-            </el-radio-group>
-          </div>
-        </div> -->
         <div class="content-wrapper detail-container">
           <div class="title-container">
             Thông tin chung
@@ -65,7 +57,17 @@
                     label="Đơn vị tính"
                     label-position="top"
                   >
-                    <el-input v-model="product.unitName" />
+                    <el-select
+                      placeholder="Chọn loại sản phẩm"
+                      v-model="product.unitId"
+                    >
+                      <el-option
+                        :label="category.unitName"
+                        :value="category.unitId"
+                        v-for="(category, index) in units"
+                        :key="index"
+                      />
+                    </el-select>
                   </el-form-item>
                 </div>
               </div>
@@ -75,7 +77,7 @@
                   label-position="top"
                 >
                   <el-input
-                    v-model="product.stockQuantity"
+                    v-model="product.description"
                     :rows="2"
                     type="textarea"
                   />
@@ -123,7 +125,7 @@
         <div class="content-wrapper img-container">
           <div class="img-container-header">
             <div class="img-description">
-              {{ `Ảnh sản phẩm (${imgCount})` }}
+              {{ `Ảnh sản phẩm` }}
             </div>
             <div class="delete-all">
               Xóa tất cả
@@ -146,13 +148,13 @@
   </div>
 </template>
 <script>
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { useStore, mapState, mapActions, mapMutations } from 'vuex'
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import Uploader from '@/views/pages/common/uploader.vue'
 import MoreInfo from './more-info'
-import { mapState, mapActions, mapMutations } from 'vuex'
 
 const PRODUCT_MODULE = 'product'
 
@@ -163,6 +165,14 @@ export default {
   },
   setup () {
     const router = useRouter()
+    const route = useRoute()
+    const store = useStore()
+    let isEdit = ref(false)
+    if (route.params?.productId) {
+      store.dispatch(`${PRODUCT_MODULE}/getProduct`, route.params.productId)
+      isEdit = true
+    }
+    store.dispatch('unit/getUnits')
 
     // quay lai man danh sach san pham
     const handleBackClick = () => {
@@ -170,17 +180,20 @@ export default {
     }
 
     return {
-      handleBackClick
+      handleBackClick,
+      isEdit
     }
   },
 
   computed: {
-    ...mapState(PRODUCT_MODULE, ['product'])
+    ...mapState(PRODUCT_MODULE, ['product']),
+    ...mapState('unit', ['units'])
   },
 
   methods: {
     ...mapMutations(PRODUCT_MODULE, ['setProduct']),
     ...mapActions(PRODUCT_MODULE, ['createProduct']),
+    ...mapActions('unit', ['getUnits']),
 
     handleSaveClick () {
       this.createProduct(this.product)
@@ -205,7 +218,16 @@ export default {
 
     .back-container {
       cursor: pointer;
+
+      &:hover {
+        color: #409eff;
+      }
     }
+  }
+
+  .product-name-container {
+    font-size: 28px;
+    font-weight: 700;
   }
 
   .create-content-container {

@@ -9,9 +9,12 @@
           class="product-category"
           label="Loại sản phẩm"
         >
-          <el-select placeholder="Chọn loại sản phẩm">
+          <el-select
+            placeholder="Chọn loại sản phẩm"
+            v-model="product.categoryId"
+          >
             <el-option
-              :label="category.name"
+              :label="category.categoryName"
               :value="category.categoryId"
               v-for="(category, index) in categories"
               :key="index"
@@ -25,7 +28,10 @@
           class="product-brand"
           label="Nhãn hiệu"
         >
-          <el-select placeholder="Chọn nhãn hiệu">
+          <el-select
+            placeholder="Chọn nhãn hiệu"
+            v-model="product.brandId"
+          >
             <el-option
               :label="brand.brandName"
               :value="brand.brandId"
@@ -49,7 +55,7 @@
           v-model="product.isSale"
         />
       </div>
-      <div class="mt-12px">
+      <!-- <div class="mt-12px">
         Thuế
       </div>
       <div class="checkbox-container">
@@ -57,7 +63,7 @@
           Áp dụng thuế
         </div>
         <el-checkbox size="large" />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -70,6 +76,14 @@ export default {
     ...mapState('product', ['product']),
     ...mapState('category', ['categories']),
     ...mapState('brand', ['brands'])
+  },
+  methods: {
+    ...mapActions('category', ['getCategories']),
+    ...mapActions('brand', ['getBrands'])
+  },
+  mounted () {
+    this.getBrands()
+    this.getCategories()
   }
 }
 </script>

@@ -39,11 +39,12 @@ export default {
   components: { theHeader, HeaderTable, TheTable },
 
   setup () {
+    const params = { pageIndex: 0, pageSize: 5 }
     const config = reactive({
       storeConfig: {
         moduleName: 'product',
-        entityKey: 'id',
-        entityName: 'WareHouse'
+        entityKey: params,
+        entityName: 'Products'
       }
     })
     const { loadData } = baseStore(config)

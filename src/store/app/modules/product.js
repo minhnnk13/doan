@@ -1,5 +1,5 @@
 import { API_PATH, authAxios } from '@/apis/api'
-import axios from 'axios'
+import dayjs from 'dayjs'
 
 export default {
   namespaced: true,
@@ -7,7 +7,11 @@ export default {
   getters: {},
   mutations: {
     setProducts (state, products) {
-      state.products = products
+      state.products = products.map((product) => {
+        product.createdDate = dayjs(product.createdDate).format('DD/MM/YYYY')
+        product.productName = `${product.productName} ${product.productCode}`
+        return product
+      })
     },
     setProduct (state, product) {
       state.product = product
@@ -144,19 +148,28 @@ export default {
     },
 
     getProducts: async (context, params) => {
-      const res = await authAxios.get('/product', { params })
-      context.commit('setProducts', res)
+      return new Promise((resolve, reject) => {
+        authAxios
+          .get('/product', { params })
+          .then((res) => {
+            context.commit('setProducts', res.data)
+            resolve(res.data)
+          })
+          .catch((err) => reject(err))
+      })
     },
 
     getProduct: async (context, params) => {
-      const product = context.state.products.find(
-        (x) => x.productId === Number(params)
-      )
-      context.commit('setProduct', product)
+      const res = await authAxios.get(`/product/${params}`)
+      context.commit('setProduct', res.data)
     },
 
     createProduct: async (context, params) => {
       authAxios.post('/product', params)
+    },
+
+    deleteProduct: async (context, params) => {
+      console.log('DELETED: ' + params)
     }
   }
 }

@@ -57,6 +57,7 @@ export default {
     const dialogImageUrl = ref('')
     const dialogVisible = ref(false)
     const disabled = ref(false)
+    const plusIcon = ref(Plus)
 
     const handleRemove = (file) => {
       console.log(file)
@@ -75,7 +76,8 @@ export default {
       disabled,
       handleRemove,
       handlePictureCardPreview,
-      handleDownload
+      handleDownload,
+      plusIcon
     }
   }
 }

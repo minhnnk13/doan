@@ -7,14 +7,14 @@ export default {
   getters: {},
   mutations: {
     setBrands (state, brands) {
-      state.categories = brands
+      state.brands = brands
     }
   },
   actions: {
 
     getBrands: async (context) => {
       const res = await authAxios.get('/brand')
-      context.commit('setBrands', res)
+      context.commit('setBrands', res.data)
     },
 
     getProduct: async (context, params) => {
