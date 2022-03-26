@@ -1,7 +1,7 @@
 <template>
   <div class="create-product-container">
-    <div class="product-name-container">
-      {{ "Tạo phiếu hàng" }}
+    <div class="adjustment-id-container">
+      {{ "IAN00007" }}
     </div>
     <div class="create-content-container">
       <div class="content-wrapper info-container">
@@ -13,44 +13,80 @@
           label-position="top"
         >
           <div class="content-container">
-            <div class="product-code-unit-container">
-              <div class="branch-contaienr">
-                <el-form-item
-                  label="Chi nhánh kiểm"
-                  label-position="top"
-                >
-                  <el-select
-                    placeholder="Chi nhánh mặc định"
-                    v-model="product.unitId"
+            <div class="detail-info-container">
+              <div class="branch-status-container">
+                <div class="branch-container">
+                  <img
+                    :src="iconBranch"
+                    :height="24"
                   >
-                    <el-option
-                      :label="unit.unitName"
-                      :value="unit.unitId"
-                      v-for="(unit, index) in units"
-                      :key="index"
-                    />
-                  </el-select>
-                </el-form-item>
+                  <div class="branch">
+                    Chi nhánh mặc định
+                  </div>
+                </div>
+                <div class="status-container">
+                  Đã kiểm kho
+                </div>
               </div>
-              <div class="employee-contaienr">
-                <el-form-item
-                  label="Nhân viên kiểm hàng"
-                  label-position="top"
-                >
-                  <el-input
-                    placeholder="Tên nhân viên"
-                    v-model="product.employeeName"
-                    disabled
-                  />
-                </el-form-item>
+              <div class="create-check-employee-container">
+                <div class="create-employee-container">
+                  <div class="key">
+                    Nhân viên tạo:
+                  </div>
+                  <div class="value">
+                    {{ "(Tên nhân viên)" }}
+                  </div>
+                </div>
+                <div class="check-employee-container">
+                  <div class="key">
+                    Nhân viên kiểm:
+                  </div>
+                  <div class="value">
+                    {{ "(Tên nhân viên)" }}
+                  </div>
+                </div>
+                <div class="balance-employee-container">
+                  <div class="key">
+                    Nhân viên cân bằng:
+                  </div>
+                  <div class="value">
+                    {{ "(Tên nhân viên)" }}
+                  </div>
+                </div>
+              </div>
+              <div class="create-check-date-container">
+                <div class="create-date-container">
+                  <div class="key">
+                    Ngày tạo:
+                  </div>
+                  <div class="value">
+                    {{ "23/03/2022" }}
+                  </div>
+                </div>
+                <div class="check-date-container">
+                  <div class="key">
+                    Ngày kiểm:
+                  </div>
+                  <div class="value">
+                    {{ "23/03/2022" }}
+                  </div>
+                </div>
+                <div class="balance-date-container">
+                  <div class="key">
+                    Ngày cân bằng:
+                  </div>
+                  <div class="value">
+                    {{ "23/03/2022" }}
+                  </div>
+                </div>
               </div>
               <div class="note-container">
-                <el-form-item
-                  label="Ghi chú"
-                  label-position="top"
-                >
-                  <el-input v-model="product.note" />
-                </el-form-item>
+                <div class="key">
+                  Ghi chú:
+                </div>
+                <div class="value">
+                  {{ "Đây là ghi chú rất dài dành cho nhân viên" }}
+                </div>
               </div>
             </div>
           </div>
@@ -60,17 +96,8 @@
         <div class="title-container">
           Danh sách sản phẩm
         </div>
-        <div class="search">
-          <text-field
-            v-model="inputSearch"
-            class="w-50 m-2"
-            size="large"
-            placeholder="Tìm kiếm theo mã sản phẩm, tên sản phẩm, barcode"
-            :prefix-icon="searchIcon"
-          />
-        </div>
         <el-table
-          :data="products"
+          :data="mockData"
           ref="table"
           style="width: 100%"
           class="table-style"
@@ -79,13 +106,13 @@
           :max-height="tableHeight"
         >
           <el-table-column
-            prop="image"
+            prop="STT"
             label="STT"
             class="cursor-pointer"
           >
-            <template #default="props">
+            <template #default="prop">
               <img
-                :src="props.row?.image"
+                :src="prop.row?.image"
                 width="100"
               >
             </template>
@@ -100,14 +127,30 @@
             label="Tên sản phẩm"
           />
           <el-table-column
-            prop="saleQuantity"
+            prop="unitId"
             label="Đơn vị"
+            width="100"
           />
           <el-table-column
-            prop="stockQuantity"
+            prop="quantityOnHand"
             label="Tồn chi nhánh"
+            width="120"
           />
-
+          <el-table-column
+            label="Tồn thực tế"
+            prop="ActualInventory"
+            width="100"
+          />
+          <el-table-column
+            label="Số lượng lệch"
+            prop="amountDeviation"
+            width="120"
+          />
+          <el-table-column
+            label="Ghi chú"
+            prop="note"
+            width="150"
+          />
           <template #append>
             <div class="paging-container">
               <div style="margin-right: 12px; margin-top: 6px">
@@ -134,19 +177,11 @@
           </template>
         </el-table>
       </div>
-      <div class="confirm-btn-container">
-        <el-button
-          class="btn-style"
-          type="primary"
-          @click="$emit('onConfirmListClick')"
-        >
-          Xác nhận danh sách
-        </el-button>
-      </div>
     </div>
   </div>
 </template>
 <script>
+// Đang fix cứng các thông tin
 
 import { useRouter, useRoute } from 'vue-router'
 import { useStore, mapState, mapActions, mapMutations } from 'vuex'
@@ -156,11 +191,10 @@ import { Plus, Search } from '@element-plus/icons-vue'
 import { getUserInfo } from '@/utils/auth'
 import messageBox from '@/utils/message-box'
 import dayjs from 'dayjs'
-
+import IconBranch from '@/assets/icons/import-control/image 32.svg'
 const PRODUCT_MODULE = 'product'
 
 export default {
-  emits: ['onConfirmListClick'],
 
   setup () {
     const router = useRouter()
@@ -171,6 +205,7 @@ export default {
     const pageSize = ref(5)
     const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
     const inputSearch = ref('')
+    const iconBranch = ref(IconBranch)
     const params = computed(() => {
       return {
         pageIndex: 0,
@@ -178,6 +213,40 @@ export default {
         search: inputSearch.value
       }
     })
+    const mockData = reactive([
+      {
+        STT: '01',
+        productName: 'Sản phẩm từ kho',
+        categoryName: 'Thức ăn cho chim',
+        unitId: 'Cái',
+        ActualInventory: 15,
+        quantityOnHand: 16
+      },
+      {
+        STT: '01',
+        productName: 'Sản phẩm từ kho',
+        categoryName: 'Thức ăn cho chim',
+        unitId: 'Cái',
+        ActualInventory: 15,
+        quantityOnHand: 16
+      },
+      {
+        STT: '01',
+        productName: 'Sản phẩm từ kho',
+        categoryName: 'Thức ăn cho chim',
+        unitId: 'Cái',
+        ActualInventory: 15,
+        quantityOnHand: 16
+      },
+      {
+        STT: '01',
+        productName: 'Sản phẩm từ kho',
+        categoryName: 'Thức ăn cho chim',
+        unitId: 'Cái',
+        ActualInventory: 15,
+        quantityOnHand: 16
+      }
+    ])
     if (route.params?.productId) {
       store.dispatch(`${PRODUCT_MODULE}/getProduct`, route.params.productId)
       isEdit = true
@@ -250,25 +319,24 @@ export default {
       searchIcon,
       pageSizes,
       pageSize,
-      inputSearch
+      inputSearch,
+      iconBranch,
+      mockData
     }
   },
 
   computed: {
-    ...mapState(PRODUCT_MODULE, ['product']),
-    ...mapState('unit', ['units'])
+    ...mapState(PRODUCT_MODULE, ['product'])
   },
 
   methods: {
     ...mapMutations(PRODUCT_MODULE, ['setProduct']),
-    ...mapActions(PRODUCT_MODULE, ['createProduct']),
-    ...mapActions('unit', ['getUnits'])
+    ...mapActions(PRODUCT_MODULE, ['createProduct'])
   },
 
   mounted () {},
 
-  beforeUnmount () {
-  }
+  beforeUnmount () {}
 }
 </script>
 <style lang="scss" scoped>
@@ -290,14 +358,68 @@ export default {
     }
   }
 
-  .product-name-container {
+  .adjustment-id-container {
     font-size: 28px;
     font-weight: 700;
   }
 
   .create-content-container {
     width: 100%;
+    .detail-info-container {
+      display: flex;
 
+      .branch-status-container {
+        width: 20%;
+        .branch-container {
+          display: flex;
+
+          img {
+            margin-right: 8px;
+            margin-top: -8px;
+          }
+        }
+        .status-container {
+          margin-top: 16px;
+        }
+      }
+
+      .create-check-employee-container {
+        width: 30%;
+
+        .create-employee-container,
+        .check-employee-container,
+        .balance-employee-container {
+          display: flex;
+          .key {
+            width: 184px;
+          }
+        }
+
+        .check-employee-container, .balance-employee-container {
+          margin-top: 16px;
+        }
+      }
+
+      .create-check-date-container {
+        width: 25%;
+        .create-date-container,
+        .check-date-container,
+        .balance-date-container {
+          display: flex;
+          .key {
+            width: 132px;
+          }
+        }
+
+        .check-date-container, .balance-date-container {
+          margin-top: 16px;
+        }
+      }
+
+      .note-container {
+        width: 25%;
+      }
+    }
     .info-container,
     .list-container {
       margin-top: 24px;
@@ -323,26 +445,6 @@ export default {
               width: 100%;
             }
           }
-        }
-      }
-
-      .sub-price-container {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        padding: 12px;
-        div {
-          width: 50%;
-          :deep(.el-form-item) {
-            width: 100%;
-            .el-input {
-              width: 100%;
-            }
-          }
-        }
-
-        .sub-price-2 {
-          margin-left: 12px;
         }
       }
     }
@@ -373,9 +475,7 @@ export default {
         .el-table__append-wrapper {
           display: flex;
           justify-content: flex-end;
-          position: absolute;
-          right: 24px;
-          bottom: 8px;
+          margin: 12px;
           .paging-container {
             display: flex;
             .el-input {

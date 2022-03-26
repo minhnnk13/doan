@@ -1,14 +1,5 @@
 <template>
   <div class="create-product-container">
-    <div class="create-header">
-      <div
-        class="back-container"
-        @click="handleBackClick"
-      >
-        {{ "Phiếu kiểm hàng" }}
-      </div>
-      <div class="process-container" />
-    </div>
     <div class="adjustment-id-container">
       {{ "IAN00007" }}
     </div>
@@ -103,9 +94,9 @@
             label="STT"
             class="cursor-pointer"
           >
-            <template #default="props">
+            <template #default="prop">
               <img
-                :src="props.row?.image"
+                :src="prop.row?.image"
                 width="100"
               >
             </template>
@@ -131,10 +122,10 @@
             label="Tồn thực tế"
             width="150"
           >
-            <template #default="props">
+            <template #default="prop">
               <text-field
                 :only-border-bottom="true"
-                v-model="props.row.quantityOnHand"
+                v-model="prop.row.ActualInventory"
               />
             </template>
           </el-table-column>
@@ -142,8 +133,8 @@
             label="Ghi chú"
             width="150"
           >
-            <template #default>
-              <text-field v-model="props.row.note" />
+            <template #default="prop">
+              <text-field v-model="prop.row.note" />
             </template>
           </el-table-column>
           <template #append>
@@ -176,9 +167,9 @@
         <el-button
           class="btn-style"
           type="primary"
-          @click="$emit('onCheckClick')"
+          @click="$emit('onFinishClick')"
         >
-          Kiểm hàng
+          Hoàn thành kiểm
         </el-button>
       </div>
     </div>
@@ -199,7 +190,7 @@ import IconBranch from '@/assets/icons/import-control/image 32.svg'
 const PRODUCT_MODULE = 'product'
 
 export default {
-  emits: ['onCheckClick'],
+  emits: ['onFinishClick'],
 
   setup () {
     const router = useRouter()
@@ -256,7 +247,6 @@ export default {
       store.dispatch(`${PRODUCT_MODULE}/getProduct`, route.params.productId)
       isEdit = true
     }
-    store.dispatch('unit/getUnits')
 
     const product = computed(() => store.state.product.product)
 
@@ -332,14 +322,12 @@ export default {
   },
 
   computed: {
-    ...mapState(PRODUCT_MODULE, ['product']),
-    ...mapState('unit', ['units'])
+    ...mapState(PRODUCT_MODULE, ['product'])
   },
 
   methods: {
     ...mapMutations(PRODUCT_MODULE, ['setProduct']),
-    ...mapActions(PRODUCT_MODULE, ['createProduct']),
-    ...mapActions('unit', ['getUnits'])
+    ...mapActions(PRODUCT_MODULE, ['createProduct'])
   },
 
   mounted () {},

@@ -1,14 +1,5 @@
 <template>
   <div class="create-product-container">
-    <div class="create-header">
-      <div
-        class="back-container"
-        @click="handleBackClick"
-      >
-        {{ "Phiếu kiểm hàng" }}
-      </div>
-      <div class="process-container" />
-    </div>
     <div class="adjustment-id-container">
       {{ "IAN00007" }}
     </div>

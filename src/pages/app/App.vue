@@ -6,7 +6,7 @@
       <app-header v-if="!$route.meta.excludeHeader" />
       <div
         class="content"
-        :class="{'height-full': $route.meta.excludeHeader}"
+        :class="{ 'height-full': $route.meta.excludeHeader }"
       >
         <router-view v-slot="{ Component }">
           <transition name="fade">
@@ -45,14 +45,11 @@ export default {
       height: calc(100% - 56px);
       overflow: auto;
 
-
       &.height-full {
         height: 100%;
         padding-top: 0;
       }
-
     }
-
   }
 }
 </style>

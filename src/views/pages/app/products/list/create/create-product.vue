@@ -133,7 +133,7 @@
             label-position="top"
           >
             <div class="content-container">
-              <uploader />
+              <uploader :product="product" />
             </div>
           </el-form>
         </div>

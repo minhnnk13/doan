@@ -1,9 +1,16 @@
 <template>
+  <the-header
+    @onBackClick="handleBackClick"
+    v-if="step != 0"
+  />
   <component
     :is="components"
     @onCreateClick="handleCreateClick"
     @onConfirmListClick="handleConfirmListClick"
     @onCheckClick="handleCheckClick"
+    @onFinishClick="handleFinishClick"
+    @onBalanceClick="handleBalanceClick"
+    @onConfirmBalanceClick="handleConfirmBalanceClick"
   />
 </template>
 
@@ -18,6 +25,10 @@ import CreateStep1 from '@/views/pages/app/products/control/create-step-1.vue'
 import CreateStep2 from '@/views/pages/app/products/control/create-step-2.vue'
 import CreateStep3 from '@/views/pages/app/products/control/create-step-3.vue'
 import CreateStep4 from '@/views/pages/app/products/control/create-step-4.vue'
+import CreateStep5 from '@/views/pages/app/products/control/create-step-5.vue'
+import CreateStep6 from '@/views/pages/app/products/control/create-step-6.vue'
+import TheHeader from '@/views/pages/app/products/control/the-header.vue'
+
 import { computed, ref, reactive } from 'vue'
 import { useStore } from 'vuex'
 
@@ -26,14 +37,16 @@ const CREATE_STEP_1 = 1
 const CREATE_STEP_2 = 2
 const CREATE_STEP_3 = 3
 const CREATE_STEP_4 = 4
-
+const CREATE_STEP_5 = 5
+const CREATE_STEP_6 = 6
 export default {
   components: {
-    ImportControl
+    ImportControl,
+    TheHeader
   },
   setup () {
     // #data
-    const step = ref(CREATE_STEP_3)
+    const step = ref(LIST)
     // #end-data
 
     // #computed
@@ -49,6 +62,10 @@ export default {
           return CreateStep3
         case CREATE_STEP_4:
           return CreateStep4
+        case CREATE_STEP_5:
+          return CreateStep5
+        case CREATE_STEP_6:
+          return CreateStep6
       }
     })
     // #end-computed
@@ -65,12 +82,34 @@ export default {
     const handleCheckClick = () => {
       step.value = CREATE_STEP_3
     }
+
+    const handleFinishClick = () => {
+      step.value = CREATE_STEP_4
+    }
+
+    const handleBalanceClick = () => {
+      step.value = CREATE_STEP_5
+    }
+
+    const handleConfirmBalanceClick = () => {
+      step.value = CREATE_STEP_6
+    }
+
+    const handleBackClick = () => {
+      step.value = LIST
+    }
+
     // #endmethods
     return {
       components,
       handleCreateClick,
       handleConfirmListClick,
-      handleCheckClick
+      handleCheckClick,
+      handleFinishClick,
+      handleBalanceClick,
+      handleConfirmBalanceClick,
+      step,
+      handleBackClick
     }
   }
 }
