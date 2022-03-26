@@ -3,6 +3,7 @@
     :is="components"
     @onCreateClick="handleCreateClick"
     @onConfirmListClick="handleConfirmListClick"
+    @onCheckClick="handleCheckClick"
   />
 </template>
 
@@ -32,7 +33,7 @@ export default {
   },
   setup () {
     // #data
-    const step = ref(CREATE_STEP_2)
+    const step = ref(CREATE_STEP_3)
     // #end-data
 
     // #computed
@@ -60,11 +61,16 @@ export default {
     const handleConfirmListClick = () => {
       step.value = CREATE_STEP_2
     }
+
+    const handleCheckClick = () => {
+      step.value = CREATE_STEP_3
+    }
     // #endmethods
     return {
       components,
       handleCreateClick,
-      handleConfirmListClick
+      handleConfirmListClick,
+      handleCheckClick
     }
   }
 }
