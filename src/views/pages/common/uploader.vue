@@ -3,9 +3,12 @@
     action="#"
     list-type="picture-card"
     :auto-upload="false"
+    @change="handlePickFile"
   >
     <template #default>
-      <el-icon><Plus /></el-icon>
+      <el-icon :src="iconPlus">
+        <Plus />
+      </el-icon>
     </template>
     <template #file="{ file }">
       <div>
@@ -15,25 +18,13 @@
           alt=""
         >
         <span class="el-upload-list__item-actions">
-          <span
-            class="el-upload-list__item-preview"
-            @click="handlePictureCardPreview(file)"
-          >
-            <el-icon><zoom-in /></el-icon>
-          </span>
-          <span
-            v-if="!disabled"
-            class="el-upload-list__item-delete"
-            @click="handleDownload(file)"
-          >
-            <el-icon><Download /></el-icon>
-          </span>
+
           <span
             v-if="!disabled"
             class="el-upload-list__item-delete"
             @click="handleRemove(file)"
           >
-            <el-icon><Delete /></el-icon>
+            <el-icon :size="20"><delete-icon /></el-icon>
           </span>
         </span>
       </div>
@@ -48,9 +39,10 @@
   </el-dialog>
 </template>
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Plus, ZoomIn, Download, Delete } from '@element-plus/icons-vue'
-import UploadFile from 'element-plus'
+
+import { useStore } from 'vuex'
 
 export default {
   setup () {
@@ -58,6 +50,10 @@ export default {
     const dialogVisible = ref(false)
     const disabled = ref(false)
     const plusIcon = ref(Plus)
+    const deleteIcon = ref(Delete)
+    const store = useStore()
+
+    const product = computed(() => store.state.product.product)
 
     const handleRemove = (file) => {
       console.log(file)
@@ -65,9 +61,11 @@ export default {
     const handlePictureCardPreview = (file) => {
       dialogImageUrl.value = file.url
       dialogVisible.value = true
-    }
-    const handleDownload = (file) => {
       console.log(file)
+    }
+
+    const handlePickFile = (file) => {
+      product.value.image = file
     }
 
     return {
@@ -76,8 +74,9 @@ export default {
       disabled,
       handleRemove,
       handlePictureCardPreview,
-      handleDownload,
-      plusIcon
+      plusIcon,
+      deleteIcon,
+      handlePickFile
     }
   }
 }

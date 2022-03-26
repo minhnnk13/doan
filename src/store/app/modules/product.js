@@ -1,5 +1,7 @@
 import { API_PATH, authAxios } from '@/apis/api'
 import dayjs from 'dayjs'
+import firebase from 'firebase/app'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 export default {
   namespaced: true,
@@ -8,12 +10,16 @@ export default {
   mutations: {
     setProducts (state, products) {
       state.products = products.map((product) => {
-        product.createdDate = dayjs(product.createdDate).format('DD/MM/YYYY')
+        product.createdDate = dayjs(product.createdDate).format('YYYY-MM-DD')
+        product.modifyCreate = dayjs(product.modifyCreate).format('YYYY-MM-DD')
         product.productName = `${product.productName} ${product.productCode}`
+        product.categoryName = product.categoryId?.categoryName
         return product
       })
     },
     setProduct (state, product) {
+      product.createdDate = dayjs(product.createdDate).format('YYYY-MM-DD')
+      product.modifyCreate = dayjs(product.modifyCreate).format('YYYY-MM-DD')
       state.product = product
     }
   },
@@ -164,12 +170,20 @@ export default {
       context.commit('setProduct', res.data)
     },
 
-    createProduct: async (context, params) => {
-      authAxios.post('/product', params)
+    createProduct: async (context, payload) => {
+      if (typeof payload.image === 'object') {
+        const storage = getStorage()
+        const storageRef = ref(storage, payload.image.name)
+        const img = await fetch(payload.image.url)
+        await uploadBytes(storageRef, await img.blob())
+        payload.image = await getDownloadURL(storageRef)
+      }
+
+      return authAxios.post('/product', payload)
     },
 
-    deleteProduct: async (context, params) => {
-      console.log('DELETED: ' + params)
+    deleteProduct: async (context, payload) => {
+      return await authAxios.delete(`/product/${payload}`)
     }
   }
 }

@@ -6,7 +6,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import globalComponents from '@/plugins/global-components'
 import globalMixin from '@/plugins/global-mixin'
-
+import { app } from '@/common/storage_initialize.js'
 const globalProps = require('@/plugins/global-props').default
 
 createApp(App)
@@ -16,4 +16,5 @@ createApp(App)
   .use(globalComponents)
   .use(globalMixin)
   .use(globalProps)
+  .use(app)
   .mount('#app')

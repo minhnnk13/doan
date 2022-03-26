@@ -43,12 +43,14 @@ export default {
       padding: 24px 24px;
       width: 100%;
       height: calc(100% - 56px);
-      overflow: hidden;
+      overflow: auto;
+
 
       &.height-full {
         height: 100%;
         padding-top: 0;
       }
+
     }
 
   }

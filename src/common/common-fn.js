@@ -4,7 +4,6 @@ const getLinkToApp = (app) => `${window.location.origin}/${app}`
 
 const redirectToApp = (app, path) => {
   let href = getLinkToApp(app)
-
   if (path) {
     href += `${path}`
   }

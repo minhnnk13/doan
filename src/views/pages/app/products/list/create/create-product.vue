@@ -62,9 +62,9 @@
                       v-model="product.unitId"
                     >
                       <el-option
-                        :label="category.unitName"
-                        :value="category.unitId"
-                        v-for="(category, index) in units"
+                        :label="unit.unitName"
+                        :value="unit.unitId"
+                        v-for="(unit, index) in units"
                         :key="index"
                       />
                     </el-select>
@@ -127,9 +127,6 @@
             <div class="img-description">
               {{ `Ảnh sản phẩm` }}
             </div>
-            <div class="delete-all">
-              Xóa tất cả
-            </div>
           </div>
           <el-form
             :model="form"
@@ -150,11 +147,14 @@
 <script>
 import { useRouter, useRoute } from 'vue-router'
 import { useStore, mapState, mapActions, mapMutations } from 'vuex'
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import Uploader from '@/views/pages/common/uploader.vue'
 import MoreInfo from './more-info'
+import { getUserInfo } from '@/utils/auth'
+import messageBox from '@/utils/message-box'
+import dayjs from 'dayjs'
 
 const PRODUCT_MODULE = 'product'
 
@@ -174,14 +174,70 @@ export default {
     }
     store.dispatch('unit/getUnits')
 
+    const product = computed(() => store.state.product.product)
+
     // quay lai man danh sach san pham
     const handleBackClick = () => {
       router.push('/app/list-product')
     }
 
+    // xu li xoa san pham
+    const handleSaveClick = () => {
+      messageBox.showConfirm(
+        'Bạn có đồng ý lưu sản phẩm này?',
+        callbackMessageBox,
+        {
+          confirmButtonText: 'Đồng ý',
+          cancelButtonText: 'Thoát'
+        }
+      )
+    }
+
+    // confirm xoa
+    const callbackMessageBox = (action) => {
+      if (action === 'confirm') {
+        product.value.userId = getUserInfo().userId
+        if (!product.value.productId) {
+          product.value.createdDate = dayjs(new Date()).format('YYYY-MM-DD')
+        }
+        product.value.modifyCreate = dayjs(new Date()).format('YYYY-MM-DD')
+        product.value.supplierId = 1
+
+        if (isEdit.value) {
+          product.value.isSale = product.value.sale
+
+          if (typeof product.value.brandId === 'object') {
+            product.value.brandId = product.value.brandId.brandId
+          }
+
+          if (typeof product.value.categoryId === 'object') {
+            product.value.categoryId = product.value.categoryId.categoryId
+          }
+
+          if (typeof product.value.unitId === 'object') {
+            product.value.unitId = product.value.unitId.unitId
+          }
+        }
+
+        store
+          .dispatch(`${PRODUCT_MODULE}/createProduct`, product.value)
+          .then((res) => {
+            if (res) {
+              ElMessage({
+                type: 'success',
+                message: 'Lưu thành công'
+              })
+              router.push('/app/list-product')
+            }
+          })
+      }
+    }
+
     return {
       handleBackClick,
-      isEdit
+      isEdit,
+      handleSaveClick,
+      callbackMessageBox
     }
   },
 
@@ -193,11 +249,7 @@ export default {
   methods: {
     ...mapMutations(PRODUCT_MODULE, ['setProduct']),
     ...mapActions(PRODUCT_MODULE, ['createProduct']),
-    ...mapActions('unit', ['getUnits']),
-
-    handleSaveClick () {
-      this.createProduct(this.product)
-    }
+    ...mapActions('unit', ['getUnits'])
   },
 
   mounted () {},

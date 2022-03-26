@@ -6,9 +6,9 @@
         <el-button
           class="btn-style"
           type="primary"
-          @click="handleCreateClick"
+          @click="$emit('onCreateClick')"
         >
-          Thêm sản phẩm
+          Tạo phiếu kiểm
         </el-button>
       </div>
     </div>
@@ -17,7 +17,7 @@
       active-name="first"
     >
       <el-tab-pane
-        label="Tất cả sản phẩm"
+        label="Tất cả"
         name="first"
       >
         <div class="search">
@@ -25,31 +25,9 @@
             v-model="inputSearch"
             class="w-50 m-2"
             size="large"
-            placeholder="Tìm kiếm theo mã sản phẩm, tên sản phẩm, barcode"
+            placeholder="Tìm kiếm theo mã phiếu kiểm hàng"
             :prefix-icon="searchIcon"
           />
-        </div>
-        <div
-          class="header-table"
-          v-if="!isShowHeaderTable"
-        >
-          <el-checkbox
-            @change="selectAll"
-            :model-value="selectedHeader"
-          />
-          Đã chọn {{ selectedProduct?.length }} trên trang này
-          <el-select
-            v-model="selectedAction"
-            @change="selectAction"
-            placeholder="Chọn thao tác"
-          >
-            <el-option
-              v-for="(action, index) in actions"
-              :key="index"
-              :label="action.lable"
-              :value="action.value"
-            />
-          </el-select>
         </div>
         <el-table
           :data="products"
@@ -68,39 +46,36 @@
             align="center"
           />
           <el-table-column
-            prop="image"
-            label="Ảnh"
+            prop="code"
+            label="Mã phiếu"
             class="cursor-pointer"
-          >
-            <template #default="props">
-              <img
-                :src="props.row?.image"
-                width="100"
-              >
-            </template>
-          </el-table-column>
+          />
+
           <el-table-column
-            prop="productName"
-            label="Sản phẩm"
+            prop="storeName"
+            label="Kho kiểm hàng"
             class="cursor-pointer"
           />
           <el-table-column
-            prop="categoryName"
-            label="Loại"
-          />
-          <el-table-column
-            prop="saleQuantity"
-            label="Có thể bán"
-          />
-          <el-table-column
-            prop="stockQuantity"
-            label="Tồn kho"
+            prop="status"
+            label="Trạng thái"
           />
           <el-table-column
             prop="createdDate"
-            label="Ngày khởi tạo"
+            label="Ngày tạo"
           />
-
+          <el-table-column
+            prop="checkDate"
+            label="Ngày kiểm"
+          />
+          <el-table-column
+            prop="user"
+            label="Nhân viên tạo"
+          />
+          <el-table-column
+            prop="note"
+            label="Ghi chú"
+          />
           <template #append>
             <div class="paging-container">
               <div style="margin-right: 12px; margin-top: 6px">
@@ -141,7 +116,10 @@ import { Search } from '@element-plus/icons-vue'
 
 const PRODUCT_MODULE = 'product'
 export default {
+  emits: ['onCreateClick'],
+
   setup () {
+    // #declare
     const store = useStore()
     const route = useRoute()
     const router = useRouter()
@@ -150,28 +128,23 @@ export default {
     const searchIcon = ref(Search)
     const selectedHeader = ref(true)
     const selectedAction = ref(null)
-    const inputSearch = ref('')
-    const selectedProduct = ref([])
     const pageSize = ref(5)
-    const params = computed(() => {
-      return {
-        pageIndex: 0,
-        pageSize: pageSize.value,
-        search: inputSearch.value
-      }
-    })
-    store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
+    const selectedProduct = ref([])
     const products = computed(() => store.state.product.products)
     const tableHeight = ref(window.innerHeight - 300)
     const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
+    // #enddeclare
+
+    // #Computed
     const isShowHeaderTable = computed(() => {
       return !selectedProduct.value?.length
     })
 
+    const params = computed(() => { return { pageIndex: 0, pageSize: pageSize.value, search: '' } })
+    // #endComputed
+
+    // #region Methods
     // xu li event nut back
-    const handleCreateClick = () => {
-      router.push('/app/create')
-    }
 
     // xem chi tiet san pham
     const handleDetailClick = (product) => {
@@ -190,10 +163,13 @@ export default {
       store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
     }
 
+    // #endregion
+
+    store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
+
     return {
       products,
       activeName,
-      handleCreateClick,
       handleDetailClick,
       searchIcon,
       tableHeight,
@@ -272,11 +248,11 @@ export default {
         justify-content: flex-end;
         position: fixed;
         right: 24px;
-        bottom: 27px;
+        bottom: 32px;
         .paging-container {
           display: flex;
-          .el-input {
-            width: 50px;
+          .el-select {
+            width: 50px !important;
           }
         }
       }
