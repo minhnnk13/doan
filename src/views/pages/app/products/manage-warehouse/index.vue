@@ -137,7 +137,8 @@ export default {
       clearSelected,
       pageSizes,
       pageSize,
-      handleChangePageSize
+      handleChangePageSize,
+      inputSearch
     }
   }
 }

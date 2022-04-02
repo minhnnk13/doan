@@ -42,7 +42,7 @@ export default {
     },
 
     register: async (context, data) => {
-      return await axios.post(`${API_PATH}/register`, data)
+      return await axios.post(`${API_PATH}/user/register`, data)
         .then((res) => res)
         .catch(() => {
           return false

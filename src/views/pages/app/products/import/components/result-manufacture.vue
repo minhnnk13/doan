@@ -5,10 +5,7 @@
     <div class="top">
       <div class="name">
         <el-icon><avatar /></el-icon>
-        Nhà cung cấp 123
-        <span>
-          <el-icon><close /></el-icon>
-        </span>
+        {{ supplier.supplierName }}
       </div>
 
       <div class="debt">
@@ -22,14 +19,17 @@
           Địa chỉ xuất hàng
         </div>
         <div>
-          Giao hàng:
+          Giao hàng
         </div>
 
         <div>
-          Số điện thoại:
+          Số điện thoại:  {{ supplier.phone }}
         </div>
         <div>
-          Địa chỉ:
+          Địa chỉ:  {{ supplier.address }}
+        </div>
+        <div>
+          Email:  {{ supplier.email }}
         </div>
       </div>
 
@@ -38,14 +38,14 @@
           Địa chỉ xuất hàng
         </div>
         <div>
-          Giao hàng:
+          Giao hàng
         </div>
 
         <div>
-          Số điện thoại:
+          Số điện thoại: {{ supplier.phone }}
         </div>
         <div>
-          Địa chỉ:
+          Địa chỉ: {{ supplier.address }}
         </div>
       </div>
     </div>
@@ -54,10 +54,20 @@
 
 <script>
 import { Avatar, Close } from '@element-plus/icons-vue'
+import { computed, ref, reactive } from 'vue'
+import { useStore } from 'vuex'
+
 export default {
   components: {
-    Avatar,
-    Close
+    Avatar
+  },
+
+  setup () {
+    const store = useStore()
+
+    const supplier = computed(() => { return store.state.supplier.importSupplier })
+
+    return { supplier }
   }
 }
 </script>

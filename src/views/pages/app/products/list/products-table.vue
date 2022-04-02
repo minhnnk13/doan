@@ -27,6 +27,7 @@
             size="large"
             placeholder="Tìm kiếm theo mã sản phẩm, tên sản phẩm, barcode"
             :prefix-icon="searchIcon"
+            @keyup="handleSearch"
           />
         </div>
         <div
@@ -138,6 +139,7 @@ import { reactive, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getAuthToken } from '@/utils/auth'
 import { Search } from '@element-plus/icons-vue'
+import { debounce } from 'lodash'
 
 const PRODUCT_MODULE = 'product'
 export default {
@@ -190,6 +192,11 @@ export default {
       store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
     }
 
+    // ham tim kiem
+    const handleSearch = () => {
+      store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
+    }
+
     return {
       products,
       activeName,
@@ -206,7 +213,9 @@ export default {
       selectedProduct,
       pageSize,
       pageSizes,
-      handleChangePageSize
+      handleChangePageSize,
+      inputSearch,
+      handleSearch
     }
   }
 }

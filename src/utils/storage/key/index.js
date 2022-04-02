@@ -4,7 +4,7 @@ const localStorageKey = {
 }
 
 const sessionStorageKey = {
-
+  IMPORT_INFO: 'ImportInfo'
 }
 
 export { localStorageKey, sessionStorageKey }

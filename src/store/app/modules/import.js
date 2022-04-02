@@ -3,14 +3,52 @@ import axios from 'axios'
 
 export default {
   namespaced: true,
-  state: { products: [], product: {} },
+  state: {
+    import: {
+      productsToImport: [],
+      totalPrice: 0,
+      saleQuantity: 0,
+      isTaxed: false
+    },
+    product: {},
+    productsToImport: []
+  },
   getters: {},
   mutations: {
-    setProducts (state, products) {
-      state.products = products
+    setImportProducts (state, importProducts) {
+      state.importProducts = importProducts
     },
     setProduct (state, product) {
       state.product = product
+    },
+    setProductsToImport (state, product) {
+      state.productsToImport.push(product)
+      state.import.productsToImport = state.productsToImport
+    },
+    calculateTotalPrice (state) {
+      state.import.totalPrice = 0
+      state.import.saleQuantity = 0
+      state.import.productsToImport.map(product => {
+        if (!state.import.isTaxed) {
+          product.productImportPrice += (product.productImportPrice * 0.1)
+        } else {
+          product.productImportPrice += product.productImportPrice
+        }
+        state.import.totalPrice += product.productImportPrice
+        state.import.saleQuantity += Number(product.quantity)
+      })
+    },
+    reCalculateAllPrice (state) {
+      state.import.totalPrice = 0
+      state.import.saleQuantity = 0
+      state.import.productsToImport.map(product => {
+        if (!state.import.isTaxed) {
+          product.productImportPrice += (product.productImportPrice * 0.1)
+        } else {
+          product.productImportPrice -= (product.productImportPrice / 11)
+        }
+        state.import.totalPrice += product.productImportPrice
+      })
     }
   },
   actions: {

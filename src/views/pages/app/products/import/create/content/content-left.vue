@@ -1,16 +1,30 @@
 <template>
   <div class="left">
     <div class="manufacture">
-      <div
-        class="label"
-      >
+      <div class="label">
         Thông tin nhà cung cấp
       </div>
       <div
         class="search"
-        v-if="false"
+        v-if="importSupplier && Object.keys(importSupplier).length === 0 && Object.getPrototypeOf(importSupplier) === Object.prototype"
       >
-        <el-autocomplete placeholder="Tìm kiếm nhà cung câp theo SĐT, tên, mã nhà cung cấp" />
+        <el-autocomplete
+          placeholder="Tìm kiếm nhà cung câp theo SĐT, tên, mã nhà cung cấp"
+          v-model="supplierInputSearch"
+          :fetch-suggestions="suppliersQuerySearch"
+          clearable
+          @select="handleSupplierSelect"
+        >
+          <template #default="{ item }">
+            <div class="item-container">
+              <div class="value">
+                {{ item.supplierName }}
+              </div>
+            </div>
+
+            <!-- <span class="link">{{ item.link }}</span> -->
+          </template>
+        </el-autocomplete>
       </div>
 
       <result-manufacture v-else />
@@ -22,12 +36,33 @@
           Thông tin sản phẩm
         </div>
 
-        <el-autocomplete placeholder="Tìm kiếm nhà cung câp theo SĐT, tên, mã nhà cung cấp" />
+        <el-autocomplete
+          v-model="inputSearch"
+          placeholder="Tìm kiếm sản phẩm theo SĐT, tên, mã sản phẩm"
+          :fetch-suggestions="querySearch"
+          clearable
+          class="inline-input"
+          @select="handleSelect"
+        >
+          <template #default="{ item }">
+            <div class="item-container">
+              <div class="img-container">
+                <img
+                  class="item-img"
+                  :src="item.image"
+                >
+              </div>
+              <div class="value">
+                {{ item.productName }}
+              </div>
+            </div>
+
+            <!-- <span class="link">{{ item.link }}</span> -->
+          </template>
+        </el-autocomplete>
       </div>
 
-      <div
-        class="list"
-      >
+      <div class="list">
         <products-table />
       </div>
 
@@ -46,14 +81,87 @@
 <script>
 import ProductsTable from '../../components/products-table.vue'
 import ResultManufacture from '../../components/result-manufacture.vue'
-
+import { useStore } from 'vuex'
+import { ref, reactive, computed } from 'vue'
 export default {
   components: {
     ResultManufacture,
     ProductsTable
+  },
+  setup () {
+    const store = useStore()
+    const importCreateStep = computed(() => {
+      return store.state['multiple-screen-data'].importCreateStep
+    })
 
+    const products = computed(() => {
+      return store.state.product.products
+    })
+
+    const suppliers = computed(() => {
+      return store.state.supplier.suppliers
+    })
+
+    const importSupplier = computed(() => { return store.state.supplier.importSupplier })
+
+    const inputSearch = ref('')
+    const supplierInputSearch = ref('')
+    const querySearch = (queryString, cb) => {
+      const results = queryString
+        ? products.value.filter(createFilter(queryString))
+        : products.value
+      // call callback function to return suggestions
+      cb(results)
+    }
+
+    const createFilter = (queryString) => {
+      return (product) => {
+        return (
+          product.productName
+            .toLowerCase()
+            .indexOf(queryString.toLowerCase()) === 0
+        )
+      }
+    }
+
+    const createSuppliersFilter = (queryString) => {
+      return (supplier) => {
+        return (
+          supplier.supplierName
+            .toLowerCase()
+            .indexOf(queryString.toLowerCase()) === 0
+        )
+      }
+    }
+
+    const suppliersQuerySearch = (queryString, cb) => {
+      const results = queryString
+        ? suppliers.value.filter(createSuppliersFilter(queryString))
+        : suppliers.value
+      // call callback function to return suggestions
+      cb(results)
+    }
+
+    const handleSelect = (product) => {
+      store.commit('import/setProductsToImport', product)
+    }
+
+    const handleSupplierSelect = (supplier) => {
+      store.commit('supplier/setImportSupplier', supplier)
+    }
+
+    return {
+      querySearch,
+      inputSearch,
+      handleSelect,
+      importCreateStep,
+      suppliers,
+      suppliersQuerySearch,
+      supplierInputSearch,
+      handleSupplierSelect,
+      importSupplier
+    }
   }
-
 }
 </script>
 
@@ -76,7 +184,6 @@ export default {
         width: 100%;
       }
     }
-
   }
 
   .products {
@@ -92,7 +199,6 @@ export default {
         width: 100%;
       }
     }
-
   }
 
   .ware-house {
