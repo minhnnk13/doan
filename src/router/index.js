@@ -166,24 +166,81 @@ const routes = [
       {
         path: 'manufacture',
         name: 'Manufacture',
-        meta: {
-          pageName: 'Nhà cung cấp'
-        },
         component: () =>
           import(
             /* webpackChunkName: "manufacture" */ '@/pages/app/products/manufacture'
-          )
+          ),
+        children: [
+          {
+            path: '',
+            name: 'ListManufacture',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: "list-manufacture" */ '@/pages/app/products/manufacture/list'
+              )
+          },
+
+          {
+            path: 'create',
+            name: 'CreateManufacture',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: "create-manufacture" */ '@/pages/app/products/manufacture/create'
+              )
+          },
+
+          {
+            path: ':id',
+            name: 'DetailManufacture',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
+              )
+          }
+        ]
+
       },
       {
         path: 'capital',
         name: 'Capital',
-        meta: {
-          pageName: 'Điều chỉnh giá vốn'
-        },
         component: () =>
           import(
             /* webpackChunkName: "capital" */ '@/pages/app/products/capital'
-          )
+          ),
+
+        children: [
+          {
+            path: '',
+            name: 'DetailManufacture',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
+              )
+          },
+          {
+            path: ':id',
+            name: 'DetailManufacture',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
+              )
+          }
+        ]
       },
 
       // #endregion

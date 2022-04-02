@@ -1,10 +1,14 @@
 <template>
-  chattin
+  <the-chatting />
 </template>
 
 <script>
-export default {
 
+import TheChatting from '@/views/pages/app/chatting'
+export default {
+  components: {
+    TheChatting
+  }
 }
 </script>
 

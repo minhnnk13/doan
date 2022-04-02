@@ -6,7 +6,7 @@
     <div class="items">
       <el-menu
         class=""
-        default-active="dashboard"
+        default-active="/app/dashboard"
         :router="true"
         text-color="#fff"
         background-color="#021266"
@@ -32,15 +32,16 @@
     </div>
 
     <div class="chatting">
-      <div class="title">
-        Chatting Space
-
+      <router-link to="chatting">
+        <div class="title">
+          Chatting Space
+        </div>
         <div class="thumbnail">
           <img
             :src="chattingIcon"
           >
         </div>
-      </div>
+      </router-link>
     </div>
 
     <div class="version">
@@ -62,41 +63,41 @@ export default {
         {
           name: 'Tổng quan',
           icon: 'dashboard',
-          to: 'dashboard'
+          to: '/app/dashboard'
         },
         {
           name: 'Báo cáo',
           icon: 'report',
-          to: 'report'
+          to: '/app/report'
         },
         {
           name: 'Sản phẩm',
           icon: 'product',
-          to: 'product',
+          to: '/app/product',
           subs: [
             {
               name: 'Danh sách sản phẩm',
-              to: 'list-product'
+              to: '/app/list-product'
             },
             {
               name: 'Quản lý kho',
-              to: 'manage-warehouse'
+              to: '/app/manage-warehouse'
             },
             {
               name: 'Nhập hàng',
-              to: 'import'
+              to: '/app/import'
             },
             {
               name: 'Kiểm hàng',
-              to: 'control'
+              to: '/app/control'
             },
             {
               name: 'Nhà cung cấp',
-              to: 'manufacture'
+              to: '/app/manufacture'
             },
             {
               name: 'Điều chỉnh giá vốn',
-              to: 'capital'
+              to: '/app/capital'
             }
 
           ]
@@ -104,12 +105,12 @@ export default {
         {
           name: 'Thiết lập kho',
           icon: 'warehouse',
-          to: 'warehouse'
+          to: '/app/warehouse'
         },
         {
           name: 'Đối tác và khách hàng',
           icon: 'customer',
-          to: 'customer',
+          to: '/app/customer',
           subs: [
             {
               name: 'Danh sách khách hàng',
@@ -124,7 +125,7 @@ export default {
         {
           name: 'Sổ quỹ',
           icon: 'cash-book',
-          to: 'cash-book',
+          to: '/app/cash-book',
           // to: 'cash-book',
           subs: [
             {
@@ -169,7 +170,8 @@ export default {
   color: #fff;
   font-weight: 700;
   padding-bottom: 40px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   .header {
     padding: 20px;
@@ -208,6 +210,25 @@ export default {
       margin-top: 24px;
       cursor: pointer;
     }
+
+    a {
+      display: block;
+      .title {
+        height: 56px;
+        line-height: 56px;
+        color: #fff;
+      }
+
+      &.router-link-active  {
+        display: block;
+        .title {
+
+          background: $color--gradient
+        }
+      }
+
+    }
+
   }
 
   .version {
