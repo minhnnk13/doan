@@ -1,5 +1,5 @@
 <template>
-  <router-view />
+  create
 </template>
 
 <script>

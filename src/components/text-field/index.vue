@@ -22,6 +22,7 @@
       @change="onChange"
       @focus="onFocus"
       @blur="onBlur"
+      @keyup.enter="$emit('onSubmit')"
       ref="input"
       :class="{
         'only-border-bottom': onlyBorderBottom,
@@ -58,7 +59,7 @@ export default {
 
   mixins: [validate],
 
-  emits: [UPDATE_MODEL, 'onChange', 'onBlur'],
+  emits: [UPDATE_MODEL, 'onChange', 'onBlur', 'onSubmit'],
 
   props: {
     modelValue: {

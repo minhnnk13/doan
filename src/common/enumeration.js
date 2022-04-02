@@ -31,6 +31,14 @@ const enumeration = {
     StorageChecked: 8, // Đã kiểm kho
     StorageChecking: 9, // Đang kiểm kho
     Balance: 10 // Đã cân bằng
+  },
+
+  ManufactureTabs: {
+    History: 0,
+    Debt: 1,
+    Contact: 2,
+    Address: 3,
+    Note: 4
   }
 }
 

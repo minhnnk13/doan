@@ -16,24 +16,24 @@
       <div class="form">
         <text-field
           label="Họ và tên"
-          v-model="account.Username"
+          v-model="account.name"
           :disabled="!changeMode"
         />
         <text-field
           label="Số điện thọai"
-          v-model="account.Phone"
+          v-model="account.phone"
           :disabled="!changeMode"
         />
 
         <text-field
-          label="Email"
-          v-model="account.Email"
+          label="email"
+          v-model="account.email"
           :disabled="!changeMode"
         />
         <div class="birthday">
           <label>Ngày sinh</label>
           <el-date-picker
-            v-model="account.DOB"
+            v-model="account.dob"
             type="date"
             format="DD/MM/YYYY"
             value-format="DD/MM/YYYY"
@@ -43,7 +43,7 @@
 
         <text-field
           label="Địa chỉ"
-          v-model="account.Address"
+          v-model="account.address"
           :disabled="!changeMode"
         />
       </div>
@@ -93,20 +93,15 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import changePasswordPopup from './change-password-popup.vue'
+import { getUserInfo } from '@/utils/auth'
 export default {
   components: { changePasswordPopup },
   setup () {
     const changePassDialog = ref(null)
-    const defaultAccount = {
-      Username: 'account',
-      Phone: '1234567890',
-      Email: 'abcdf@gmail.com',
-      DOB: '06/03/1999',
-      Address: 'Ha Noi'
+    const defaultAccount = reactive(getUserInfo())
 
-    }
     const account = ref(
       { ...defaultAccount }
     )

@@ -1,5 +1,5 @@
 <template>
-  cash-book
+  list
 </template>
 
 <script>
