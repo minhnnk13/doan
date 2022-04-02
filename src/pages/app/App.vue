@@ -45,7 +45,6 @@ export default {
       height: calc(100% - 56px);
       overflow: auto;
 
-
       &.height-full {
         height: 100%;
         padding-top: 0;
