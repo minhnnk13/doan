@@ -28,7 +28,7 @@
         </div>
       </div>
 
-      <input-message />
+      <input-message @onSubmit="addNewChat" />
     </div>
   </div>
 </template>
@@ -44,14 +44,21 @@ export default {
     InputMessage
   },
 
-  setup () {
+  emits: ['addNewChat'],
+
+  setup (props, { emit }) {
     const isActive = ref(false)
     const handleComponent = (value) => {
       isActive.value = value
     }
+
+    const addNewChat = message => {
+      emit('addNewChat', message)
+    }
     return {
       isActive,
-      handleComponent
+      handleComponent,
+      addNewChat
     }
   }
 }

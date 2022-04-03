@@ -32,7 +32,7 @@
     </div>
 
     <div class="chatting">
-      <router-link to="chatting">
+      <router-link to="/app/chatting">
         <div class="title">
           Chatting Space
         </div>

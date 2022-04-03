@@ -7,16 +7,16 @@
     <div class="message">
       <div class="message__head">
         <div class="user-name">
-          LHLONG
+          {{ message.userName }}
         </div>
 
         <div class="time">
-          59 phút trước
+          {{ message.time }}
         </div>
       </div>
 
       <div class="message__content">
-        abcd
+        {{ message.message }}
       </div>
     </div>
   </div>

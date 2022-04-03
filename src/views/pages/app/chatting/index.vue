@@ -6,70 +6,98 @@
     >
       <el-tab-pane
         label="Chat"
-        name="Chat"
+        name="chat"
       >
-        <div class="content">
-          <div class="container">
-            <chat-space
-              v-for="(item, index) in 4"
-              :key="item"
-              :id="`thread-${index}`"
-            />
-          </div>
-
-          <new-thread />
-        </div>
+        <the-chat
+          :chats="chats"
+          @addMessage="addMessage"
+          @addNewChat="addNewChat"
+        />
       </el-tab-pane>
       <el-tab-pane
         label="Log"
-        name="Log"
+        name="log"
       >
-        <log-thread />
+        <the-log
+          @onCheck="onCheck"
+          @deleteChat="deleteChat"
+          @redirectChat="redirectChat"
+        />
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
-import ChatSpace from './chat-space.vue'
-import NewThread from './new-thread.vue'
-import LogThread from './log-thread.vue'
+import { ref, reactive, onMounted, computed, nextTick } from 'vue'
+import TheChat from './chat'
+import TheLog from './log'
+import baseStore from '@/views/pages/base/base-store'
+
 export default {
-  components: { ChatSpace, NewThread, LogThread },
+  components: { TheChat, TheLog },
 
   setup () {
-    const activeTab = ref('Chat')
+    const activeTab = ref('chat')
+    const config = reactive({
+      storeConfig: {
+        moduleName: 'chat',
+        entityKey: 'id',
+        entityName: 'Chats'
+      }
+    })
+    const { loadData, store } = baseStore(config)
+
+    const chats = computed(() => store.state[config.storeConfig.moduleName].chats)
+
+    onMounted(async () => {
+      await loadData()
+    })
+
+    const addMessage = (message, id) => {
+      const params = {
+        message: message,
+        id: id
+      }
+      store.dispatch(`${config.storeConfig.moduleName}/addMessage`, params)
+    }
+
+    const addNewChat = (message) => {
+      store.dispatch(`${config.storeConfig.moduleName}/addNewChat`, message)
+    }
+
+    const onCheck = id => {
+      store.dispatch(`${config.storeConfig.moduleName}/completeChat`, id)
+    }
+    const deleteChat = id => {
+      store.dispatch(`${config.storeConfig.moduleName}/deleteChat`, id)
+    }
+    const redirectChat = id => {
+      const index = chats.value.findIndex(chat => chat.id === id)
+      const chatContainerEL = document.querySelector('#chat-container')
+      const chatEl = document.querySelector(`#chat-${index}`)
+      activeTab.value = 'chat'
+      nextTick(() => {
+        chatContainerEL.scrollTo({ top: chatEl.offsetTop, behavior: 'smooth' })
+      })
+    }
+
     return {
-      activeTab
+      activeTab,
+      chats,
+      addMessage,
+      addNewChat,
+      onCheck,
+      deleteChat,
+      redirectChat
     }
   }
-
 }
 </script>
 
 <style lang="scss" scoped>
 .chatting {
-
   &__tabs {
-    .content {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      padding: 0 200px;
-      height: calc(100vh - 158px);
-      overflow: hidden;
-
-      .container {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        height: calc(100% - 120px);
-        overflow: auto;
-        margin: 0 -16px;
-        padding: 0 16px;
-      }
-    }
   }
 }
 </style>
