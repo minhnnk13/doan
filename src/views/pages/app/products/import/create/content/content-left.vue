@@ -83,6 +83,7 @@ import ProductsTable from '../../components/products-table.vue'
 import ResultManufacture from '../../components/result-manufacture.vue'
 import { useStore } from 'vuex'
 import { ref, reactive, computed } from 'vue'
+
 export default {
   components: {
     ResultManufacture,
@@ -90,10 +91,6 @@ export default {
   },
   setup () {
     const store = useStore()
-    const importCreateStep = computed(() => {
-      return store.state['multiple-screen-data'].importCreateStep
-    })
-
     const products = computed(() => {
       return store.state.product.products
     })
@@ -102,7 +99,9 @@ export default {
       return store.state.supplier.suppliers
     })
 
-    const importSupplier = computed(() => { return store.state.supplier.importSupplier })
+    const importSupplier = computed(() => {
+      return store.state.supplier.importSupplier
+    })
 
     const inputSearch = ref('')
     const supplierInputSearch = ref('')
@@ -154,7 +153,6 @@ export default {
       querySearch,
       inputSearch,
       handleSelect,
-      importCreateStep,
       suppliers,
       suppliersQuerySearch,
       supplierInputSearch,

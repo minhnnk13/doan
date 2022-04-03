@@ -8,7 +8,7 @@
       <div class="label">
         Mã đơn hàng
       </div>
-      <text-field />
+      <text-field v-model="importProducts.importId" />
     </div>
 
     <div class="col">
@@ -42,24 +42,12 @@
 </template>
 
 <script>
-import { Avatar, Close } from '@element-plus/icons-vue'
 import { computed, ref, reactive } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
   setup () {
     const store = useStore()
-    const importCode = (length = 7) => {
-      var result = ''
-      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-      var charactersLength = characters.length
-      for (var i = 0; i < length; i++) {
-        result += characters.charAt(
-          Math.floor(Math.random() * charactersLength)
-        )
-      }
-      return result
-    }
 
     const importProducts = computed(() => {
       return store.state.import.import

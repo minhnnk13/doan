@@ -1,5 +1,6 @@
 
 export default {
+  namespaced: true,
   state: { importCreateStep: 1 },
   getters: {},
   mutations: {

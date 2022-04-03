@@ -168,7 +168,7 @@ const table = () => {
 
   const tableActive = computed(() => {
     const table = tableConfigs.find((element) => element.tabActive === Number(tabActive.value))
-    debugger
+
     return table
   })
   return {

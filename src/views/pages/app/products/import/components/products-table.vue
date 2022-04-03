@@ -19,6 +19,7 @@
     <el-table-column
       label="Số lượng"
       width="100"
+      v-if="!(importProducts.status === 0)"
     >
       <template #default="prop">
         <text-field
@@ -28,6 +29,12 @@
         />
       </template>
     </el-table-column>
+    <el-table-column
+      label="Số lượng"
+      width="100"
+      prop="quantity"
+      v-else
+    />
     <el-table-column
       label="Giá nhập"
       prop="unitPrice"
@@ -85,9 +92,7 @@ export default {
     const importProducts = computed(() => {
       return store.state.import.import
     })
-    //     const import = reactive({
-    // importPrice: 0,
-    //     })
+
     const calculateSalePrice = (product) => {
       if (product.quantity) {
         product.productImportPrice = product.unitPrice * Number(product.quantity)

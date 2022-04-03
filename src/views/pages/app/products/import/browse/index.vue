@@ -11,10 +11,10 @@
 
       <template #title>
         <div class="title">
-          PONO1234
+          {{ importProducts?.importId }}
         </div>
         <div class="date">
-          23/02/20222 22:34
+          {{ importProducts?.createdDate }}
         </div>
       </template>
     </the-header>
@@ -26,8 +26,17 @@
 <script>
 import TheHeader from '../components/the-header.vue'
 import TheContent from './content'
+import { setImportInfo, getImportInfo } from '@/utils/import-storage.js'
+import { useRoute } from 'vue-router'
 export default {
-  components: { TheHeader, TheContent }
+  components: { TheHeader, TheContent },
+  setup () {
+    const route = useRoute()
+    const importProducts = getImportInfo(route.params.id)
+    // to-do: sửa lại format hiển thị id và ngày tháng
+
+    return { importProducts }
+  }
 
 }
 </script>

@@ -25,14 +25,4 @@ const getUserInfo = () => {
   return JSON.parse(localStorage.get(localStorageKey.USER_INFO))
 }
 
-const setImportInfo = (importInfo) => {
-  if (importInfo) {
-    sessionStorage.set(sessionStorageKey.IMPORT_INFO, importInfo)
-  }
-}
-
-const getImportInfo = () => {
-  return sessionStorage.get(sessionStorageKey.IMPORT_INFO)
-}
-
-export { setAuthToken, getAuthToken, removeAuthToken, setUserInfo, getUserInfo, setImportInfo, getImportInfo }
+export { setAuthToken, getAuthToken, removeAuthToken, setUserInfo, getUserInfo }

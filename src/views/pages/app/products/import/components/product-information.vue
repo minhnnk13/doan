@@ -12,8 +12,11 @@
       </div>
 
       <div class="product-infor__top__right">
-        <el-tag type="success">
-          Đang giao dịch
+        <el-tag
+          effect="dark"
+          :type="importProductTag.type"
+        >
+          {{ importProductTag.title }}
         </el-tag>
       </div>
     </div>
@@ -38,52 +41,77 @@
 
 <script>
 import { Van } from '@element-plus/icons-vue'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import enumeration from '@/common/enumeration.js'
+
 export default {
   components: {
     Van
+  },
+
+  setup () {
+    const store = useStore()
+    const importProducts = computed(() => {
+      return store.state.import.import
+    })
+    const importProductTag = computed(() => {
+      switch (importProducts.value.status) {
+        default:
+          return { type: '', title: 'Đặt hàng' }
+        case enumeration.status.Trading:
+          return
+        case enumeration.status.Cancel:
+          return { type: 'danger', title: 'Đã hủy' }
+        case enumeration.status.StorageImported:
+          return { type: 'success', title: 'Đã nhập kho' }
+      }
+    })
+
+    return { importProducts, importProductTag }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .product-infor {
-    &__top {
-        margin: 0 -24px;
-        padding: 0 24px;
-        padding-bottom: 24px;
+  &__top {
+    margin: 0 -24px;
+    padding: 0 24px;
+    padding-bottom: 24px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid;
+
+    &__left {
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+
+      .branch {
+        font-size: 14px;
         display: flex;
         align-items: center;
-        border-bottom: 1px solid;
-
-        &__left {
-            font-weight: bold;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            flex: 1;
-
-            .branch {
-              font-size: 14px;
-              display: flex;
-              align-items: center;
-              .el-icon {
-                font-size: 16px;
-              }
-              span {
-                  margin-left: 10px;
-              }
-            }
+        .el-icon {
+          font-size: 16px;
         }
-
-        &__right {
-            width: 100px;
+        span {
+          margin-left: 10px;
         }
+      }
     }
 
-    &__bottom {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        row-gap: 20px;
+    &__right {
+      width: 100px;
     }
+  }
+
+  &__bottom {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    row-gap: 20px;
+  }
 }
 </style>
