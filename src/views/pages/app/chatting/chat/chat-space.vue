@@ -7,11 +7,11 @@
       <div class="items">
         <div
           class="item"
-          v-for="item in 4"
-          :key="item"
+          v-for="(message, index) in messages"
+          :key="index"
         >
           <div class="message">
-            <chat-item :message="item" />
+            <chat-item :message="message" />
           </div>
         </div>
       </div>
@@ -19,7 +19,6 @@
       <div class="input-message">
         <input-message
           @onSubmit="addMessage"
-          v-model="message"
         />
       </div>
     </div>
@@ -27,19 +26,31 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { toRefs } from 'vue'
 import ChatItem from './chat-item.vue'
 import InputMessage from './input-message.vue'
 export default {
   components: { ChatItem, InputMessage },
 
-  setup () {
-    const message = ref(null)
-    const addMessage = () => {
-      alert('submit')
+  emits: ['addMessage'],
+  props: {
+    messages: {
+      type: Array,
+      default: () => []
+    },
+
+    chatId: {
+      type: Number,
+      default: -1
+    }
+  },
+
+  setup (props, { emit }) {
+    const { chatId } = toRefs(props)
+    const addMessage = (message) => {
+      emit('addMessage', message, chatId.value)
     }
     return {
-      message,
       addMessage
     }
   }
