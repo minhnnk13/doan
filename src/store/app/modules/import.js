@@ -1,94 +1,104 @@
 import { API_PATH, authAxios } from '@/apis/api'
 import axios from 'axios'
+import { getUserInfo } from '@/utils/auth/index.js'
 
 export default {
   namespaced: true,
+
   state: {
-    import: {
-      productsToImport: [],
-      totalPrice: 0,
-      saleQuantity: 0,
-      isTaxed: false
-    },
+    import: {},
     product: {},
-    productsToImport: []
+    productsToImport: [],
+    importList: []
   },
+
   getters: {},
+
   mutations: {
     setImportProducts (state, importProducts) {
-      state.importProducts = importProducts
+      state.import = importProducts
     },
+
     setProduct (state, product) {
       state.product = product
     },
-    setProductsToImport (state, product) {
-      state.productsToImport.push(product)
+
+    setProductsToImport (state, importProduct) {
+      const findExisted = state.productsToImport.findIndex(product => {
+        return product.productId === importProduct.productId
+      })
+      if (findExisted >= 0) {
+        state.productsToImport[findExisted].quantity = Number(state.productsToImport[findExisted].quantity) + 1
+        state.productsToImport[findExisted].totalPrice += Number(importProduct.unitPrice)
+        state.import.importPrice = 0
+        state.import.saleQuantity = 0
+        state.import.productsToImport.map(product => {
+          if (!state.import.isTaxed) {
+            product.totalPrice += (product.totalPrice * 0.1)
+          } else {
+            product.totalPrice += product.totalPrice
+          }
+          state.import.importPrice += product.totalPrice
+          state.import.saleQuantity += Number(product.quantity)
+        })
+      } else {
+        state.productsToImport.push(importProduct)
+      }
       state.import.productsToImport = state.productsToImport
     },
+
     calculateTotalPrice (state) {
-      state.import.totalPrice = 0
+      state.import.importPrice = 0
       state.import.saleQuantity = 0
       state.import.productsToImport.map(product => {
         if (!state.import.isTaxed) {
-          product.productImportPrice += (product.productImportPrice * 0.1)
+          product.totalPrice += (product.totalPrice * 0.1)
         } else {
-          product.productImportPrice += product.productImportPrice
+          product.totalPrice += product.totalPrice
         }
-        state.import.totalPrice += product.productImportPrice
+        state.import.importPrice += product.totalPrice
         state.import.saleQuantity += Number(product.quantity)
       })
     },
+
     reCalculateAllPrice (state) {
-      state.import.totalPrice = 0
+      state.import.importPrice = 0
       state.import.saleQuantity = 0
       state.import.productsToImport.map(product => {
         if (!state.import.isTaxed) {
-          product.productImportPrice += (product.productImportPrice * 0.1)
+          product.totalPrice += (product.totalPrice * 0.1)
         } else {
-          product.productImportPrice -= (product.productImportPrice / 11)
+          product.totalPrice -= (product.totalPrice / 11)
         }
-        state.import.totalPrice += product.productImportPrice
+        state.import.importPrice += product.totalPrice
       })
+    },
+
+    setImportList (state, importList) {
+      state.importList = importList
     }
   },
+
   actions: {
 
-    getImport: () => {
+    getImports: (context, params) => {
       return new Promise((resolve, reject) => {
-        const data = [
-          {
-            importId: 1,
-            productCode: 'MF368',
-            supplierName: 'product 1',
-            branchName: 'CHi nhánh mặc định',
-            statusName: 'Hoàn thành',
-            paymentName: 'Đã hoàn thành',
-            importPrice: '30.000.000',
-            userName: 'LHLong'
-          },
-          {
-            importId: 2,
-            productCode: 'MF368',
-            supplierName: 'product 1',
-            branchName: 'CHi nhánh mặc định',
-            statusName: 'Hoàn thành',
-            paymentName: 'Đã hoàn thành',
-            importPrice: '30.000.000',
-            userName: 'LHLong'
-          },
-          {
-            importId: 3,
-            productCode: 'MF368',
-            supplierName: 'product 1',
-            branchName: 'CHi nhánh mặc định',
-            statusName: 'Hoàn thành',
-            paymentName: 'Đã hoàn thành',
-            importPrice: '30.000.000',
-            userName: 'LHLong'
-          }
-        ]
+        authAxios
+          .get('/import', { params })
+          .then((res) => {
+            context.commit('setImportList', res.data)
+            resolve(res.data)
+          })
+          .catch((err) => reject(err))
+      })
+    },
 
-        resolve(data)
+    createImport: async (context, payload) => {
+      payload.branchId = 1
+      payload.paymentType = 1
+      payload.employee = getUserInfo.userId
+      return new Promise((resolve, reject) => {
+        authAxios.post('/import', payload)
       })
     }
 

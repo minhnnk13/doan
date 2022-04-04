@@ -19,7 +19,7 @@
     <el-table-column
       label="Số lượng"
       width="100"
-      v-if="!(importProducts.status === 0)"
+      v-if="!importProducts.status && importProducts.status !== 0"
     >
       <template #default="prop">
         <text-field
@@ -45,7 +45,7 @@
     </el-table-column>
     <el-table-column
       label="Thành tiền"
-      prop="productImportPrice"
+      prop="totalPrice"
     />
   </el-table>
   <div class="final-info-wrapper">
@@ -71,7 +71,7 @@
           Tổng tiền
         </div>
         <div class="value">
-          {{ importProducts.totalPrice }}
+          {{ importProducts.importPrice }}
         </div>
       </div>
       <!-- <div class="amount">Tiền cần trả {{importProducts.saleQuantity}}</div> -->
@@ -95,9 +95,9 @@ export default {
 
     const calculateSalePrice = (product) => {
       if (product.quantity) {
-        product.productImportPrice = product.unitPrice * Number(product.quantity)
+        product.totalPrice = product.unitPrice * Number(product.quantity)
       } else {
-        product.productImportPrice = 0
+        product.totalPrice = 0
       }
 
       store.commit('import/calculateTotalPrice')

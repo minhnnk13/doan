@@ -35,17 +35,32 @@ import TheHeader from './the-header.vue'
 import HeaderTable from './header-table.vue'
 import TheTable from './the-table.vue'
 import baseStore from '@/views/pages/base/base-store'
+import { useStore } from 'vuex'
+
 export default {
   components: { TheHeader, HeaderTable, TheTable },
 
   setup () {
+    const store = useStore()
+    const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
+    const pageSize = ref(15)
+
+    const params = computed(() => {
+      return {
+        pageIndex: 0,
+        pageSize: pageSize.value,
+        search: inputSearch.value
+      }
+    })
     const config = reactive({
       storeConfig: {
         moduleName: 'import',
-        entityKey: 'importId',
-        entityName: 'Import'
+        entityKey: params,
+        entityName: 'Imports'
       }
     })
+    const inputSearch = ref('')
+
     const { loadData } = baseStore(config)
     const tableRef = ref(null)
     const tableData = ref([])
@@ -90,7 +105,8 @@ export default {
       productSearchValue,
       checkedSelectProduct,
       tableRef,
-      clearSelected
+      clearSelected,
+      pageSizes
     }
   }
 }

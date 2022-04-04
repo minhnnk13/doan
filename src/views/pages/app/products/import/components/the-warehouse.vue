@@ -10,17 +10,25 @@
     <div class="container">
       <div class="container__left">
         <div class="status">
-          PCN00002
+          {{ importProduct.importId }}
 
-          <el-tag>Đã nhập kho</el-tag>
+          <el-tag
+            effect="dark"
+          >
+            Đã nhập kho
+          </el-tag>
         </div>
 
-        <div class="code element">
+        <div
+          class="
+            code
+            element"
+        >
           <div class="title">
             Mã phiếu nhập kho
           </div>
           <div class="content">
-            PCN00002
+            {{ importProduct.importId }}
           </div>
         </div>
 
@@ -29,16 +37,23 @@
             Ngày nhập kho
           </div>
           <div class="content">
-            24/03/2022 23:03
+            {{ importProduct.createdDate }}
           </div>
         </div>
 
-        <div class="product element">
+        <div
+
+          class="product element"
+        >
           <div class="title">
             Sản phẩm
           </div>
-          <div class="content">
-            1 x Đồ bơi
+          <div
+            v-for="(product, index) in importProduct.productsToImport"
+            :key="index"
+            class="content"
+          >
+            {{ `${product.quantity} x ${product.productName}` }}
           </div>
         </div>
       </div>
@@ -49,7 +64,7 @@
             Tổng tiền
           </div>
           <div class="content">
-            30,000
+            {{ importProduct.importPrice }}
           </div>
         </div>
       </div>
@@ -60,9 +75,22 @@
 <script>
 
 import { Van } from '@element-plus/icons-vue'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+
 export default {
   components: {
     Van
+  },
+  setup () {
+    const store = useStore()
+    const importProduct = computed(() => {
+      return store.state.import.import
+    })
+
+    return {
+      importProduct
+    }
   }
 
 }

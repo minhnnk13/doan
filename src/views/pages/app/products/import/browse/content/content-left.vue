@@ -28,9 +28,9 @@
       <result-product />
     </div>
 
-    <the-payment v-if="!(currentStatus === 0)" />
+    <the-payment v-if="importCreateStep === 3" />
 
-    <the-warehouse v-if="!(currentStatus === 0)" />
+    <the-warehouse v-if="importCreateStep === 3 && importProduct?.status === 11" />
   </div>
 </template>
 
@@ -55,12 +55,19 @@ export default {
   setup () {
     const store = useStore()
     const route = useRoute()
+    const importProduct = computed(() => {
+      return store.state.import.import
+    })
+    if (!importProduct.value || Object.keys(importProduct.value).length === 0 || Object.getPrototypeOf(importProduct.value) === Object.prototype) {
+      importProduct.value = getImportInfo(route.params.id)
+    }
 
-    const importProduct = getImportInfo(route.params.id)
-
-    const currentStatus = importProduct.status
+    const importCreateStep = computed(() => {
+      return store.state['multiple-screen-data'].importCreateStep
+    })
     return {
-      currentStatus
+      importCreateStep,
+      importProduct
     }
   }
 }

@@ -8,7 +8,14 @@ const setImportsInfo = () => {
 const setImportInfo = (importInfo) => {
   if (importInfo) {
     const imports = JSON.parse(sessionStorage.get(sessionStorageKey.IMPORT_INFO))
-    imports.push(importInfo)
+    const res = imports.findIndex(importInfoInSession => {
+      return importInfoInSession.importId === importInfo.importId
+    })
+    if (res >= 0) {
+      imports[res] = importInfo
+    } else {
+      imports.push(importInfo)
+    }
     sessionStorage.set(sessionStorageKey.IMPORT_INFO, imports)
   }
 }

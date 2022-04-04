@@ -52,23 +52,25 @@ export default {
 
   setup () {
     const store = useStore()
-    const importProducts = computed(() => {
-      return store.state.import.import
+    const status = computed(() => {
+      return store.state.import.import.status
     })
     const importProductTag = computed(() => {
-      switch (importProducts.value.status) {
+      switch (status.value) {
         default:
           return { type: '', title: 'Đặt hàng' }
         case enumeration.status.Trading:
-          return
+          return { type: 'warning', title: 'Đang giao dịch' }
         case enumeration.status.Cancel:
           return { type: 'danger', title: 'Đã hủy' }
         case enumeration.status.StorageImported:
           return { type: 'success', title: 'Đã nhập kho' }
+        case enumeration.status.Finished:
+          return { type: 'success', title: 'Hoàn thành' }
       }
     })
 
-    return { importProducts, importProductTag }
+    return { importProductTag }
   }
 }
 </script>
