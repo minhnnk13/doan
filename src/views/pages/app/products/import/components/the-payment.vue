@@ -9,11 +9,11 @@
       </div>
 
       <div class="detail">
-        <div class="paid">
+        <!-- <div class="paid">
           Đã thanh toán: 0
-        </div>
+        </div> -->
         <div class="unpaid">
-          Còn phải trả: 1,200,000
+          Còn phải trả: {{ importProduct.importPrice }}
         </div>
       </div>
     </div>
@@ -29,9 +29,21 @@
 <script>
 
 import { Postcard } from '@element-plus/icons-vue'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 export default {
   components: {
     Postcard
+  },
+  setup () {
+    const store = useStore()
+    const importProduct = computed(() => {
+      return store.state.import.import
+    })
+
+    return {
+      importProduct
+    }
   }
 
 }

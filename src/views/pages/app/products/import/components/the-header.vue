@@ -25,19 +25,19 @@
         >
           <el-step
             title="Đặt hàng"
-            status="success"
+            :status="importCreateStep >= 1? 'success' : 'wait'"
           />
           <el-step
             title="Duyệt"
-            status="wait"
+            :status="importCreateStep >= 2? 'success' : 'wait'"
           />
           <el-step
             title="Nhập kho"
-            status="wait"
+            :status="importCreateStep >= 3? 'success' : 'wait'"
           />
           <el-step
             title="Hoàn thành"
-            status="wait"
+            :status="importCreateStep >= 4? 'success' : 'wait'"
           />
         </el-steps>
       </div>
@@ -46,7 +46,11 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { setImportInfo, getImportInfo } from '@/utils/import-storage.js'
+import { useRouter, useRoute } from 'vue-router'
+import { useStore } from 'vuex'
+
 export default {
   props: {
     title: {
@@ -62,8 +66,18 @@ export default {
 
   setup () {
     const textPage = ref('< Đơn nhập hàng')
+    const store = useStore()
+    const importProducts = computed(() => {
+      return store.state.import.import
+    })
+    const importCreateStep = computed(() => {
+      return store.state['multiple-screen-data'].importCreateStep
+    })
     return {
-      textPage
+      textPage,
+      importProducts,
+      importCreateStep
+
     }
   }
 }

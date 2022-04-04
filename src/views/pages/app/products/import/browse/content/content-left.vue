@@ -16,7 +16,7 @@
           Thông tin sản phẩm
         </div>
 
-        <el-autocomplete placeholder="Tìm kiếm nhà cung câp theo SĐT, tên, mã nhà cung cấp" />
+        <!-- <el-autocomplete placeholder="Tìm kiếm nhà cung câp theo SĐT, tên, mã nhà cung cấp" /> -->
       </div>
 
       <div
@@ -28,9 +28,9 @@
       <result-product />
     </div>
 
-    <the-payment />
+    <the-payment v-if="importCreateStep === 3" />
 
-    <the-warehouse />
+    <the-warehouse v-if="importCreateStep === 3 && importProduct?.status === 11" />
   </div>
 </template>
 
@@ -39,6 +39,10 @@ import ProductsTable from '../../components/products-table.vue'
 import ResultManufacture from '../../components/result-manufacture.vue'
 import ThePayment from '../../components/the-payment.vue'
 import TheWarehouse from '../../components/the-warehouse.vue'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import { setImportInfo, getImportInfo } from '@/utils/import-storage.js'
+import { useRouter, useRoute } from 'vue-router'
 
 export default {
   components: {
@@ -47,8 +51,25 @@ export default {
     ThePayment,
     TheWarehouse
 
-  }
+  },
+  setup () {
+    const store = useStore()
+    const route = useRoute()
+    const importProduct = computed(() => {
+      return store.state.import.import
+    })
+    if (!importProduct.value || Object.keys(importProduct.value).length === 0 || Object.getPrototypeOf(importProduct.value) === Object.prototype) {
+      importProduct.value = getImportInfo(route.params.id)
+    }
 
+    const importCreateStep = computed(() => {
+      return store.state['multiple-screen-data'].importCreateStep
+    })
+    return {
+      importCreateStep,
+      importProduct
+    }
+  }
 }
 </script>
 

@@ -21,10 +21,15 @@
 <script>
 import AppNavigation from '@/views/app-navigation'
 import AppHeader from '@/views/app-header'
+import { setImportsInfo } from '@/utils/import-storage.js'
+
 export default {
   components: {
     AppNavigation,
     AppHeader
+  },
+  mounted () {
+    setImportsInfo()
   }
 }
 </script>
