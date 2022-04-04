@@ -28,13 +28,13 @@
 <script>
 
 import { CirclePlus } from '@element-plus/icons-vue'
-import { computed, toRefs } from 'vue'
+import { computed, ref } from 'vue'
 export default {
   components: {
     CirclePlus
   },
 
-  emits: ['update:modelValue', 'onSubmit'],
+  emits: ['onSubmit'],
 
   props: {
     modelValue: {
@@ -44,19 +44,14 @@ export default {
   },
 
   setup (props, { emit }) {
-    const { modelValue } = toRefs(props)
-    const message = computed({
-      get: () => modelValue.value,
-      set: (value) => {
-        emit('update:modelValue', value)
-      }
-    })
+    const message = ref(null)
 
-    const isEnable = computed(() => !!modelValue.value)
+    const isEnable = computed(() => !!message.value)
 
     const onSubmit = () => {
       if (isEnable.value) {
-        emit('onSubmit')
+        emit('onSubmit', message.value)
+        message.value = null
       }
     }
     return {
