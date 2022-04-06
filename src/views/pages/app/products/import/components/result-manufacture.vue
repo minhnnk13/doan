@@ -65,7 +65,7 @@ export default {
   setup () {
     const store = useStore()
 
-    const supplier = computed(() => { return store.state.supplier.importSupplier })
+    const supplier = computed(() => { return store.state.import.importSupplier })
 
     return { supplier }
   }

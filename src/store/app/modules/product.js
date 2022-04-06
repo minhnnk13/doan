@@ -5,7 +5,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 export default {
   namespaced: true,
-  state: { products: [], product: {} },
+  state: { products: [], product: {}, productsToImport: [] },
   getters: {},
   mutations: {
     setProducts (state, products) {
@@ -17,10 +17,24 @@ export default {
         return product
       })
     },
+
+    setProductsToImport (state, products) {
+      state.productsToImport = products.map((product) => {
+        product.saleQuantity = ''
+        return product
+      })
+    },
+
     setProduct (state, product) {
       product.createdDate = dayjs(product.createdDate).format('YYYY-MM-DD')
       product.modifyCreate = dayjs(product.modifyCreate).format('YYYY-MM-DD')
       state.product = product
+    },
+
+    setDefaultProductsPrice (state) {
+      state.products.forEach(product => {
+        product.saleQuantity = ''
+      })
     }
   },
   actions: {
@@ -31,6 +45,18 @@ export default {
           .get('/product', { params })
           .then((res) => {
             context.commit('setProducts', res.data)
+            resolve(res.data)
+          })
+          .catch((err) => reject(err))
+      })
+    },
+
+    getProductsToImport: async (context, params) => {
+      return new Promise((resolve, reject) => {
+        authAxios
+          .get('/product', { params })
+          .then((res) => {
+            context.commit('setProductsToImport', res.data)
             resolve(res.data)
           })
           .catch((err) => reject(err))

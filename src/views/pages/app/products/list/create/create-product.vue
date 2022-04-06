@@ -167,10 +167,10 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
-    let isEdit = ref(false)
+    const isEdit = ref(false)
     if (route.params?.productId) {
       store.dispatch(`${PRODUCT_MODULE}/getProduct`, route.params.productId)
-      isEdit = true
+      isEdit.value = true
     }
     store.dispatch('unit/getUnits')
 

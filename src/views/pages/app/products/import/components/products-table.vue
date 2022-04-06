@@ -24,7 +24,7 @@
       <template #default="prop">
         <text-field
           :only-border-bottom="true"
-          v-model="prop.row.quantity"
+          v-model="prop.row.saleQuantity"
           @keyup="calculateSalePrice(prop.row)"
         />
       </template>
@@ -32,7 +32,7 @@
     <el-table-column
       label="Số lượng"
       width="100"
-      prop="quantity"
+      prop="saleQuantity"
       v-else
     />
     <el-table-column
@@ -94,8 +94,8 @@ export default {
     })
 
     const calculateSalePrice = (product) => {
-      if (product.quantity) {
-        product.totalPrice = product.unitPrice * Number(product.quantity)
+      if (product.saleQuantity) {
+        product.totalPrice = product.unitPrice * Number(product.saleQuantity)
       } else {
         product.totalPrice = 0
       }

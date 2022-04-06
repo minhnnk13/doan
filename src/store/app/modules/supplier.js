@@ -3,15 +3,13 @@ import axios from 'axios'
 
 export default {
   namespaced: true,
-  state: { suppliers: [], importSupplier: {} },
+  state: { suppliers: [] },
   getters: {},
   mutations: {
     setSuppliers (state, suppliers) {
       state.suppliers = suppliers
-    },
-    setImportSupplier (state, supplier) {
-      state.importSupplier = supplier
     }
+
   },
   actions: {
 

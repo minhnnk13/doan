@@ -4,7 +4,7 @@ const enumeration = {
     view: 0,
     add: 1,
     edit: 2,
-    dublicate: 3
+    duplicate: 3
   },
 
   ExecuteStoreType: {

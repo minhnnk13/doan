@@ -129,7 +129,6 @@ export default {
     },
 
     addMessage: ({ commit }, params) => {
-      debugger
       return new Promise((resolve, reject) => {
         // commit('deleteChat', params)
         resolve(params)
@@ -137,7 +136,6 @@ export default {
     },
 
     addNewChat: ({ commit }, message) => {
-      debugger
       return new Promise((resolve, reject) => {
         // commit('deleteChat', message)
         resolve(message)

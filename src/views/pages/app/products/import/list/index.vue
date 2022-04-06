@@ -1,6 +1,6 @@
 <template>
   <div class="manage-warehouse">
-    <the-header v-model="productSearchValue" />
+    <the-header v-model="inputSearch" />
     <header-table
       v-if="!isShowHeaderTable"
       v-model="checkedSelectProduct"
@@ -9,7 +9,7 @@
       @clearSelected="clearSelected"
     />
     <the-table
-      :data="filterTableData"
+      :data="tableData"
       @handleSelectionChange="handleSelectionChange"
       :is-show-header-table="isShowHeaderTable"
       ref="tableRef"
@@ -36,6 +36,7 @@ import HeaderTable from './header-table.vue'
 import TheTable from './the-table.vue'
 import baseStore from '@/views/pages/base/base-store'
 import { useStore } from 'vuex'
+import { setImportInfo, getImportsInfo } from '@/utils/import-storage.js'
 
 export default {
   components: { TheHeader, HeaderTable, TheTable },
@@ -68,7 +69,6 @@ export default {
     const isShowHeaderTable = computed(() => {
       return !selectedProduct.value?.length
     })
-    const productSearchValue = ref(null)
     const checkedSelectProduct = ref(true)
 
     const changeCBB = (val) => {
@@ -81,9 +81,6 @@ export default {
       tableRef.value.tableRef.clearSelection()
     }
 
-    const filterTableData = computed(() => tableData.value.filter(data =>
-      !productSearchValue.value || data.productName.toLowerCase().includes(productSearchValue.value.toLowerCase())
-    ))
     loadData().then(res => {
       tableData.value = res
     })
@@ -97,12 +94,12 @@ export default {
     }
 
     return {
-      filterTableData,
+      tableData,
       isShowHeaderTable,
       handleSelectionChange,
       changeCBB,
       selectedProduct,
-      productSearchValue,
+      inputSearch,
       checkedSelectProduct,
       tableRef,
       clearSelected,

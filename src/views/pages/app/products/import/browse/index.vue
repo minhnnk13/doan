@@ -70,6 +70,7 @@ export default {
 
     const handleConfirmClick = () => {
       importProducts.status = enumeration.status.Trading
+      importProducts.statusStore = enumeration.status.Trading
       store.commit('import/setImportProducts', importProducts)
       setImportInfo(importProducts)
     }
@@ -81,13 +82,16 @@ export default {
       } else {
         store.commit('multiple-screen-data/setImportCreateStep', 4)
         importProducts.status = enumeration.status.Finished
+        importProducts.statusStore = enumeration.status.Finished
         store.commit('import/setImportProducts', importProducts)
+        store.dispatch('import/createImport', importProducts)
       }
     }
 
     const handleImportClick = () => {
       store.commit('multiple-screen-data/setImportCreateStep', 3)
       importProducts.status = 11
+      importProducts.statusImport = 11
       importProducts.readyForPayment = true
       store.commit('import/setImportProducts', importProducts)
       setImportInfo(importProducts)
