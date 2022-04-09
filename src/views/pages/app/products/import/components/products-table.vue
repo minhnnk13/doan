@@ -45,7 +45,7 @@
     </el-table-column>
     <el-table-column
       label="Thành tiền"
-      prop="totalPrice"
+      prop="price"
     />
   </el-table>
   <div class="final-info-wrapper">
@@ -86,7 +86,7 @@ export default {
   setup () {
     const store = useStore()
     const products = computed(() => {
-      return store.state.import.productsToImport
+      return store.state.import.import.productsToImport
     })
 
     const importProducts = computed(() => {
@@ -95,9 +95,9 @@ export default {
 
     const calculateSalePrice = (product) => {
       if (product.saleQuantity) {
-        product.totalPrice = product.unitPrice * Number(product.saleQuantity)
+        product.price = product.unitPrice * Number(product.saleQuantity)
       } else {
-        product.totalPrice = 0
+        product.price = 0
       }
 
       store.commit('import/calculateTotalPrice')

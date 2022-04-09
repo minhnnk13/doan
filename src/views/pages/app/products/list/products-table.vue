@@ -165,7 +165,7 @@ export default {
     store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
     const products = computed(() => store.state.product.products)
     const tableHeight = ref(window.innerHeight - 300)
-    const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
+    const pageSizes = reactive([5, 25, 50, 75, 100])
     const isShowHeaderTable = computed(() => {
       return !selectedProduct.value?.length
     })

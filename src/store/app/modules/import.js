@@ -2,6 +2,7 @@ import { API_PATH, authAxios } from '@/apis/api'
 import axios from 'axios'
 import { getUserInfo } from '@/utils/auth/index.js'
 import { setImportInfo, getImportsInfo } from '@/utils/import-storage.js'
+import enumeration from '@/common/enumeration.js'
 export default {
   namespaced: true,
 
@@ -10,15 +11,23 @@ export default {
     product: {},
     productsToImport: [],
     importList: [],
-    importSupplier: {}
+    importSupplier: {},
+    importCreateStep: 1
   },
 
   getters: {},
 
   mutations: {
+    setImportProductsFromResponse (state, productsToImport) {
+      state.productsToImport = productsToImport
+    },
     setImportProducts (state, importProducts) {
       state.import = importProducts
       setImportInfo(state.import)
+    },
+
+    setDefaultImportProducts (state) {
+      state.import = {}
     },
 
     setProduct (state, product) {
@@ -26,21 +35,24 @@ export default {
     },
 
     setProductsToImport (state, importProduct) {
-      const findExisted = state.productsToImport.findIndex(product => {
+      const findExisted = state.productsToImport.findIndex((product) => {
         return product.productId === importProduct.productId
       })
       if (findExisted >= 0) {
-        state.productsToImport[findExisted].quantity = Number(state.productsToImport[findExisted].saleQuantity) + 1
-        state.productsToImport[findExisted].totalPrice += Number(importProduct.unitPrice)
+        state.productsToImport[findExisted].quantity =
+          Number(state.productsToImport[findExisted].saleQuantity) + 1
+        state.productsToImport[findExisted].price += Number(
+          importProduct.unitPrice
+        )
         state.import.importPrice = 0
         state.import.saleQuantity = 0
-        state.import.productsToImport.map(product => {
+        state.import.productsToImport.map((product) => {
           if (!state.import.isTaxed) {
-            product.totalPrice += (product.totalPrice * 0.1)
+            product.price += product.price * 0.1
           } else {
-            product.totalPrice += product.totalPrice
+            product.price += product.price
           }
-          state.import.importPrice += product.totalPrice
+          state.import.importPrice += product.price
           state.import.saleQuantity += Number(product.saleQuantity)
         })
       } else {
@@ -49,16 +61,20 @@ export default {
       state.import.productsToImport = state.productsToImport
     },
 
+    setDefaultProductsToImport (state) {
+      state.productsToImport = []
+    },
+
     calculateTotalPrice (state) {
       state.import.importPrice = 0
       state.import.saleQuantity = 0
-      state.import.productsToImport.map(product => {
+      state.import.productsToImport.map((product) => {
         if (!state.import.isTaxed) {
-          product.totalPrice += (product.totalPrice * 0.1)
+          product.price += product.price * 0.1
         } else {
-          product.totalPrice += product.totalPrice
+          product.price += product.price
         }
-        state.import.importPrice += product.totalPrice
+        state.import.importPrice += product.price
         state.import.saleQuantity += Number(product.saleQuantity)
       })
     },
@@ -66,13 +82,13 @@ export default {
     reCalculateAllPrice (state) {
       state.import.importPrice = 0
       state.import.saleQuantity = 0
-      state.import.productsToImport.map(product => {
+      state.import.productsToImport.map((product) => {
         if (!state.import.isTaxed) {
-          product.totalPrice += (product.totalPrice * 0.1)
+          product.price += product.price * 0.1
         } else {
-          product.totalPrice -= (product.totalPrice / 11)
+          product.price -= product.price / 11
         }
-        state.import.importPrice += product.totalPrice
+        state.import.importPrice += product.price
       })
     },
 
@@ -83,15 +99,19 @@ export default {
     setImportSupplier (state, supplier) {
       state.importSupplier = supplier
       state.import.supplierId = supplier.supplierId
+      state.import.supplier = supplier.supplierName
     },
 
     pushCreatingImport (state, newImport) {
       state.importList.push(newImport)
+    },
+
+    setImportCreateStep (state, importCreateStep) {
+      state.importCreateStep = importCreateStep
     }
   },
 
   actions: {
-
     getImports: (context, params) => {
       return new Promise((resolve, reject) => {
         authAxios
@@ -101,6 +121,15 @@ export default {
 
             const pendingImports = getImportsInfo()
             if (pendingImports.length > 0 && res.data) {
+              pendingImports.map((importFromClient) => {
+                const findImport = res.data.find((importInfo) => {
+                  return importInfo.importID === importFromClient.importID
+                })
+                if (findImport) {
+                  pendingImports.pop(importFromClient)
+                }
+              })
+
               res.data = [...res.data, ...pendingImports]
             }
 
@@ -116,9 +145,31 @@ export default {
       payload.employee = getUserInfo().userId
       payload.products = payload.productsToImport
       return new Promise((resolve, reject) => {
-        authAxios.post('/import', payload)
+        authAxios.post('/import', payload).then(res => {
+          if (res) context.commit('setImportCreateStep', 4)
+        })
+      })
+    },
+
+    getImportDetail: async (context, payload) => {
+      return new Promise((resolve, reject) => {
+        authAxios
+          .get(`/import/${payload}`)
+          .then((res) => {
+            if (res.data) {
+              res.data.statusImport = res.data.status
+              res.data.statusStore = res.data.sttStore
+              res.data.productsToImport = res.data.listProduct
+              context.commit('setImportProducts', res.data)
+              context.commit('setImportProductsFromResponse', res.data.listProduct)
+              context.commit('setImportCreateStep', 4)
+              resolve(res.data)
+            }
+          })
+          .catch((err) => {
+            reject(err)
+          })
       })
     }
-
   }
 }

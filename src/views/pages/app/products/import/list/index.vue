@@ -15,21 +15,32 @@
       ref="tableRef"
     >
       <template #pagination>
-        <el-pagination
-          v-model:currentPage="currentPage4"
-          v-model:page-size="pageSize4"
-          :default-page-size="5"
-          :pager-count="4"
-          layout="prev, pager, next"
-          :total="100"
-        />
+        <div class="paging-container">
+          <div style="margin-right: 12px; margin-top: 6px">
+            {{ "Hiển thị" }}
+          </div>
+          <el-select
+            v-model="pageSize"
+            @change="handleChangePageSize"
+            size="small"
+          >
+            <el-option
+              v-for="(pageSizeIndex, index) in pageSizes"
+              :key="index"
+              :label="pageSizeIndex"
+              :value="pageSizeIndex"
+            />
+          </el-select>
+          <div style="margin-right: 12px; margin-left: 12px; margin-top: 6px">
+            {{ "Kết quả" }}
+          </div>
+        </div>
       </template>
     </the-table>
   </div>
 </template>
 
 <script>
-
 import { computed, reactive, ref, watch } from 'vue'
 import TheHeader from './the-header.vue'
 import HeaderTable from './header-table.vue'
@@ -43,8 +54,8 @@ export default {
 
   setup () {
     const store = useStore()
-    const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
-    const pageSize = ref(15)
+    const pageSizes = reactive([5, 25, 50, 75, 100])
+    const pageSize = ref(500)
 
     const params = computed(() => {
       return {
@@ -81,16 +92,20 @@ export default {
       tableRef.value.tableRef.clearSelection()
     }
 
-    loadData().then(res => {
+    loadData().then((res) => {
       tableData.value = res
     })
 
     const handleSelectionChange = (val) => {
       val.length
-        ? checkedSelectProduct.value = true
-        : checkedSelectProduct.value = false
+        ? (checkedSelectProduct.value = true)
+        : (checkedSelectProduct.value = false)
 
       selectedProduct.value = val
+    }
+
+    const handleChangePageSize = () => {
+      store.dispatch('import/getImports', params.value)
     }
 
     return {
@@ -103,7 +118,9 @@ export default {
       checkedSelectProduct,
       tableRef,
       clearSelected,
-      pageSizes
+      pageSizes,
+      handleChangePageSize,
+      pageSize
     }
   }
 }
@@ -117,5 +134,12 @@ export default {
   background-color: #fff;
   position: relative;
   margin-bottom: -56px;
+
+  .paging-container {
+    display: flex;
+    :deep(.el-input) {
+      width: 50px;
+    }
+  }
 }
 </style>

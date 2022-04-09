@@ -5,6 +5,7 @@
     :data="data"
     :max-height="tableHeight"
     @selection-change="$emit('handleSelectionChange', $event)"
+    @row-click="handleDetailClick"
     :show-header="isShowHeaderTable"
     ref="tableRef"
   >
@@ -15,29 +16,29 @@
     <el-table-column
       label="Mã đơn"
       align="center"
-      prop="importId"
+      prop="importID"
     />
 
     <el-table-column
       label="Tên nhà cung cấp"
       width="200"
-      prop="supplierName"
+      prop="supplier"
     />
-    <el-table-column
+    <!-- <el-table-column
       label="Chi nhánh"
       prop="branchName"
-    />
+    /> -->
     <el-table-column
       label="Trạng thái"
-      prop="statusStore"
+      prop="status"
     />
     <el-table-column
       label="Thanh toán"
-      prop="paymentName"
+      prop="statusPayment"
     />
     <el-table-column
       label="Nhập kho"
-      prop="statusName"
+      prop="sttStore"
     />
     <el-table-column
       label="Giá nhập"
@@ -46,7 +47,7 @@
 
     <el-table-column
       label="Nhân viên tạo"
-      prop="userName"
+      prop="user"
     />
 
     <template #append>
@@ -59,6 +60,8 @@
 
 import baseStore from '@/views/pages/base/base-store'
 import { ref, toRefs } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 export default {
   emits: ['handleSelectionChange'],
 
@@ -75,13 +78,22 @@ export default {
   },
 
   setup () {
+    const router = useRouter()
+    const store = useStore()
+
     const tableHeight = ref(
       window.innerHeight - 300
     )
     const tableRef = ref(null)
+
+    const handleDetailClick = (importInfo) => {
+      router.push({ name: 'BrowseGoods', params: { id: importInfo.importID } })
+    }
+
     return {
       tableHeight,
-      tableRef
+      tableRef,
+      handleDetailClick
     }
   }
 }

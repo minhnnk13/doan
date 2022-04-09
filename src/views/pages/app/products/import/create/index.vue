@@ -24,10 +24,11 @@
 import TheContent from './content'
 import TheHeader from '../components/the-header.vue'
 import { useStore } from 'vuex'
-import { computed, ref, reactive } from 'vue'
+import { computed, ref, reactive, onBeforeUnmount } from 'vue'
 import { setImportInfo, getImportInfo } from '@/utils/import-storage.js'
 import { useRouter, useRoute } from 'vue-router'
 import dayjs from 'dayjs'
+import enumeration from '@/common/enumeration.js'
 
 const PRODUCT_MODULE = 'product'
 
@@ -71,11 +72,16 @@ export default {
         importProducts.value.importId = importCode()
         importProducts.value.status = 0
         importProducts.value.createdDate = dayjs(new Date()).format('DD/MM/YYYY HH:mm')
+        importProducts.value.statusPayment = enumeration.status.NotPayment
+        importProducts.value.statusStore = enumeration.status.WaitForImporting
+        importProducts.value.statusImport = enumeration.status.Trading
+
+        // to-do: xử lí đổi enum thành text
       }
 
       await setImportInfo(importProducts.value)
       router.push({ name: 'BrowseGoods', params: { id: importProducts.value?.importId } })
-      store.commit('multiple-screen-data/setImportCreateStep', 2)
+      store.commit('import/setImportCreateStep', 2)
     }
 
     return { handleOrderClick }

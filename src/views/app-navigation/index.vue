@@ -141,6 +141,26 @@ export default {
               to: 'cash-book'
             }
           ]
+        },
+
+        {
+          name: 'Đơn hàng',
+          icon: 'order',
+          // to: 'cash-book',
+          subs: [
+            {
+              name: 'Tạo đơn hàng',
+              to: 'create-order'
+            },
+            {
+              name: 'Danh sách đơn hàng',
+              to: 'list-order'
+            },
+            {
+              name: 'Khách trả hàng',
+              to: 'customer-returns'
+            }
+          ]
         }
       ]
 
@@ -190,6 +210,16 @@ export default {
 
   .el-menu {
     background: $color--bg1;
+
+    :deep(.el-sub-menu) {
+      &:last-child {
+        .el-icon {
+          img {
+            background: #fff;
+          }
+        }
+      }
+    }
   }
 
   .chatting {

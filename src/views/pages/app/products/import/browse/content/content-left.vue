@@ -63,7 +63,7 @@ export default {
     }
 
     const importCreateStep = computed(() => {
-      return store.state['multiple-screen-data'].importCreateStep
+      return store.state.import.importCreateStep
     })
     return {
       importCreateStep,
