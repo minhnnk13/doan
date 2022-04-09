@@ -71,7 +71,7 @@ export default {
       return store.state.import.import
     })
     const importCreateStep = computed(() => {
-      return store.state['multiple-screen-data'].importCreateStep
+      return store.state.import.importCreateStep
     })
     return {
       textPage,

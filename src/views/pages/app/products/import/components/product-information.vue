@@ -56,11 +56,11 @@ export default {
       return store.state.import.import
     })
     const importProductTag = computed(() => {
-      if (importProducts.value.statusStore === enumeration.status.Finished) {
+      if (importProducts.value.statusImport === enumeration.status.Finished) {
         return { type: 'success', title: 'Hoàn thành' }
       }
 
-      if (importProducts.value.statusStore === enumeration.status.Trading) {
+      if (importProducts.value.statusPayment === enumeration.status.Trading) {
         return { type: 'warning', title: 'Đang giao dịch' }
       }
 

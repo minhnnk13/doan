@@ -15,14 +15,6 @@
       ref="tableRef"
     >
       <template #pagination>
-        <!-- <el-pagination
-          v-model:currentPage="currentPage4"
-          v-model:page-size="pageSize4"
-          :default-page-size="5"
-          :pager-count="4"
-          layout="prev, pager, next"
-          :total="100"
-        /> -->
         <div class="paging-container">
           <div style="margin-right: 12px; margin-top: 6px">
             {{ "Hiển thị" }}
@@ -72,7 +64,7 @@ export default {
     })
 
     const inputSearch = ref('')
-    const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
+    const pageSizes = reactive([5, 25, 50, 75, 100])
     const store = useStore()
     const config = reactive({
       storeConfig: {
