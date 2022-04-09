@@ -1,7 +1,7 @@
 import { API_PATH, authAxios } from '@/apis/api'
 import axios from 'axios'
 import { getUserInfo } from '@/utils/auth/index.js'
-
+import { setImportInfo, getImportsInfo } from '@/utils/import-storage.js'
 export default {
   namespaced: true,
 
@@ -9,7 +9,8 @@ export default {
     import: {},
     product: {},
     productsToImport: [],
-    importList: []
+    importList: [],
+    importSupplier: {}
   },
 
   getters: {},
@@ -17,6 +18,7 @@ export default {
   mutations: {
     setImportProducts (state, importProducts) {
       state.import = importProducts
+      setImportInfo(state.import)
     },
 
     setProduct (state, product) {
@@ -28,7 +30,7 @@ export default {
         return product.productId === importProduct.productId
       })
       if (findExisted >= 0) {
-        state.productsToImport[findExisted].quantity = Number(state.productsToImport[findExisted].quantity) + 1
+        state.productsToImport[findExisted].quantity = Number(state.productsToImport[findExisted].saleQuantity) + 1
         state.productsToImport[findExisted].totalPrice += Number(importProduct.unitPrice)
         state.import.importPrice = 0
         state.import.saleQuantity = 0
@@ -39,7 +41,7 @@ export default {
             product.totalPrice += product.totalPrice
           }
           state.import.importPrice += product.totalPrice
-          state.import.saleQuantity += Number(product.quantity)
+          state.import.saleQuantity += Number(product.saleQuantity)
         })
       } else {
         state.productsToImport.push(importProduct)
@@ -57,7 +59,7 @@ export default {
           product.totalPrice += product.totalPrice
         }
         state.import.importPrice += product.totalPrice
-        state.import.saleQuantity += Number(product.quantity)
+        state.import.saleQuantity += Number(product.saleQuantity)
       })
     },
 
@@ -76,6 +78,15 @@ export default {
 
     setImportList (state, importList) {
       state.importList = importList
+    },
+
+    setImportSupplier (state, supplier) {
+      state.importSupplier = supplier
+      state.import.supplierId = supplier.supplierId
+    },
+
+    pushCreatingImport (state, newImport) {
+      state.importList.push(newImport)
     }
   },
 
@@ -87,6 +98,12 @@ export default {
           .get('/import', { params })
           .then((res) => {
             context.commit('setImportList', res.data)
+
+            const pendingImports = getImportsInfo()
+            if (pendingImports.length > 0 && res.data) {
+              res.data = [...res.data, ...pendingImports]
+            }
+
             resolve(res.data)
           })
           .catch((err) => reject(err))
@@ -96,7 +113,8 @@ export default {
     createImport: async (context, payload) => {
       payload.branchId = 1
       payload.paymentType = 1
-      payload.employee = getUserInfo.userId
+      payload.employee = getUserInfo().userId
+      payload.products = payload.productsToImport
       return new Promise((resolve, reject) => {
         authAxios.post('/import', payload)
       })

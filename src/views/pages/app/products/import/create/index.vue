@@ -63,7 +63,7 @@ export default {
       return result
     }
 
-    store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
+    store.dispatch(`${PRODUCT_MODULE}/getProductsToImport`, params.value)
     store.dispatch('supplier/getSuppliers')
 
     const handleOrderClick = async () => {

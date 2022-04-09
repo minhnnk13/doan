@@ -92,7 +92,7 @@ export default {
   setup () {
     const store = useStore()
     const products = computed(() => {
-      return store.state.product.products
+      return store.state.product.productsToImport
     })
 
     const suppliers = computed(() => {
@@ -100,7 +100,7 @@ export default {
     })
 
     const importSupplier = computed(() => {
-      return store.state.supplier.importSupplier
+      return store.state.import.importSupplier
     })
 
     const inputSearch = ref('')
@@ -146,7 +146,7 @@ export default {
     }
 
     const handleSupplierSelect = (supplier) => {
-      store.commit('supplier/setImportSupplier', supplier)
+      store.commit('import/setImportSupplier', supplier)
     }
 
     return {

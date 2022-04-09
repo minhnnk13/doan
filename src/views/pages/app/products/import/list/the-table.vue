@@ -15,7 +15,7 @@
     <el-table-column
       label="Mã đơn"
       align="center"
-      prop="productCode"
+      prop="importId"
     />
 
     <el-table-column
@@ -29,7 +29,7 @@
     />
     <el-table-column
       label="Trạng thái"
-      prop="statusName"
+      prop="statusStore"
     />
     <el-table-column
       label="Thanh toán"
@@ -58,7 +58,7 @@
 <script>
 
 import baseStore from '@/views/pages/base/base-store'
-import { ref } from 'vue'
+import { ref, toRefs } from 'vue'
 export default {
   emits: ['handleSelectionChange'],
 
@@ -79,7 +79,6 @@ export default {
       window.innerHeight - 300
     )
     const tableRef = ref(null)
-
     return {
       tableHeight,
       tableRef
