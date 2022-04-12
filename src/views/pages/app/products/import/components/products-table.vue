@@ -37,7 +37,7 @@
     />
     <el-table-column
       label="Giá nhập"
-      prop="unitPrice"
+      prop="renderUnitPrice"
     />
 
     <el-table-column label="Thuế(%)">
@@ -45,7 +45,7 @@
     </el-table-column>
     <el-table-column
       label="Thành tiền"
-      prop="price"
+      prop="renderPrice"
     />
   </el-table>
   <div class="final-info-wrapper">
@@ -71,7 +71,7 @@
           Tổng tiền
         </div>
         <div class="value">
-          {{ importProducts.importPrice }}
+          {{ importProducts.renderImportPrice }}
         </div>
       </div>
       <!-- <div class="amount">Tiền cần trả {{importProducts.saleQuantity}}</div> -->
@@ -82,6 +82,8 @@
 <script>
 import { useStore } from 'vuex'
 import { computed, ref, reactive } from 'vue'
+import { formatPrice } from '@/common/common-fn.js'
+
 export default {
   setup () {
     const store = useStore()
@@ -99,7 +101,7 @@ export default {
       } else {
         product.price = 0
       }
-
+      product.renderPrice = formatPrice(product.price)
       store.commit('import/calculateTotalPrice')
     }
     return { products, calculateSalePrice, importProducts }

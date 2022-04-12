@@ -19,22 +19,27 @@ const focusFirstControl = (container) => {
     const element = controls[index]
     const elementStyle = window.getComputedStyle(element)
 
-    const isVisible = elementStyle.visibility !== 'hiddent' && elementStyle.display !== 'none'
+    const isVisible =
+      elementStyle.visibility !== 'hiddent' && elementStyle.display !== 'none'
     if (isVisible) {
       element.focus()
       break
     }
   }
 }
+
+const formatPrice = (value) => {
+  const val = (value / 1).toFixed(2).replace('.', ',')
+  return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
+
 class CommonFn {
   showMask (container) {
-    const loadingInstance = ElLoading.service(
-      {
-        target: container,
-        lock: true,
-        text: 'Đang tải'
-      }
-    )
+    const loadingInstance = ElLoading.service({
+      target: container,
+      lock: true,
+      text: 'Đang tải'
+    })
 
     window.loadingInstance = loadingInstance
   }
@@ -45,7 +50,4 @@ class CommonFn {
 }
 export default new CommonFn()
 
-export {
-  focusFirstControl,
-  redirectToApp
-}
+export { focusFirstControl, redirectToApp, formatPrice }

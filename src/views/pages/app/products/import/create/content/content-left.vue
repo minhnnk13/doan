@@ -6,7 +6,11 @@
       </div>
       <div
         class="search"
-        v-if="importSupplier && Object.keys(importSupplier).length === 0 && Object.getPrototypeOf(importSupplier) === Object.prototype"
+        v-if="
+          importSupplier &&
+            Object.keys(importSupplier).length === 0 &&
+            Object.getPrototypeOf(importSupplier) === Object.prototype
+        "
       >
         <el-autocomplete
           placeholder="Tìm kiếm nhà cung câp theo SĐT, tên, mã nhà cung cấp"
@@ -51,9 +55,9 @@
                   class="item-img"
                   :src="item.image"
                 >
-              </div>
-              <div class="value">
-                {{ item.productName }}
+                <div class="value">
+                  {{ item.productName }}
+                </div>
               </div>
             </div>
 
@@ -205,6 +209,17 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+}
+
+:deep(.img-container) {
+  display: flex !important;
+  height: 200px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  img {
+    border-radius: 15px;
   }
 }
 </style>
