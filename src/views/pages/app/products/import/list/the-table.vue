@@ -42,7 +42,7 @@
     />
     <el-table-column
       label="Giá nhập"
-      prop="importPrice"
+      prop="renderImportPrice"
     />
 
     <el-table-column
@@ -58,7 +58,6 @@
 
 <script>
 
-import baseStore from '@/views/pages/base/base-store'
 import { ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'

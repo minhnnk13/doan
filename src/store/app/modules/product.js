@@ -2,6 +2,7 @@ import { API_PATH, authAxios } from '@/apis/api'
 import dayjs from 'dayjs'
 import firebase from 'firebase/app'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { formatPrice } from '@/common/common-fn.js'
 
 export default {
   namespaced: true,
@@ -28,6 +29,9 @@ export default {
     setProduct (state, product) {
       product.createdDate = dayjs(product.createdDate).format('YYYY-MM-DD')
       product.modifyCreate = dayjs(product.modifyCreate).format('YYYY-MM-DD')
+      product.renderUnitPrice = formatPrice(product.unitPrice)
+      product.renderWholesalePrice = formatPrice(product.wholesalePrice)
+      product.renderRetailPrice = formatPrice(product.retailPrice)
       state.product = product
     },
 
