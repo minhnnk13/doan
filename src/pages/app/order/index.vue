@@ -1,5 +1,5 @@
 <template>
-  <the-create />
+  <router-view />
 </template>
 
 <script>

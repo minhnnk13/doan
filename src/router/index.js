@@ -244,7 +244,49 @@ const routes = [
       },
 
       // #endregion
+      {
+        path: 'orders',
+        name: 'Orders',
+        meta: {
+          pageName: 'Danh sách đơn hàng'
+        },
+        component: () =>
+          import(/* webpackChunkName: "orders" */ '@/pages/app/order'),
+        children: [
+          {
+            path: '',
+            name: 'ListOrder',
+            meta: {
+              pageName: 'Danh sách đơn hàng'
+            },
+            component: () =>
+              import(/* webpackChunkName: "list-order" */ '@/pages/app/order/list')
+          },
 
+          {
+            path: 'create',
+            name: 'CreateOrder',
+            meta: {
+              pageName: 'Tạo đơn hàng'
+            },
+            component: () =>
+              import(/* webpackChunkName: "create-order" */ '@/pages/app/order/create')
+          },
+
+          {
+            path: 'returns',
+            name: 'ReturnsOrder',
+            meta: {
+              pageName: 'Danh sách đơn trả hàng'
+            },
+            component: () =>
+              import(/* webpackChunkName: "returns-order" */ '@/pages/app/order/returns')
+          }
+        ]
+      },
+      // #region Đơn hàng
+
+      // #endregion
       {
         path: 'warehouse',
         name: 'WareHouse',

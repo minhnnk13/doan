@@ -1,57 +1,76 @@
 <template>
   <div>
     <div class="time">
-      Friday, 14 FEB
+      {{ date }}
     </div>
     <div class="space">
-      <div class="items">
-        <div
-          class="item"
-          v-for="(message, index) in messages"
-          :key="index"
-        >
-          <div class="message">
-            <chat-item :message="message" />
-          </div>
+      <div
+        class="topic"
+      >
+        <div class="user">
+          {{ topic.assignTo }}
         </div>
-      </div>
+        <div class="title">
+          {{ topic.title }}
+        </div>
 
-      <div class="input-message">
-        <input-message
-          @onSubmit="addMessage"
+        <el-button
+          v-if="!isShowComment"
+          type="text"
+          @click="showComments"
+        >
+          Xem chi tiết
+        </el-button>
+        <span
+          class="line"
+          v-else
         />
       </div>
+      <chat-content
+        v-if="isShowComment"
+        :messages="topic.content"
+        @addMessage="addMessage"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { toRefs } from 'vue'
-import ChatItem from './chat-item.vue'
-import InputMessage from './input-message.vue'
+import { computed, ref, toRefs } from 'vue'
+import ChatContent from './chat-content.vue'
+
 export default {
-  components: { ChatItem, InputMessage },
+  components: { ChatContent },
 
-  emits: ['addMessage'],
+  emits: ['addMessage', 'showComments'],
   props: {
-    messages: {
-      type: Array,
-      default: () => []
-    },
-
-    chatId: {
-      type: Number,
-      default: -1
+    topic: {
+      type: Object,
+      default: () => { }
     }
   },
 
   setup (props, { emit }) {
-    const { chatId } = toRefs(props)
+    const { topic } = toRefs(props)
+
+    const createdDate = ref(new Date(topic.value.createdDate))
+
+    const date = ref(createdDate.value.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }))
+    const isShowComment = ref(false)
     const addMessage = (message) => {
-      emit('addMessage', message, chatId.value)
+      emit('addMessage', message, topic.topicId)
     }
+
+    const showComments = () => {
+      isShowComment.value = true
+      emit('showComments')
+    }
+
     return {
-      addMessage
+      addMessage,
+      date,
+      isShowComment,
+      showComments
     }
   }
 
@@ -71,10 +90,16 @@ export default {
     flex-direction: column;
     gap: 16px;
 
-    .items {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
+    .topic {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .line {
+        width: 100%;
+        height: 2px;
+        background: #ccc;
+      }
     }
 }
 </style>

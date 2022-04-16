@@ -16,6 +16,7 @@
           v-for="(subNav, index) in items"
           :key="index"
           :sub-nav="subNav"
+          :class="subNav.class"
         >
           <template
             v-if="subNav.subs?.length"
@@ -102,6 +103,27 @@ export default {
 
           ]
         },
+
+        {
+          name: 'Đơn hàng',
+          icon: 'order',
+          class: 'order',
+          // to: 'cash-book',
+          subs: [
+            {
+              name: 'Tạo đơn hàng',
+              to: '/app/orders/create'
+            },
+            {
+              name: 'Danh sách đơn hàng',
+              to: '/app/orders'
+            },
+            {
+              name: 'Khách trả hàng',
+              to: '/app/orders/returns'
+            }
+          ]
+        },
         {
           name: 'Thiết lập kho',
           icon: 'warehouse',
@@ -141,27 +163,8 @@ export default {
               to: 'cash-book'
             }
           ]
-        },
-
-        {
-          name: 'Đơn hàng',
-          icon: 'order',
-          // to: 'cash-book',
-          subs: [
-            {
-              name: 'Tạo đơn hàng',
-              to: 'create-order'
-            },
-            {
-              name: 'Danh sách đơn hàng',
-              to: 'list-order'
-            },
-            {
-              name: 'Khách trả hàng',
-              to: 'customer-returns'
-            }
-          ]
         }
+
       ]
 
       data = data.map((item) => {
@@ -211,14 +214,14 @@ export default {
   .el-menu {
     background: $color--bg1;
 
-    :deep(.el-sub-menu) {
-      &:last-child {
+    :deep(.order) {
+
         .el-icon {
           img {
             background: #fff;
           }
         }
-      }
+
     }
   }
 
