@@ -17,12 +17,6 @@ import CompleteLog from './complete-log.vue'
 import listLog from './list-log.vue'
 export default {
   components: { listLog, CompleteLog },
-  props: {
-    chats: {
-      type: Array,
-      default: () => []
-    }
-  },
 
   emits: ['onCheck', 'deleteChat', 'redirectChat'],
 
