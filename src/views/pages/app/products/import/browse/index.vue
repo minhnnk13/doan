@@ -17,7 +17,7 @@
           class="toolbar"
           v-else
         >
-          <!-- todo: thêm hàm check điều kiện để convert status -->
+          <!-- to-do: thêm hàm check điều kiện để convert status -->
           <!-- v-if="!importInfo?.statusPayment?.toLowerCase().includes('đã thanh toán')" -->
           <el-button
 
@@ -57,7 +57,7 @@ import { useStore } from 'vuex'
 import enumeration from '@/common/enumeration.js'
 import { computed, onBeforeUnmount, onMounted } from 'vue'
 import messageBox from '@/utils/message-box'
-
+// to-do: Nếu sản phẩm chưa được lưu vào DB thì sẽ case theo status trong action để hiển thị đúng step
 export default {
   components: { TheHeader, TheContent },
   setup () {

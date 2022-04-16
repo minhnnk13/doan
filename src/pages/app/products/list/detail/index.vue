@@ -52,7 +52,7 @@
               Loại sản phẩm
             </div>
             <div class="value">
-              {{ product.name }}
+              {{ product.categoryId?.categoryName }}
             </div>
           </div>
           <div class="product-info">
@@ -79,6 +79,14 @@
               {{ product.modifyCreate }}
             </div>
           </div>
+          <div class="product-info">
+            <div class="title">
+              Mô tả
+            </div>
+            <div class="value">
+              {{ product.description }}
+            </div>
+          </div>
         </div>
         <div class="img-container">
           <img
@@ -99,7 +107,7 @@
           Giá bán lẻ
         </div>
         <div class="value">
-          {{ product.retailPrice }}
+          {{ product.renderRetailPrice }}
         </div>
       </div>
       <div class="whole-sale-price">
@@ -107,7 +115,7 @@
           Giá bán buôn
         </div>
         <div class="value">
-          {{ product.wholesalePrice }}
+          {{ product.renderWholesalePrice }}
         </div>
       </div>
     </div>
@@ -117,7 +125,7 @@
         Giá nhập
       </div>
       <div class="value">
-        {{ product.unitPrice }}
+        {{ product.renderUnitPrice }}
       </div>
     </div>
   </div>
@@ -233,6 +241,7 @@ export default {
 
       .product-img {
         width: 100%;
+        border-radius: 10px;
       }
     }
   }
@@ -282,5 +291,9 @@ export default {
       width: 40%;
     }
   }
+}
+
+.title {
+  font-weight: 700;
 }
 </style>
