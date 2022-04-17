@@ -20,6 +20,9 @@
               :key="index"
             />
           </el-select>
+          <el-icon class="icon-container">
+            <plus @click="handleShowAddCategoryClick" />
+          </el-icon>
         </el-form-item>
 
         <hr class="line">
@@ -39,6 +42,9 @@
               :key="index"
             />
           </el-select>
+          <el-icon class="icon-container">
+            <plus @click="handleShowAddBrandClick" />
+          </el-icon>
         </el-form-item>
       </el-form>
     </div>
@@ -55,23 +61,52 @@
           v-model="product.isSale"
         />
       </div>
-      <!-- <div class="mt-12px">
-        Thuế
-      </div>
-      <div class="checkbox-container">
-        <div class="tax-title">
-          Áp dụng thuế
-        </div>
-        <el-checkbox size="large" />
-      </div> -->
     </div>
+    <add-info-popup
+      :info-add="infoAdd"
+      ref="addInfoDialog"
+    />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { Plus } from '@element-plus/icons-vue'
+import AddInfoPopup from '@/views/pages/app/products/list/create/add-info-popup.vue'
+import { reactive, ref } from 'vue'
 
 export default {
+  components: {
+    Plus,
+    AddInfoPopup
+  },
+
+  setup () {
+    const addInfoDialog = ref(null)
+    const infoAdd = ref(0)
+    const handleShowAddInfoClick = () => {
+      addInfoDialog.value.handleOpenPopupClick()
+    }
+
+    const handleShowAddBrandClick = () => {
+      infoAdd.value = 1
+      handleShowAddInfoClick()
+    }
+
+    const handleShowAddCategoryClick = () => {
+      infoAdd.value = 2
+      handleShowAddInfoClick()
+    }
+
+    return {
+      addInfoDialog,
+      handleShowAddInfoClick,
+      infoAdd,
+      handleShowAddBrandClick,
+      handleShowAddCategoryClick
+    }
+  },
+
   computed: {
     ...mapState('product', ['product']),
     ...mapState('category', ['categories']),
@@ -101,6 +136,11 @@ export default {
 
     .line {
       border-top: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .icon-container {
+      margin-left: 12px;
+      cursor: pointer;
     }
   }
 

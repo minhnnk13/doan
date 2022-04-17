@@ -68,6 +68,9 @@
                         :key="index"
                       />
                     </el-select>
+                    <el-icon class="icon-container">
+                      <plus @click="handleShowAddInfoClick" />
+                    </el-icon>
                   </el-form-item>
                 </div>
               </div>
@@ -142,6 +145,10 @@
         <more-info />
       </div>
     </div>
+    <add-info-popup
+      :info-add="infoAdd"
+      ref="addInfoDialog"
+    />
   </div>
 </template>
 <script>
@@ -155,19 +162,25 @@ import MoreInfo from './more-info'
 import { getUserInfo } from '@/utils/auth'
 import messageBox from '@/utils/message-box'
 import dayjs from 'dayjs'
+import AddInfoPopup from '@/views/pages/app/products/list/create/add-info-popup.vue'
 
 const PRODUCT_MODULE = 'product'
 
 export default {
   components: {
     Uploader,
-    MoreInfo
+    MoreInfo,
+    Plus,
+    AddInfoPopup
   },
   setup () {
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
     const isEdit = ref(false)
+    const addInfoDialog = ref(null)
+    const infoAdd = 3
+
     if (route.params?.productId) {
       store.dispatch(`${PRODUCT_MODULE}/getProduct`, route.params.productId)
       isEdit.value = true
@@ -175,6 +188,10 @@ export default {
     store.dispatch('unit/getUnits')
 
     const product = computed(() => store.state.product.product)
+
+    const handleShowAddInfoClick = () => {
+      addInfoDialog.value.handleOpenPopupClick()
+    }
 
     // quay lai man danh sach san pham
     const handleBackClick = () => {
@@ -237,7 +254,10 @@ export default {
       handleBackClick,
       isEdit,
       handleSaveClick,
-      callbackMessageBox
+      callbackMessageBox,
+      handleShowAddInfoClick,
+      infoAdd,
+      addInfoDialog
     }
   },
 
@@ -309,6 +329,11 @@ export default {
 
           .unit-contaienr {
             margin-left: 12px;
+
+            .icon-container {
+              margin-left: 12px;
+              cursor: pointer;
+            }
           }
         }
 
