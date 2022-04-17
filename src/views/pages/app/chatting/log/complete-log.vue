@@ -3,7 +3,7 @@
     <el-table
       table-layout="auto"
       ref="tableRef"
-      :data="chats"
+      :data="topics"
     >
       <el-table-column width="40">
         <template #default>
@@ -31,7 +31,7 @@
           >
             <div
               class="chat action"
-              @click="$emit('redirectChat', scope.row.id)"
+              @click="$emit('redirectChat', scope.row.topicId)"
             >
               <el-tooltip
                 placement="bottom"
@@ -43,7 +43,7 @@
             </div>
             <div
               class="delete action"
-              @click="$emit('deleteChat', scope.row.id)"
+              @click="$emit('deleteChat', scope.row.topicId)"
             >
               <el-tooltip
                 placement="bottom"
@@ -78,9 +78,9 @@ export default {
   setup () {
     const store = useStore()
 
-    const chats = computed(() => store.getters[`${MODULE_NAME}/doneChats`])
+    const topics = computed(() => store.getters[`${MODULE_NAME}/doneTopics`])
     return {
-      chats
+      topics
     }
   }
 }

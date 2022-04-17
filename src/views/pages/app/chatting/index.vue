@@ -9,9 +9,11 @@
         name="chat"
       >
         <the-chat
-          :chats="chats"
+          :topics="chats"
           @addMessage="addMessage"
           @addNewChat="addNewChat"
+          @showComments="showComments"
+          @loadMoreTopic="loadMoreTopic"
         />
       </el-tab-pane>
       <el-tab-pane
@@ -33,7 +35,8 @@ import { ref, reactive, onMounted, computed, nextTick } from 'vue'
 import TheChat from './chat'
 import TheLog from './log'
 import baseStore from '@/views/pages/base/base-store'
-
+import CommonFn from '@/common/common-fn'
+import { getUserInfo } from '@/utils/auth'
 export default {
   components: { TheChat, TheLog },
 
@@ -43,34 +46,54 @@ export default {
       storeConfig: {
         moduleName: 'chat',
         entityKey: 'id',
-        entityName: 'Chats'
+        entityName: 'Topics'
       }
     })
-    const { loadData, store } = baseStore(config)
+    const pageConfig = reactive({
+      pageIndex: 0,
+      pageSize: 5
+    })
 
-    const chats = computed(() => store.state[config.storeConfig.moduleName].chats)
+    const userID = ref(
+      getUserInfo().userId
+    )
+    const isLoading = ref(false)
+    const isLastPage = computed(() => false)
+    const { store } = baseStore(config)
 
+    const chats = computed(() => store.state[config.storeConfig.moduleName].topics)
+
+    const loadData = async () => {
+      const container = document.querySelector('#loadingContainer')
+      isLoading.value = true
+      CommonFn.showMask(container)
+      await store.dispatch(`${config.storeConfig.moduleName}/getTopics`, pageConfig)
+
+      CommonFn.hideMask()
+      isLoading.value = false
+    }
     onMounted(async () => {
       await loadData()
     })
 
-    const addMessage = (message, id) => {
+    const addMessage = (content, id) => {
       const params = {
-        message: message,
-        id: id
+        content: content,
+        topicId: id,
+        createBy: userID.value
       }
-      store.dispatch(`${config.storeConfig.moduleName}/addMessage`, params)
+      store.dispatch(`${config.storeConfig.moduleName}/addComment`, params)
     }
 
-    const addNewChat = (message) => {
-      store.dispatch(`${config.storeConfig.moduleName}/addNewChat`, message)
+    const addNewChat = (param) => {
+      store.dispatch(`${config.storeConfig.moduleName}/addTopic`, param)
     }
 
     const onCheck = id => {
       store.dispatch(`${config.storeConfig.moduleName}/completeChat`, id)
     }
     const deleteChat = id => {
-      store.dispatch(`${config.storeConfig.moduleName}/deleteChat`, id)
+      store.dispatch(`${config.storeConfig.moduleName}/deleteTopic`, id)
     }
     const redirectChat = id => {
       const index = chats.value.findIndex(chat => chat.id === id)
@@ -82,6 +105,17 @@ export default {
       })
     }
 
+    const showComments = (topicId) => {
+      store.dispatch(`${config.storeConfig.moduleName}/getChat`, topicId)
+    }
+
+    const loadMoreTopic = async () => {
+      if (!isLoading.value && !isLastPage.value) {
+        pageConfig.pageIndex++
+        await loadData()
+      }
+    }
+
     return {
       activeTab,
       chats,
@@ -89,7 +123,10 @@ export default {
       addNewChat,
       onCheck,
       deleteChat,
-      redirectChat
+      redirectChat,
+      showComments,
+      loadMoreTopic
+
     }
   }
 }

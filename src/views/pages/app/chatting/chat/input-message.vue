@@ -1,11 +1,11 @@
 <template>
   <div class="type">
-    <div class="plus">
+    <!-- <div class="plus">
       <el-icon><circle-plus /></el-icon>
-    </div>
+    </div> -->
 
     <text-field
-      placeholder="Trả lời"
+      :placeholder="placeholder"
       v-model="message"
       @onSubmit="onSubmit"
     />
@@ -27,11 +27,11 @@
 
 <script>
 
-import { CirclePlus } from '@element-plus/icons-vue'
+// import { CirclePlus } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 export default {
   components: {
-    CirclePlus
+    // CirclePlus
   },
 
   emits: ['onSubmit'],
@@ -40,6 +40,11 @@ export default {
     modelValue: {
       type: String,
       default: null
+    },
+
+    placeholder: {
+      type: String,
+      default: 'Trả lời'
     }
   },
 
