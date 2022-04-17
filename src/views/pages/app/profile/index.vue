@@ -45,6 +45,7 @@
           label="Địa chỉ"
           v-model="account.address"
           :disabled="!changeMode"
+          :is-number="true"
         />
       </div>
 

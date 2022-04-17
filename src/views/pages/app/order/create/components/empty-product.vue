@@ -9,7 +9,7 @@
       </div>
 
       <div class="hint">
-        Chưa có thông tin khách hàng
+        Chưa có thông tin sản phẩm
       </div>
     </div>
   </div>
@@ -20,7 +20,7 @@ import { ref } from 'vue'
 export default {
   setup () {
     const textSearch = ref(null)
-    const emptyIcon = ref(require('@/assets/images/app/order/empty-customer.png'))
+    const emptyIcon = ref(require('@/assets/images/app/order/empty-product.png'))
     return {
       textSearch,
       emptyIcon

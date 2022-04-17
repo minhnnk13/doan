@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, computed, nextTick } from 'vue'
+import { ref, reactive, onMounted, computed, nextTick, onUnmounted } from 'vue'
 import TheChat from './chat'
 import TheLog from './log'
 import baseStore from '@/views/pages/base/base-store'
@@ -115,6 +115,10 @@ export default {
         await loadData()
       }
     }
+
+    onUnmounted(() => {
+      store.commit(`${config.storeConfig.moduleName}/clearData`)
+    })
 
     return {
       activeTab,
