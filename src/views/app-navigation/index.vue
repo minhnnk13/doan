@@ -95,12 +95,7 @@ export default {
             {
               name: 'Nhà cung cấp',
               to: '/app/manufacture'
-            },
-            {
-              name: 'Điều chỉnh giá vốn',
-              to: '/app/capital'
             }
-
           ]
         },
 
