@@ -1,9 +1,9 @@
 <template>
-  <div class="customer">
-    <div class="customer__head">
-      <div class="customer__head__left">
+  <div class="product">
+    <div class="product__head">
+      <div class="product__head__left">
         <div class="title">
-          Thông tin khách hàng
+          Thông tin sản phẩm
         </div>
         <div class="content">
           <text-field
@@ -12,40 +12,67 @@
           />
         </div>
       </div>
-      <div class="customer__head__right">
-        Thông tin khách hàng
+      <div class="product__head__right">
+        <div class="title">
+          Kiểm tra tồn kho
+        </div>
+        <div class="content">
+          <el-select v-model="manuafacture">
+            <el-option
+              :label="'Giá bán lẻ'"
+              :value="1"
+            />
+          </el-select>
+        </div>
       </div>
     </div>
-    <div class="customer__content">
-      <empty-customer />
+    <div class="product__content">
+      <empty-product />
+    </div>
+
+    <div class="product__footer">
+      dsa
     </div>
   </div>
 </template>
 
 <script>
-import emptyCustomer from './components/empty-customer.vue'
+import EmptyProduct from './components/empty-product.vue'
+import { ref } from 'vue'
 export default {
-  components: { emptyCustomer },
+  components: { EmptyProduct },
   setup () {
-    return {}
+    const manuafacture = ref(1)
+    return {
+      manuafacture
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.customer {
+.product {
    background: #fff;
    padding: 24px;
    display: flex;
    flex-direction: column;
 
-   &__title {
+   &__head {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     gap: 24px;
      margin-bottom: 12px;
 
-   }
+     &__left {
+       flex: 1;
+     }
 
-   &__content {
-     flex: 1;
+     &__right {
+       .title {
+         margin-bottom: 4px;
+       }
+     }
    }
 }
 </style>

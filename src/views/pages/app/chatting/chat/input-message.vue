@@ -4,12 +4,18 @@
       <el-icon><circle-plus /></el-icon>
     </div> -->
 
-    <text-field
+    <!-- <text-field
       :placeholder="placeholder"
       v-model="message"
       @onSubmit="onSubmit"
+    /> -->
+    <el-input
+      :placeholder="placeholder"
+      v-model="message"
+      type="textarea"
+      :autosize="{minRows: 1}"
+      resize="none"
     />
-
     <div
       class="send"
       :class="{'enable': isEnable}"

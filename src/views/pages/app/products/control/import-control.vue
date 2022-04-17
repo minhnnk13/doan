@@ -12,97 +12,95 @@
         </el-button>
       </div>
     </div>
-    <el-tabs
+    <div
       class="all-product-tab"
       active-name="first"
     >
-      <el-tab-pane
-        label="Tất cả"
-        name="first"
+      <div class="title">
+        Tất cả
+      </div>
+      <div class="search">
+        <text-field
+          v-model="inputSearch"
+          class="w-50 m-2"
+          size="large"
+          placeholder="Tìm kiếm theo mã phiếu kiểm hàng"
+          :prefix-icon="searchIcon"
+        />
+      </div>
+      <el-table
+        :data="products"
+        ref="table"
+        style="width: 100%"
+        class="table-style"
+        table-layout="auto"
+        @row-click="handleDetailClick"
+        @selection-change="handleSelectionChange"
+        :show-header="isShowHeaderTable"
+        header-cell-class-name="table-head"
+        :max-height="tableHeight"
       >
-        <div class="search">
-          <text-field
-            v-model="inputSearch"
-            class="w-50 m-2"
-            size="large"
-            placeholder="Tìm kiếm theo mã phiếu kiểm hàng"
-            :prefix-icon="searchIcon"
-          />
-        </div>
-        <el-table
-          :data="products"
-          ref="table"
-          style="width: 100%"
-          class="table-style"
-          table-layout="auto"
-          @row-click="handleDetailClick"
-          @selection-change="handleSelectionChange"
-          :show-header="isShowHeaderTable"
-          header-cell-class-name="table-head"
-          :max-height="tableHeight"
-        >
-          <el-table-column
-            type="selection"
-            align="center"
-          />
-          <el-table-column
-            prop="code"
-            label="Mã phiếu"
-            class="cursor-pointer"
-          />
+        <el-table-column
+          type="selection"
+          align="center"
+        />
+        <el-table-column
+          prop="code"
+          label="Mã phiếu"
+          class="cursor-pointer"
+        />
 
-          <el-table-column
-            prop="storeName"
-            label="Kho kiểm hàng"
-            class="cursor-pointer"
-          />
-          <el-table-column
-            prop="status"
-            label="Trạng thái"
-          />
-          <el-table-column
-            prop="createdDate"
-            label="Ngày tạo"
-          />
-          <el-table-column
-            prop="checkDate"
-            label="Ngày kiểm"
-          />
-          <el-table-column
-            prop="user"
-            label="Nhân viên tạo"
-          />
-          <el-table-column
-            prop="note"
-            label="Ghi chú"
-          />
-          <template #append>
-            <div class="paging-container">
-              <div style="margin-right: 12px; margin-top: 6px">
-                {{ "Hiển thị" }}
-              </div>
-              <el-select
-                v-model="pageSize"
-                @change="handleChangePageSize"
-                size="small"
-              >
-                <el-option
-                  v-for="(pageSizeIndex, index) in pageSizes"
-                  :key="index"
-                  :label="pageSizeIndex"
-                  :value="pageSizeIndex"
-                />
-              </el-select>
-              <div
-                style="margin-right: 12px; margin-left: 12px; margin-top: 6px"
-              >
-                {{ "Kết quả" }}
-              </div>
+        <el-table-column
+          prop="storeName"
+          label="Kho kiểm hàng"
+          class="cursor-pointer"
+        />
+        <el-table-column
+          prop="status"
+          label="Trạng thái"
+        />
+        <el-table-column
+          prop="createdDate"
+          label="Ngày tạo"
+        />
+        <el-table-column
+          prop="checkDate"
+          label="Ngày kiểm"
+        />
+        <el-table-column
+          prop="user"
+          label="Nhân viên tạo"
+        />
+        <el-table-column
+          prop="note"
+          label="Ghi chú"
+        />
+        <template #append>
+          <div class="paging-container">
+            <div style="margin-right: 12px; margin-top: 6px">
+              {{ "Hiển thị" }}
             </div>
-          </template>
-        </el-table>
-      </el-tab-pane>
-    </el-tabs>
+            <el-select
+              v-model="pageSize"
+              @change="handleChangePageSize"
+              size="small"
+            >
+              <el-option
+                v-for="(pageSizeIndex, index) in pageSizes"
+                :key="index"
+                :label="pageSizeIndex"
+                :value="pageSizeIndex"
+              />
+            </el-select>
+            <div
+              style="margin-right: 12px; margin-left: 12px; margin-top: 6px"
+            >
+              {{ "Kết quả" }}
+            </div>
+          </div>
+        </template>
+      </el-table>
+    </div>
   </div>
 </template>
 
@@ -226,6 +224,26 @@ export default {
     height: calc(100% - 56px);
     overflow-y: auto;
     background-color: #fff;
+
+    .title {
+      height: 40px;
+      position: relative;
+      text-transform: uppercase;
+      color: $color--green;
+      font-weight: 700 ;
+      padding-left: 12px;
+      line-height: 40px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        width: 250px;
+        background: $color--green;
+      }
+    }
 
     .search-bar-container {
       width: 100%;
