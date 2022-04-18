@@ -1,5 +1,4 @@
-import { API_PATH, authAxios } from '@/apis/api'
-import axios from 'axios'
+import { authAxios } from '@/apis/api'
 
 export default {
   namespaced: true,
@@ -14,6 +13,12 @@ export default {
     getUnits: async (context) => {
       const res = await authAxios.get('/unit')
       context.commit('setUnits', res.data)
+    },
+
+    addUnit: async (context, payload) => {
+      const res = await authAxios.post('/unit', payload)
+      context.dispatch('getUnits')
+      return res
     }
   }
 }

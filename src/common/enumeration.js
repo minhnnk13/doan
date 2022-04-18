@@ -4,7 +4,7 @@ const enumeration = {
     view: 0,
     add: 1,
     edit: 2,
-    dublicate: 3
+    duplicate: 3
   },
 
   ExecuteStoreType: {
@@ -21,6 +21,7 @@ const enumeration = {
 
   // Trạng thái lấy từ DB
   status: {
+    Ordering: 0, // Đặt hàng
     Finished: 1, // Hoàn thành
     Trading: 2, // Đang giao dịch
     Payment: 3, // Đã thanh toán
@@ -30,7 +31,17 @@ const enumeration = {
     StopTrading: 7, // Ngừng giao dịch
     StorageChecked: 8, // Đã kiểm kho
     StorageChecking: 9, // Đang kiểm kho
-    Balance: 10 // Đã cân bằng
+    Balance: 10, // Đã cân bằng
+    StorageImported: 11, // Đã nhập kho
+    Cancel: 12 // Đã hủy
+  },
+
+  ManufactureTabs: {
+    History: 0,
+    Debt: 1,
+    Contact: 2,
+    Address: 3,
+    Note: 4
   }
 }
 

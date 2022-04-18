@@ -17,11 +17,10 @@ export default {
       context.commit('setCategories', res.data)
     },
 
-    getProduct: async (context, params) => {
-      const product = context.state.products.find(
-        (x) => x.productId === Number(params)
-      )
-      context.commit('setProduct', product)
+    addCategory: async (context, payload) => {
+      const res = await authAxios.post('/category', payload)
+      context.dispatch('getCategories')
+      return res
     }
   }
 }

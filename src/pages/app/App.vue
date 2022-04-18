@@ -3,8 +3,11 @@
     <app-navigation />
 
     <div id="content-header">
-      <app-header />
-      <div class="content">
+      <app-header v-if="!$route.meta.excludeHeader" />
+      <div
+        class="content"
+        :class="{ 'height-full': $route.meta.excludeHeader }"
+      >
         <router-view v-slot="{ Component }">
           <transition name="fade">
             <component :is="Component" />
@@ -18,10 +21,15 @@
 <script>
 import AppNavigation from '@/views/app-navigation'
 import AppHeader from '@/views/app-header'
+import { setImportsInfo } from '@/utils/import-storage.js'
+
 export default {
   components: {
     AppNavigation,
     AppHeader
+  },
+  mounted () {
+    setImportsInfo()
   }
 }
 </script>
@@ -41,6 +49,11 @@ export default {
       width: 100%;
       height: calc(100% - 56px);
       overflow: auto;
+
+      &.height-full {
+        height: 100%;
+        padding-top: 0;
+      }
     }
   }
 }

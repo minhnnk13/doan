@@ -107,9 +107,50 @@ const routes = [
           pageName: 'Nhập hàng'
         },
         component: () =>
-          import(
-            /* webpackChunkName: "import" */ '@/pages/app/products/import'
-          )
+          import(/* webpackChunkName: "import" */ '@/pages/app/products/import'),
+        children: [
+          {
+            path: '',
+            name: 'ListGoods',
+            meta: {
+              pageName: 'Đơn nhập hàng'
+            },
+            component: () =>
+              import(/* webpackChunkName: "import-goods" */ '@/pages/app/products/import/list')
+          },
+          {
+            path: 'create',
+            name: 'CreateGoods',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(/* webpackChunkName: "create-goods" */ '@/pages/app/products/import/create')
+          },
+
+          {
+            path: 'returns',
+            name: 'ReturnGoods',
+            props: true,
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(/* webpackChunkName: "return-goods" */ '@/pages/app/products/import/return')
+          },
+
+          {
+            path: ':id',
+            name: 'BrowseGoods',
+            props: true,
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(/* webpackChunkName: "browse-goods" */ '@/pages/app/products/import/browse')
+          }
+
+        ]
       },
       {
         path: 'control',
@@ -125,28 +166,127 @@ const routes = [
       {
         path: 'manufacture',
         name: 'Manufacture',
-        meta: {
-          pageName: 'Nhà cung cấp'
-        },
         component: () =>
           import(
             /* webpackChunkName: "manufacture" */ '@/pages/app/products/manufacture'
-          )
+          ),
+        children: [
+          {
+            path: '',
+            name: 'ListManufacture',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: "list-manufacture" */ '@/pages/app/products/manufacture/list'
+              )
+          },
+
+          {
+            path: 'create',
+            name: 'CreateManufacture',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: "create-manufacture" */ '@/pages/app/products/manufacture/create'
+              )
+          },
+
+          {
+            path: ':id',
+            name: 'DetailManufacture',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
+              )
+          }
+        ]
+
       },
       {
         path: 'capital',
         name: 'Capital',
-        meta: {
-          pageName: 'Điều chỉnh giá vốn'
-        },
         component: () =>
           import(
             /* webpackChunkName: "capital" */ '@/pages/app/products/capital'
-          )
+          ),
+
+        children: [
+          {
+            path: '',
+            name: 'DetailManufacture',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
+              )
+          },
+          {
+            path: ':id',
+            name: 'DetailManufacture',
+            meta: {
+              excludeHeader: true
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
+              )
+          }
+        ]
       },
 
       // #endregion
+      {
+        path: 'orders',
+        name: 'Orders',
+        meta: {
+          pageName: 'Danh sách đơn hàng'
+        },
+        component: () =>
+          import(/* webpackChunkName: "orders" */ '@/pages/app/order'),
+        children: [
+          {
+            path: '',
+            name: 'ListOrder',
+            meta: {
+              pageName: 'Danh sách đơn hàng'
+            },
+            component: () =>
+              import(/* webpackChunkName: "list-order" */ '@/pages/app/order/list')
+          },
 
+          {
+            path: 'create',
+            name: 'CreateOrder',
+            meta: {
+              pageName: 'Tạo đơn hàng'
+            },
+            component: () =>
+              import(/* webpackChunkName: "create-order" */ '@/pages/app/order/create')
+          },
+
+          {
+            path: 'returns',
+            name: 'ReturnsOrder',
+            meta: {
+              pageName: 'Danh sách đơn trả hàng'
+            },
+            component: () =>
+              import(/* webpackChunkName: "returns-order" */ '@/pages/app/order/returns')
+          }
+        ]
+      },
+      // #region Đơn hàng
+
+      // #endregion
       {
         path: 'warehouse',
         name: 'WareHouse',
@@ -282,16 +422,19 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const token = getAuthToken()
   if (to.matched.some((record) => !record.meta.ignoreAuth)) {
-    const token = getAuthToken()
-
     if (!token) {
       next()
       redirectToApp(App.account)
     } else {
+      // redirectToApp(App.app)
       next()
     }
   } else {
+    if (token) {
+      redirectToApp(App.app)
+    }
     next()
   }
 })

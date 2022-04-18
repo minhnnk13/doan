@@ -10,7 +10,7 @@
     :destroy-on-close="true"
     :close-on-click-modal="false"
   >
-    <dialog-body />
+    <dialog-body ref="dialogBody" />
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="closePopup">Hủy</el-button>
@@ -34,7 +34,7 @@ export default {
     const dialogVisible = ref(false)
 
     const dialog = ref(null)
-
+    const dialogBody = ref(null)
     const closePopup = () => {
       dialogVisible.value = false
     }
@@ -52,7 +52,8 @@ export default {
       closePopup,
       onSave,
       openPopup,
-      dialogVisible
+      dialogVisible,
+      dialogBody
 
     }
   }

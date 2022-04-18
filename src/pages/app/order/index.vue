@@ -1,5 +1,5 @@
 <template>
-  cash-book
+  <router-view />
 </template>
 
 <script>

@@ -22,6 +22,12 @@ export default {
         (x) => x.productId === Number(params)
       )
       context.commit('setProduct', product)
+    },
+
+    addBrand: async (context, payload) => {
+      const res = await authAxios.post('/brand', payload)
+      context.dispatch('getBrands')
+      return res
     }
   }
 }

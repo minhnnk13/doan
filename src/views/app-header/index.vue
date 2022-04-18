@@ -23,9 +23,10 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import theAccount from './the-account.vue'
+import { getUserInfo } from '@/utils/auth'
 export default {
   components: { theAccount },
 
@@ -33,7 +34,11 @@ export default {
     const route = useRoute()
     const pageName = computed(() => route.meta.pageName)
     const notifyIcon = require('@/assets/images/app/app-header/notify.png')
-    const userName = ref('Admin')
+    const userInfor = reactive(
+      getUserInfo()
+    )
+
+    const userName = ref(userInfor.name)
     return {
       notifyIcon,
       pageName,

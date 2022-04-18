@@ -1,5 +1,5 @@
 <template>
-  cash-book
+  <the-create />
 </template>
 
 <script>

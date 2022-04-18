@@ -6,7 +6,7 @@
     <div class="items">
       <el-menu
         class=""
-        default-active="dashboard"
+        default-active="/app/dashboard"
         :router="true"
         text-color="#fff"
         background-color="#021266"
@@ -16,6 +16,7 @@
           v-for="(subNav, index) in items"
           :key="index"
           :sub-nav="subNav"
+          :class="subNav.class"
         >
           <template
             v-if="subNav.subs?.length"
@@ -32,15 +33,16 @@
     </div>
 
     <div class="chatting">
-      <div class="title">
-        Chatting Space
-
+      <router-link to="/app/chatting">
+        <div class="title">
+          Chatting Space
+        </div>
         <div class="thumbnail">
           <img
             :src="chattingIcon"
           >
         </div>
-      </div>
+      </router-link>
     </div>
 
     <div class="version">
@@ -62,54 +64,70 @@ export default {
         {
           name: 'Tổng quan',
           icon: 'dashboard',
-          to: 'dashboard'
+          to: '/app/dashboard'
         },
         {
           name: 'Báo cáo',
           icon: 'report',
-          to: 'report'
+          to: '/app/report'
         },
         {
           name: 'Sản phẩm',
           icon: 'product',
-          to: 'product',
+          to: '/app/product',
           subs: [
             {
               name: 'Danh sách sản phẩm',
-              to: 'list-product'
+              to: '/app/list-product'
             },
             {
               name: 'Quản lý kho',
-              to: 'manage-warehouse'
+              to: '/app/manage-warehouse'
             },
             {
               name: 'Nhập hàng',
-              to: 'import'
+              to: '/app/import'
             },
             {
               name: 'Kiểm hàng',
-              to: 'control'
+              to: '/app/control'
             },
             {
               name: 'Nhà cung cấp',
-              to: 'manufacture'
+              to: '/app/manufacture'
+            }
+          ]
+        },
+
+        {
+          name: 'Đơn hàng',
+          icon: 'order',
+          class: 'order',
+          // to: 'cash-book',
+          subs: [
+            {
+              name: 'Tạo đơn hàng',
+              to: '/app/orders/create'
             },
             {
-              name: 'Điều chỉnh giá vốn',
-              to: 'capital'
+              name: 'Danh sách đơn hàng',
+              to: '/app/orders'
+            },
+            {
+              name: 'Khách trả hàng',
+              to: '/app/orders/returns'
             }
-
           ]
         },
         {
           name: 'Thiết lập kho',
           icon: 'warehouse',
-          to: 'warehouse'
+          to: '/app/warehouse'
         },
         {
           name: 'Đối tác và khách hàng',
           icon: 'customer',
-          to: 'customer',
+          to: '/app/customer',
           subs: [
             {
               name: 'Danh sách khách hàng',
@@ -124,7 +142,7 @@ export default {
         {
           name: 'Sổ quỹ',
           icon: 'cash-book',
-          to: 'cash-book',
+          to: '/app/cash-book',
           // to: 'cash-book',
           subs: [
             {
@@ -141,6 +159,7 @@ export default {
             }
           ]
         }
+
       ]
 
       data = data.map((item) => {
@@ -162,14 +181,15 @@ export default {
 
 <style lang="scss" scoped>
 .navigation {
-  width: 320px;
+  // width: 320px;
   height: 100vh;
   background: $color--bg1;
   text-align: center;
   color: #fff;
   font-weight: 700;
   padding-bottom: 40px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   .header {
     padding: 20px;
@@ -188,6 +208,16 @@ export default {
 
   .el-menu {
     background: $color--bg1;
+
+    :deep(.order) {
+
+        .el-icon {
+          img {
+            background: #fff;
+          }
+        }
+
+    }
   }
 
   .chatting {
@@ -208,6 +238,25 @@ export default {
       margin-top: 24px;
       cursor: pointer;
     }
+
+    a {
+      display: block;
+      .title {
+        height: 56px;
+        line-height: 56px;
+        color: #fff;
+      }
+
+      &.router-link-active  {
+        display: block;
+        .title {
+
+          background: $color--gradient
+        }
+      }
+
+    }
+
   }
 
   .version {
