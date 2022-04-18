@@ -24,8 +24,13 @@ export default {
       state.topics.push(...chats)
     },
 
+    clearData: (state) => {
+      debugger
+      state.topics = []
+    },
+
     completeChat: (state, id) => {
-      const index = state.chats.findIndex(chat => chat.id === id)
+      const index = state.topics.findIndex(topic => topic.topicId === id)
       state.topics[index].complete = true
     },
 

@@ -1,5 +1,5 @@
 import { useVuelidate } from '@vuelidate/core'
-import { required, email, sameAs } from '@vuelidate/validators'
+import { required, email, sameAs, numeric } from '@vuelidate/validators'
 import { inject, toRefs, ref, computed } from 'vue'
 import { PROVIDE_KEY } from '../form'
 const VALIDATE_CLS = 'validatable'
@@ -29,6 +29,11 @@ const validate = {
     isPhone: {
       type: String,
       default: null
+    },
+
+    isNumber: {
+      type: Boolean,
+      default: false
     }
 
   }
@@ -53,7 +58,7 @@ const useValidate = (props, emit) => {
   }
 
   const getValidations = (propValues) => {
-    const { allowBlank, isEmail, isPhone } = propValues
+    const { allowBlank, isEmail, isPhone, isNumber } = propValues
     const validations = {}
 
     if (!allowBlank.value) {
@@ -66,6 +71,10 @@ const useValidate = (props, emit) => {
 
     if (isPhone.value) {
       validations.phone = phone
+    }
+
+    if (isNumber.value) {
+      validations.numeric = numeric
     }
 
     return validations
@@ -127,6 +136,9 @@ const useValidate = (props, emit) => {
         break
       case 'phone':
         message = 'Số điện thoại không hợp lệ'
+        break
+      case 'numeric':
+        message = 'Chỉ được nhập số'
     }
     return message
   }
