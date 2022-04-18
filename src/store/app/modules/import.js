@@ -70,20 +70,26 @@ export default {
     calculateTotalPrice (state) {
       state.import.importPrice = 0
       state.import.saleQuantity = 0
+      state.import.renderImportPrice = 0
       state.import.productsToImport.map((product) => {
         if (!state.import.isTaxed) {
           product.price += product.price * 0.1
         } else {
           product.price += product.price
         }
+
         state.import.importPrice += product.price
         state.import.saleQuantity += Number(product.saleQuantity)
       })
-      state.import.renderImportPrice = state.import.importPrice
+
+      state.import.renderImportPrice = formatPrice(
+        Number(state.import.importPrice)
+      )
     },
 
     reCalculateAllPrice (state) {
       state.import.importPrice = 0
+      state.import.renderImportPrice = 0
       state.import.productsToImport.map((product) => {
         if (!state.import.isTaxed) {
           product.price += product.price * 0.1
@@ -92,7 +98,10 @@ export default {
         }
         state.import.importPrice += product.price
       })
-      state.import.renderImportPrice = state.import.importPrice
+
+      state.import.renderImportPrice = formatPrice(
+        Number(state.import.importPrice)
+      )
     },
 
     setImportList (state, importList) {
@@ -166,7 +175,7 @@ export default {
               res.data.statusImport = res.data.status
               res.data.statusStore = res.data.sttStore
               res.data.productsToImport = res.data.listProduct
-              res.data.productsToImport.forEach(productInfo => {
+              res.data.productsToImport.forEach((productInfo) => {
                 productInfo.renderPrice = formatPrice(
                   Number(productInfo.price)
                 )

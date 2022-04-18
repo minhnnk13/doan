@@ -99,29 +99,26 @@
           >
             <div class="sub-price-container">
               <div class="sub-price-1">
-                <el-form-item
-                  label="Giá bán lẻ"
-                  label-position="top"
-                >
-                  <el-input v-model="product.retailPrice" />
-                </el-form-item>
+                <text-field
+                  :label="'Giá bán lẻ'"
+                  :is-number="true"
+                  v-model="product.retailPrice"
+                />
               </div>
               <div class="sub-price-2">
-                <el-form-item
-                  label="Giá bán buôn"
-                  label-position="top"
-                >
-                  <el-input v-model="product.wholesalePrice" />
-                </el-form-item>
+                <text-field
+                  :label="'Giá bán buôn'"
+                  :is-number="true"
+                  v-model="product.wholesalePrice"
+                />
               </div>
             </div>
             <div class="content-container">
-              <el-form-item
-                label="Giá nhập"
-                label-position="top"
-              >
-                <el-input v-model="product.unitPrice" />
-              </el-form-item>
+              <text-field
+                :label="'Giá nhập'"
+                :is-number="true"
+                v-model="product.unitPrice"
+              />
             </div>
           </el-form>
         </div>
