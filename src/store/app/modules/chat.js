@@ -25,7 +25,6 @@ export default {
     },
 
     clearData: (state) => {
-      debugger
       state.topics = []
     },
 

@@ -18,7 +18,7 @@
     />
     <el-table-column
       label="Số lượng"
-      width="100"
+      width="150"
       v-if="!importProducts.status && importProducts.status !== 0"
     >
       <template #default="prop">
@@ -26,6 +26,7 @@
           :only-border-bottom="true"
           v-model="prop.row.saleQuantity"
           @keyup="calculateSalePrice(prop.row)"
+          :is-number="true"
         />
       </template>
     </el-table-column>
@@ -37,7 +38,7 @@
     />
     <el-table-column
       label="Giá nhập"
-      width="100"
+      width="150"
       v-if="!importProducts.status && importProducts.status !== 0"
     >
       <template #default="prop">
@@ -45,6 +46,7 @@
           :only-border-bottom="true"
           v-model="prop.row.unitPrice"
           @keyup="calculateSalePrice(prop.row)"
+          :is-number="true"
         />
       </template>
     </el-table-column>
