@@ -37,8 +37,27 @@
     />
     <el-table-column
       label="Giá nhập"
-      prop="renderUnitPrice"
+      width="100"
+      v-if="!importProducts.status && importProducts.status !== 0"
+    >
+      <template #default="prop">
+        <text-field
+          :only-border-bottom="true"
+          v-model="prop.row.unitPrice"
+          @keyup="calculateSalePrice(prop.row)"
+        />
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="Giá nhập"
+      width="100"
+      prop="unitPrice"
+      v-else
     />
+    <!-- <el-table-column
+      label="Giá nhập"
+      prop="renderUnitPrice"
+    /> -->
 
     <el-table-column label="Thuế(%)">
       10%
@@ -96,10 +115,9 @@ export default {
     })
 
     const calculateSalePrice = (product) => {
+      product.price = 0
       if (product.saleQuantity) {
         product.price = product.unitPrice * Number(product.saleQuantity)
-      } else {
-        product.price = 0
       }
       product.renderPrice = formatPrice(product.price)
       store.commit('import/calculateTotalPrice')

@@ -43,7 +43,6 @@ export default {
       return new Promise((resolve, reject) => {
         authAxios.get(`/topic?pageIndex=${pageConfig.pageIndex}&pageSize=${pageConfig.pageSize}`)
           .then((res) => {
-            debugger
             commit('setTopics', res.data)
             resolve(res.data)
           })
@@ -69,11 +68,9 @@ export default {
     },
 
     addComment: ({ commit }, params) => {
-      debugger
       return new Promise((resolve, reject) => {
         authAxios.post('/comment', params)
           .then((res) => {
-            debugger
             commit('setComments', params)
             resolve(res.data)
           })
@@ -92,7 +89,6 @@ export default {
       return new Promise((resolve, reject) => {
         authAxios.delete(`/topic/${id}`)
           .then((res) => {
-            debugger
             commit('deleteTopic', id)
             resolve(res)
           })
