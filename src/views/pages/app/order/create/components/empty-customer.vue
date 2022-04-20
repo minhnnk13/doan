@@ -3,6 +3,7 @@
     <text-field
       placeholder="Tìm kiếm khách hàng theo SĐT, tên, mã khách hàng"
       v-model="textSearch"
+      :prefix-icon="searchIcon"
     />
 
     <div class="content">
@@ -22,13 +23,16 @@
 
 <script>
 import { ref } from 'vue'
+import { Search } from '@element-plus/icons-vue'
 export default {
   setup () {
+    const searchIcon = ref(Search)
     const textSearch = ref(null)
     const emptyIcon = ref(require('@/assets/images/app/order/empty-customer.png'))
     return {
       textSearch,
-      emptyIcon
+      emptyIcon,
+      searchIcon
     }
   }
 }

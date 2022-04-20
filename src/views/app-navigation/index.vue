@@ -95,11 +95,11 @@ export default {
             {
               name: 'Nhà cung cấp',
               to: '/app/manufacture'
-            },
-            {
-              name: 'Điều chỉnh giá vốn',
-              to: '/app/capital'
             }
+            // {
+            //   name: 'Điều chỉnh giá vốn',
+            //   to: '/app/capital'
+            // }
 
           ]
         },
@@ -195,6 +195,7 @@ export default {
   padding-bottom: 40px;
   overflow-y: auto;
   overflow-x: hidden;
+  width: 270px;
 
   .header {
     padding: 20px;
