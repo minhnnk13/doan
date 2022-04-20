@@ -15,6 +15,12 @@ export default {
     getCategories: async (context) => {
       const res = await authAxios.get('/category')
       context.commit('setCategories', res.data)
+    },
+
+    addCategory: async (context, payload) => {
+      const res = await authAxios.post('/category', payload)
+      context.dispatch('getCategories')
+      return res
     }
   }
 }
