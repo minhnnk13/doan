@@ -7,16 +7,16 @@
     <div class="message">
       <div class="message__head">
         <div class="user-name">
-          {{ message.userName }}
+          {{ message.createBy }}
         </div>
 
         <div class="time">
-          {{ message.time }}
+          {{ dateFomat }}
         </div>
       </div>
 
       <div class="message__content">
-        {{ message.message }}
+        {{ message.content }}
       </div>
     </div>
   </div>
@@ -25,6 +25,7 @@
 <script>
 
 import { Avatar } from '@element-plus/icons-vue'
+import { computed, toRefs } from 'vue'
 export default {
   components: {
     Avatar
@@ -34,6 +35,20 @@ export default {
     message: {
       type: Object,
       default: () => {}
+    }
+  },
+
+  setup (props) {
+    const { message } = toRefs(props)
+    const dateFomat = computed(() => {
+      const option = { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }
+
+      const date = new Date(message.value.createdDate)
+      return date.toLocaleString('vi', option)
+    })
+
+    return {
+      dateFomat
     }
   }
 }
@@ -48,19 +63,21 @@ export default {
         display: flex;
         flex-direction: column;
         gap: 12px;
+        color: #202124;
 
         &__head {
             display: flex;
+            align-items: center;
             gap: 12px;
 
-            .userName {
-                color: #202124;
+            .user-name {
                 font-weight: 500;
             }
 
             .time {
                 color: #5f6368;
                 font-size: 14px;
+                padding-top: 2px;
             }
         }
     }
