@@ -27,14 +27,6 @@
         ref="tableRef"
       >
         <template #pagination>
-          <!-- <el-pagination
-          v-model:currentPage="currentPage4"
-          v-model:page-size="pageSize4"
-          :default-page-size="5"
-          :pager-count="4"
-          layout="prev, pager, next"
-          :total="100"
-        /> -->
           <div class="paging-container">
             <div style="margin-right: 12px; margin-top: 6px">
               {{ "Hiển thị" }}
@@ -69,7 +61,7 @@ import TheTable from './the-table.vue'
 import baseStore from '@/views/pages/base/base-store'
 import { useStore } from 'vuex'
 
-const PRODUCT_MODULE = 'product'
+const PRODUCT_MODULE = 'supplier'
 
 export default {
   components: { theHeader, HeaderTable, TheTable },
@@ -89,9 +81,9 @@ export default {
     const store = useStore()
     const config = reactive({
       storeConfig: {
-        moduleName: 'product',
+        moduleName: 'supplier',
         entityKey: params,
-        entityName: 'Products'
+        entityName: 'Suppliers'
       }
     })
     const { loadData } = baseStore(config)
@@ -136,7 +128,7 @@ export default {
     }
 
     const handleChangePageSize = () => {
-      store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
+      store.dispatch(`${PRODUCT_MODULE}/getSuppliers`, params.value)
     }
 
     return {

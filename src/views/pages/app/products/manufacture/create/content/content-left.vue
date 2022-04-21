@@ -1,25 +1,17 @@
 <template>
   <div class="right">
-    <infor-contact v-model="manufacture" />
-    <infor-address v-model="manufacture" />
-    <infor-supplement v-model="manufacture" />
+    <infor-contact />
+    <infor-address />
+    <infor-supplement />
   </div>
 </template>
 
 <script>
-import { reactive } from 'vue'
 import inforContact from './components/infor-contact.vue'
 import InforAddress from './components/infor-address.vue'
 import InforSupplement from './components/infor-supplement.vue'
 export default {
-  components: { inforContact, InforAddress, InforSupplement },
-
-  setup () {
-    const manufacture = reactive({})
-    return {
-      manufacture
-    }
-  }
+  components: { inforContact, InforAddress, InforSupplement }
 }
 </script>
 

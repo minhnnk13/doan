@@ -8,36 +8,14 @@
       <text-field
         label="Nhãn"
         placeholder="VD: nơi thanh toán, nơi giao hàng"
-        v-model="tag"
+        v-model="supplier.tag"
       />
-    </div>
-    <div class="address__area">
-      <div class="label">
-        Khu vực
-      </div>
-      <el-select>
-        <el-option>Chọn tỉnh thành quận huyện</el-option>
-      </el-select>
     </div>
     <div class="address__address">
       <text-field
         label="Địa chỉ"
         :allow-blank="false"
-        v-model="address"
-      />
-    </div>
-    <div class="address__wards">
-      <div class="label">
-        Phường xã
-      </div>
-      <el-select>
-        <el-option>Chọn phường xã</el-option>
-      </el-select>
-    </div>
-    <div class="address__next">
-      <text-field
-        label="Địa chỉ 2"
-        v-model="nextAddress"
+        v-model="supplier.address"
       />
     </div>
   </div>
@@ -45,66 +23,18 @@
 
 <script>
 import { computed, toRefs } from 'vue'
-
-const UPDATE = 'update:modelValue'
+import { useStore } from 'vuex'
 
 export default {
 
-  emits: [UPDATE],
-
-  props: {
-    modelValue: {
-      type: Object,
-      default: () => {}
-    }
-  },
-
   setup (props, { emit }) {
-    const { modelValue } = toRefs(props)
-    const tag = computed({
-      get: () => modelValue.value.tag,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.tag = value
-        emit(UPDATE, model)
-      }
+    const store = useStore()
+    const supplier = computed(() => {
+      return store.state.supplier.supplier
     })
 
-    const area = computed({
-      get: () => modelValue.value.area,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.area = value
-        emit(UPDATE, model)
-      }
-    })
-
-    const address = computed({
-      get: () => modelValue.value.address,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.address = value
-        emit(UPDATE, model)
-      }
-    })
-
-    const nextAddress = computed({
-      get: () => modelValue.value.nextAddress,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.nextAddress = value
-        emit(UPDATE, model)
-      }
-    })
     return {
-      tag,
-      area,
-      address,
-      nextAddress
+      supplier
     }
   }
 }
