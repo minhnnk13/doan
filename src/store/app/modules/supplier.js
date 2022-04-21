@@ -3,7 +3,11 @@ import axios from 'axios'
 
 export default {
   namespaced: true,
-  state: { suppliers: [] },
+  state: {
+    suppliers: [],
+    supplier: {
+    }
+  },
   getters: {},
   mutations: {
     setSuppliers (state, suppliers) {
@@ -13,9 +17,21 @@ export default {
   },
   actions: {
 
-    getSuppliers: async (context) => {
-      const res = await authAxios.get('/supplier')
-      context.commit('setSuppliers', res.data)
+    getSuppliers: async (context, params) => {
+      return new Promise((resolve, reject) => {
+        authAxios
+          .get('/supplier', { params })
+          .then((res) => {
+            context.commit('setSuppliers', res.data)
+            resolve(res.data)
+          })
+          .catch((err) => reject(err))
+      })
+    },
+
+    addSupplier: async (context, payload) => {
+      const res = await authAxios.post('/supplier', payload)
     }
+
   }
 }

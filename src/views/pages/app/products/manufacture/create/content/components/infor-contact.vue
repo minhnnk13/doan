@@ -5,28 +5,28 @@
         label="Tên nhà cung cấp"
         :allow-blank="false"
         placeholder="Nhập tên nhà cung cấp"
-        v-model="name"
+        v-model="supplier.supplierName"
       />
     </div>
     <div class="contact__code">
       <text-field
         label="Mã nhà cung cấp"
         :allow-blank="false"
-        v-model="code"
+        v-model="supplier.supplierCode"
       />
     </div>
     <div class="contact__email">
       <text-field
         label="Email"
         :is-email="true"
-        v-model="email"
+        v-model="supplier.email"
       />
     </div>
     <div class="contact__phone">
       <text-field
         label="Số điện thoại"
         :is-phone="true"
-        v-model="phoneNumber"
+        v-model="supplier.phone"
       />
     </div>
   </div>
@@ -34,66 +34,17 @@
 
 <script>
 import { computed, toRefs } from 'vue'
-
-const UPDATE = 'update:modelValue'
+import { useStore } from 'vuex'
 
 export default {
 
-  emits: [UPDATE],
-
-  props: {
-    modelValue: {
-      type: Object,
-      default: () => {}
-    }
-  },
-
   setup (props, { emit }) {
-    const { modelValue } = toRefs(props)
-    const name = computed({
-      get: () => modelValue.value.name,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.name = value
-        emit(UPDATE, model)
-      }
-    })
-
-    const code = computed({
-      get: () => modelValue.value.code,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.code = value
-        emit(UPDATE, model)
-      }
-    })
-
-    const email = computed({
-      get: () => modelValue.value.email,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.email = value
-        emit(UPDATE, model)
-      }
-    })
-
-    const phone = computed({
-      get: () => modelValue.value.phone,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.phone = value
-        emit(UPDATE, model)
-      }
+    const store = useStore()
+    const supplier = computed(() => {
+      return store.state.supplier.supplier
     })
     return {
-      name,
-      code,
-      email,
-      phone
+      supplier
     }
   }
 }

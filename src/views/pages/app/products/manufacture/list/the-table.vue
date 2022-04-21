@@ -4,33 +4,28 @@
     header-cell-class-name="table-head"
     :data="data"
     :max-height="tableHeight"
-    @selection-change="$emit('handleSelectionChange', $event)"
     :show-header="isShowHeaderTable"
     ref="tableRef"
   >
     <el-table-column
-      type="selection"
-      align="center"
-    />
-    <el-table-column
       label="Mã nhà cung cấp"
-      prop="productName"
+      prop="supplierCode"
     />
     <el-table-column
       label="Tên nhà cung cấp"
-      prop="saleQuantity"
+      prop="supplierName"
     />
     <el-table-column
       label="Email"
-      prop="stockQuantity"
+      prop="email"
     />
     <el-table-column
       label="Số điện thoại"
-      prop="createdDate"
+      prop="phone"
     />
     <el-table-column
       label="Trạng thái"
-      prop="retailPrice"
+      prop="status"
     />
 
     <template #append>

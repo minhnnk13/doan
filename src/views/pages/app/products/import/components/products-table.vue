@@ -94,6 +94,9 @@
         <div class="value">
           {{ importProducts.renderImportPrice }}
         </div>
+        <div>
+          {{ 'VNĐ' }}
+        </div>
       </div>
       <!-- <div class="amount">Tiền cần trả {{importProducts.saleQuantity}}</div> -->
     </div>
@@ -121,7 +124,7 @@ export default {
       if (product.saleQuantity) {
         product.price = product.unitPrice * Number(product.saleQuantity)
       }
-      product.renderPrice = formatPrice(product.price)
+      product.renderPrice = `${formatPrice(product.price)} VNĐ`
       store.commit('import/calculateTotalPrice')
     }
     return { products, calculateSalePrice, importProducts }

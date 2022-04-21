@@ -62,7 +62,10 @@
 </template>
 
 <script>
-
+// to-do: case hiển thị trạng thái của nhà cung cấp
+// gán dữ liệu cho các field cần thiết
+// ghép api xóa
+// thêm màn sửa - cần cf lại
 import { CaretBottom } from '@element-plus/icons-vue'
 import { reactive } from 'vue'
 export default {

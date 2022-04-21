@@ -52,7 +52,7 @@ const useValidate = (props, emit) => {
   })
 
   const phone = (value) => {
-    const regExp = /^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}/
+    const regExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/
 
     return value.match(regExp)
   }

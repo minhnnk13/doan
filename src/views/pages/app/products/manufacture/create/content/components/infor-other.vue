@@ -8,8 +8,13 @@
       <div class="label">
         Nhân viên phụ trách
       </div>
-      <el-select v-model="employee">
-        <el-option>Chọn nhân viên</el-option>
+      <el-select v-model="supplier.userId">
+        <el-option
+          v-for="(user, index) in users"
+          :key="index"
+          :value="user.id"
+          :label="user.name"
+        />
       </el-select>
     </div>
 
@@ -19,54 +24,31 @@
       </div>
       <text-field
         type="textarea"
-        v-model="description"
+        v-model="supplier.description"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { computed, toRefs } from 'vue'
-
-const UPDATE = 'update:modelValue'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
 
-  emits: [UPDATE],
-
-  props: {
-    modelValue: {
-      type: Object,
-      default: () => {}
-    }
-  },
-
   setup (props, { emit }) {
-    const { modelValue } = toRefs(props)
-
-    const employee = computed({
-      get: () => modelValue.value.employee,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.employee = value
-        emit(UPDATE, model)
-      }
+    const store = useStore()
+    const supplier = computed(() => {
+      return store.state.supplier.supplier
     })
 
-    const description = computed({
-      get: () => modelValue.value.description,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.description = value
-        emit(UPDATE, model)
-      }
+    store.dispatch('user/getUsers')
+    const users = computed(() => {
+      return store.state.user.users
     })
-
     return {
-      employee,
-      description
+      supplier,
+      users
     }
   }
 }
