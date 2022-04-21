@@ -38,7 +38,8 @@ export default {
 .app {
   height: 100vh;
   width: 100vw;
-  display: flex;
+  display: grid;
+  grid-template-columns: 270px calc(100vw - 270px);
 
   #content-header {
     flex: 1;

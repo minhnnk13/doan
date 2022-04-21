@@ -19,5 +19,6 @@ export default {
   height: 100%;
   display: grid;
   grid-template-rows: 1fr 1fr;
+  gap: 24px;
 }
 </style>

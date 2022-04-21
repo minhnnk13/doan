@@ -9,6 +9,7 @@
           <text-field
             placeholder="Tìm kiếm khách hàng theo SĐT, tên, mã khách hàng"
             v-model="textSearch"
+            :prefix-icon="searchIcon"
           />
         </div>
       </div>
@@ -30,8 +31,17 @@
       <empty-product />
     </div>
 
-    <div class="product__footer">
-      dsa
+    <div
+      class="product__footer"
+      v-if="false"
+    >
+      <div class="label">
+        Tổng tiền ({{ totalProduct }} sản phẩm)
+      </div>
+
+      <div class="content">
+        {{ totalPay }}
+      </div>
     </div>
   </div>
 </template>
@@ -39,12 +49,19 @@
 <script>
 import EmptyProduct from './components/empty-product.vue'
 import { ref } from 'vue'
+import { Search } from '@element-plus/icons-vue'
 export default {
   components: { EmptyProduct },
   setup () {
     const manuafacture = ref(1)
+    const searchIcon = ref(Search)
+    const totalProduct = ref(0)
+    const totalPay = ref('15.000.000')
     return {
-      manuafacture
+      manuafacture,
+      totalProduct,
+      totalPay,
+      searchIcon
     }
   }
 }
@@ -73,6 +90,18 @@ export default {
          margin-bottom: 4px;
        }
      }
+   }
+
+   &__content {
+
+   }
+
+   &__footer {
+     padding-top: 24px;
+     border-top: 1px solid;
+     display: flex;
+     justify-content: flex-end;
+     gap: 40px;
    }
 }
 </style>

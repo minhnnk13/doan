@@ -2,12 +2,25 @@
   <div class="items">
     <div
       class="item"
-      v-for="(message, index) in messages"
+      v-for="(message, index) in topic.comments"
       :key="index"
     >
       <div class="message">
         <chat-item :message="message" />
       </div>
+    </div>
+    <div
+      class="view-more"
+      v-if="isShowViewMore"
+    >
+      <div
+        class="text"
+        @click="$emit('showComments')"
+      >
+        Xem thêm
+      </div>
+
+      <div id="viewmore-loading" />
     </div>
   </div>
 
@@ -19,27 +32,35 @@
 </template>
 
 <script>
+import { computed, toRefs } from 'vue'
 import ChatItem from './chat-item.vue'
 import InputMessage from './input-message.vue'
 export default {
 
   components: { ChatItem, InputMessage },
 
-  emits: ['addMessage'],
+  emits: ['addMessage', 'showComments'],
 
   props: {
-    messages: {
-      type: Array,
-      default: () => []
+    topic: {
+      type: Object,
+      default: () => {}
     }
   },
 
   setup (props, { emit }) {
+    const { topic } = toRefs(props)
+    const isShowViewMore = computed(() => {
+      const result = topic.value.totalComment !== topic.value.comments?.length && topic.value.comments?.length
+      debugger
+      return result
+    })
     const addMessage = (message) => {
       emit('addMessage', message)
     }
     return {
-      addMessage
+      addMessage,
+      isShowViewMore
     }
   }
 }
@@ -50,5 +71,24 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 16px;
+
+    .view-more {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .text {
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+      #viewmore-loading {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
 }
 </style>
