@@ -11,7 +11,7 @@ const routes = [
 
     redirect (to) {
       return {
-        path: `${to.path}/dashboard`
+        path: `${to.path}/list-product`
       }
     },
     component: PageIndex,

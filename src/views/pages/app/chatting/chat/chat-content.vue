@@ -52,7 +52,7 @@ export default {
     const { topic } = toRefs(props)
     const isShowViewMore = computed(() => {
       const result = topic.value.totalComment !== topic.value.comments?.length && topic.value.comments?.length
-      debugger
+
       return result
     })
     const addMessage = (message) => {

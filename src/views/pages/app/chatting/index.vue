@@ -82,7 +82,7 @@ export default {
         topicId: id,
         createBy: userID.value
       }
-      debugger
+
       store.dispatch(`${config.storeConfig.moduleName}/addComment`, params)
     }
 

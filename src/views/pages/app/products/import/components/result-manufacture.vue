@@ -9,7 +9,7 @@
       </div>
 
       <div class="debt">
-        Công nợ hiện tại <span class="title">0</span>
+        Công nợ hiện tại <span class="title">{{ supplier.dept }}</span>
       </div>
     </div>
 

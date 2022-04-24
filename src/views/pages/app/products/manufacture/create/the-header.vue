@@ -6,17 +6,13 @@
       >
         <el-button>Hủy</el-button>
       </router-link>
-      <router-link
-        :to="{
-          name: 'DetailManufacture',
-          params: {
-            id: '22'
-          }}"
+
+      <el-button
+        type="primary"
+        @click="handleSaveClick"
       >
-        <el-button type="primary">
-          Lưu
-        </el-button>
-      </router-link>
+        Lưu
+      </el-button>
     </div>
 
     <div class="header__title">
@@ -32,12 +28,33 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
 export default {
   setup () {
     const backLinkText = ref('< Danh sách nhà cung cấp')
+    const store = useStore()
+    const router = useRouter()
+
+    const supplier = computed(() => {
+      return store.state.supplier.supplier
+    })
+    const handleSaveClick = () => {
+      store.dispatch('supplier/addSupplier', supplier.value).then(res => {
+        if (res) {
+          router.push({
+            name: 'DetailManufacture',
+            params: { id: supplier.value.supplierId }
+          })
+        }
+      })
+    }
+
     return {
-      backLinkText
+      backLinkText,
+      handleSaveClick
     }
   }
 }

@@ -30,7 +30,15 @@ export default {
     },
 
     addSupplier: async (context, payload) => {
-      const res = await authAxios.post('/supplier', payload)
+      return new Promise((resolve, reject) => {
+        authAxios
+          .post('/supplier', payload)
+          .then((res) => {
+            context.commit('setSupplier', res.data)
+            resolve(res.data)
+          })
+          .catch((err) => reject(err))
+      })
     }
 
   }

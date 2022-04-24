@@ -14,7 +14,8 @@ export default {
     productsToImport: [],
     importList: [],
     importSupplier: {},
-    importCreateStep: 1
+    importCreateStep: 1,
+    isTaxed: false
   },
 
   getters: {},
@@ -72,31 +73,8 @@ export default {
       state.import.saleQuantity = 0
       state.import.renderImportPrice = 0
       state.import.productsToImport.map((product) => {
-        if (!state.import.isTaxed) {
-          product.price += product.price * 0.1
-        } else {
-          product.price += product.price
-        }
-
         state.import.importPrice += product.price
         state.import.saleQuantity += Number(product.saleQuantity)
-      })
-
-      state.import.renderImportPrice = formatPrice(
-        Number(state.import.importPrice)
-      )
-    },
-
-    reCalculateAllPrice (state) {
-      state.import.importPrice = 0
-      state.import.renderImportPrice = 0
-      state.import.productsToImport.map((product) => {
-        if (!state.import.isTaxed) {
-          product.price += product.price * 0.1
-        } else {
-          product.price -= product.price / 11
-        }
-        state.import.importPrice += product.price
       })
 
       state.import.renderImportPrice = formatPrice(
@@ -120,6 +98,10 @@ export default {
 
     setImportCreateStep (state, importCreateStep) {
       state.importCreateStep = importCreateStep
+    },
+
+    setIsTaxed (state, isTaxed) {
+      state.isTaxed = isTaxed
     }
   },
 
