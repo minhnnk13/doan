@@ -1,12 +1,12 @@
 <template>
   <div class="navigation">
     <div class="header">
-      CompanyName
+      Aquarium
     </div>
     <div class="items">
       <el-menu
         class=""
-        default-active="/app/dashboard"
+        default-active="/app/list-product"
         :router="true"
         text-color="#fff"
         background-color="#021266"

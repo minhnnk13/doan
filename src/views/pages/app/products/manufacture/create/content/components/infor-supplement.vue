@@ -7,6 +7,7 @@
     <div class="supplement__taxCode">
       <text-field
         label="Mã số thuế"
+        :is-number="true"
         v-model="supplier.taxIdentificationNumber"
       />
     </div>

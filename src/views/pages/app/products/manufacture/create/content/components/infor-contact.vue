@@ -12,6 +12,7 @@
       <text-field
         label="Mã nhà cung cấp"
         :allow-blank="false"
+        :is-number="true"
         v-model="supplier.supplierCode"
       />
     </div>

@@ -21,6 +21,15 @@
             :show-require="false"
           />
         </div>
+        <div class="user-name">
+          <text-field
+            placeholder="Tên của bạn"
+            label="Tên hiển thị"
+            v-model="account.name"
+            :allow-blank="false"
+            :show-require="false"
+          />
+        </div>
         <div class="email">
           <text-field
             placeholder="Email của bạn"
