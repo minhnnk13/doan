@@ -12,6 +12,9 @@ export default {
   mutations: {
     setSuppliers (state, suppliers) {
       state.suppliers = suppliers
+    },
+    setSupplier (state, supplier) {
+      state.supplier = supplier
     }
 
   },
@@ -34,8 +37,19 @@ export default {
         authAxios
           .post('/supplier', payload)
           .then((res) => {
+            resolve(res)
+          })
+          .catch((err) => reject(err))
+      })
+    },
+
+    getSupplierByID: async (context, payload) => {
+      return new Promise((resolve, reject) => {
+        authAxios
+          .get(`/supplier/${payload}`)
+          .then((res) => {
             context.commit('setSupplier', res.data)
-            resolve(res.data)
+            resolve(res)
           })
           .catch((err) => reject(err))
       })

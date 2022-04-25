@@ -77,7 +77,7 @@ export default {
     })
 
     const inputSearch = ref('')
-    const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
+    const pageSizes = reactive([5, 25, 50, 75, 100])
     const store = useStore()
     const config = reactive({
       storeConfig: {

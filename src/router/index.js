@@ -215,32 +215,32 @@ const routes = [
         component: () =>
           import(
             /* webpackChunkName: "capital" */ '@/pages/app/products/capital'
-          ),
+          )
 
-        children: [
-          {
-            path: '',
-            name: 'DetailManufacture',
-            meta: {
-              excludeHeader: true
-            },
-            component: () =>
-              import(
-                /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
-              )
-          },
-          {
-            path: ':id',
-            name: 'DetailManufacture',
-            meta: {
-              excludeHeader: true
-            },
-            component: () =>
-              import(
-                /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
-              )
-          }
-        ]
+        // children: [
+        //   {
+        //     path: '',
+        //     name: 'DetailManufacture',
+        //     meta: {
+        //       excludeHeader: true
+        //     },
+        //     component: () =>
+        //       import(
+        //         /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
+        //       )
+        //   },
+        //   {
+        //     path: ':id',
+        //     name: 'DetailManufacture',
+        //     meta: {
+        //       excludeHeader: true
+        //     },
+        //     component: () =>
+        //       import(
+        //         /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
+        //       )
+        //   }
+        // ]
       },
 
       // #endregion

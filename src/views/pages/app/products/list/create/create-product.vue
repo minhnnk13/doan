@@ -5,7 +5,7 @@
         class="back-container"
         @click="handleBackClick"
       >
-        {{ "Quay lại danh sách sản phẩm " }}
+        {{ routerBack }}
       </div>
       <div class="btn-container">
         <el-button @click="handleBackClick">
@@ -176,6 +176,7 @@ export default {
     const store = useStore()
     const isEdit = ref(false)
     const addInfoDialog = ref(null)
+    const routerBack = '< Quay lại danh sách sản phẩm '
     const infoAdd = 3
 
     if (route.params?.productId) {
@@ -254,7 +255,8 @@ export default {
       callbackMessageBox,
       handleShowAddInfoClick,
       infoAdd,
-      addInfoDialog
+      addInfoDialog,
+      routerBack
     }
   },
 

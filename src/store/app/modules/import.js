@@ -15,7 +15,8 @@ export default {
     importList: [],
     importSupplier: {},
     importCreateStep: 1,
-    isTaxed: false
+    isTaxed: false,
+    importsOfSupplier: []
   },
 
   getters: {},
@@ -38,29 +39,9 @@ export default {
     },
 
     setProductsToImport (state, importProduct) {
-      const findExisted = state.productsToImport.findIndex((product) => {
-        return product.productId === importProduct.productId
-      })
-      if (findExisted >= 0) {
-        state.productsToImport[findExisted].quantity =
-          Number(state.productsToImport[findExisted].saleQuantity) + 1
-        state.productsToImport[findExisted].price += Number(
-          importProduct.unitPrice
-        )
-        state.import.importPrice = 0
-        state.import.saleQuantity = 0
-        state.import.productsToImport.map((product) => {
-          if (!state.import.isTaxed) {
-            product.price += product.price * 0.1
-          } else {
-            product.price += product.price
-          }
-          state.import.importPrice += product.price
-          state.import.saleQuantity += Number(product.saleQuantity)
-        })
-      } else {
-        state.productsToImport.push(importProduct)
-      }
+      importProduct.unitName = importProduct.unitId.unitName
+      state.productsToImport.push(importProduct)
+
       state.import.productsToImport = state.productsToImport
     },
 
@@ -102,6 +83,10 @@ export default {
 
     setIsTaxed (state, isTaxed) {
       state.isTaxed = isTaxed
+    },
+
+    setImportsOfSupplier (state, importsOfSupplier) {
+      state.importsOfSupplier = importsOfSupplier
     }
   },
 
@@ -178,6 +163,15 @@ export default {
           .catch((err) => {
             reject(err)
           })
+      })
+    },
+
+    getImportsBySupplierId: async (context, params) => {
+      return new Promise((resolve, reject) => {
+        authAxios.get('import/supplier', { params }).then(res => {
+          context.commit('setImportsOfSupplier', res.data)
+          resolve(res.data)
+        }).catch(err => reject(err))
       })
     }
   }

@@ -5,6 +5,7 @@
     :data="data"
     :max-height="tableHeight"
     :show-header="isShowHeaderTable"
+    @row-click="handleDetailClick"
     ref="tableRef"
   >
     <el-table-column
@@ -25,8 +26,18 @@
     />
     <el-table-column
       label="Trạng thái"
-      prop="status"
-    />
+    >
+      <template #default="prop">
+        <div>
+          <el-tag
+            effect="dark"
+            :type="checkStatus(prop.row)"
+          >
+            test
+          </el-tag>
+        </div>
+      </template>
+    </el-table-column>
 
     <template #append>
       <slot name="pagination" />
@@ -35,9 +46,9 @@
 </template>
 
 <script>
-
 import baseStore from '@/views/pages/base/base-store'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 export default {
   emits: ['handleSelectionChange'],
 
@@ -53,33 +64,43 @@ export default {
     }
   },
 
-  setup () {
-    const tableHeight = ref(
-      window.innerHeight - 300
-    )
+  setup (props) {
+    const tableHeight = ref(window.innerHeight - 300)
     const tableRef = ref(null)
+
+    const router = useRouter()
+
+    const handleDetailClick = (supplier) => {
+      router.push({ name: 'DetailManufacture', params: { id: supplier?.supplierId } })
+    }
+
+    // to-do: check điều kiện hiển thị status
+    const checkStatus = (supplier) => {
+      return ''
+    }
 
     return {
       tableHeight,
-      tableRef
+      tableRef,
+      handleDetailClick,
+      checkStatus
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
 :deep(.el-table__inner-wrapper) {
-    .table-head {
-      background: rgba(217, 218, 218, 0.8);
-    }
-
-    .el-table__append-wrapper {
-      display: flex;
-      justify-content: flex-end;
-      position: fixed;
-      right: 24px;
-      bottom: 24px;
-    }
+  .table-head {
+    background: rgba(217, 218, 218, 0.8);
   }
+
+  .el-table__append-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+  }
+}
 </style>

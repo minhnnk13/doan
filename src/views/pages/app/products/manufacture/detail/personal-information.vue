@@ -53,7 +53,7 @@
 
         <div class="element__value">
           :
-          <span v-if="element.value">{{ element.value }}</span>
+          <span v-if="element.value !== null || element.value !== undefined || element.value !== ''">{{ element.value }}</span>
           <span v-else>...</span>
         </div>
       </div>
@@ -67,44 +67,61 @@
 // ghép api xóa
 // thêm màn sửa - cần cf lại
 import { CaretBottom } from '@element-plus/icons-vue'
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter, useRoute } from 'vue-router'
 export default {
   components: {
     CaretBottom
   },
 
   setup () {
-    const data = reactive([
-      {
-        label: 'Mã',
-        value: null
-      },
-      {
-        label: 'Mô tả',
-        value: null
-      },
-      {
-        label: 'Người phụ trách',
-        value: null
-      },
-      {
-        label: 'Số điện thoại',
-        value: null
-      },
-      {
-        label: 'Email',
-        value: null
-      },
-      {
-        label: 'Nợ hiện tại',
-        value: null
-      },
-      {
-        label: 'Mã số thuê',
-        value: null
-      }
+    const store = useStore()
+    const route = useRoute()
 
-    ])
+    const supplier = computed(() => {
+      return store.state.supplier.supplier
+    })
+
+    store.dispatch('supplier/getSupplierByID', route.params.id)
+
+    const data = computed(() => {
+      return [
+        {
+          label: 'Mã',
+          value: supplier.value.supplierCode
+        },
+        {
+          label: 'Mô tả',
+          value: supplier.value.description
+        },
+        {
+          label: 'Người phụ trách',
+          value: supplier.value.user
+        },
+        {
+          label: 'Số điện thoại',
+          value: supplier.value.phone
+        },
+        {
+          label: 'Email',
+          value: supplier.value.email
+        },
+        {
+          label: 'Nợ hiện tại',
+          value: supplier.value.dept
+        },
+        {
+          label: 'Mã số thuê',
+          value: supplier.value.taxIdentificationNumber
+        },
+        {
+          label: 'Địa chỉ',
+          value: supplier.value.address
+        }
+
+      ]
+    })
     return {
       data
     }
