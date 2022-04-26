@@ -11,10 +11,13 @@
         v-model="supplier.taxIdentificationNumber"
       />
     </div>
-    <div class="supplement__website">
-      <text-field
-        label="Website"
-        v-model="supplier.website"
+    <div class="supplement-status">
+      <div class="state-title">
+        Đang giao dịch
+      </div>
+      <el-checkbox
+        size="large"
+        v-model="supplier.status"
       />
     </div>
   </div>
@@ -25,7 +28,6 @@ import { computed, toRefs } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
-
   setup (props, { emit }) {
     const { modelValue } = toRefs(props)
     const store = useStore()
@@ -43,15 +45,27 @@ export default {
 
 <style lang="scss" scoped>
 .supplement {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  // display: grid;
+  // grid-template-columns: 1fr 1fr;
   background: #fff;
   padding: 24px;
-  gap: 24px;
 
   &__title {
-      font-weight: bold;
+    font-weight: bold;
   }
 
+  .supplement__taxCode {
+    margin-top: 24px;
+  }
+
+  .supplement-status {
+    display: flex;
+    align-items: center;
+    margin-top: 24px;
+
+    .state-title {
+      margin-right: 24px;
+    }
+  }
 }
 </style>

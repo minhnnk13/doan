@@ -6,8 +6,11 @@
       </div>
 
       <div class="personal__header__status">
-        <el-tag>
-          Đang giao dịch
+        <el-tag
+          effect="dark"
+          :type="checkStatus().type"
+        >
+          {{ checkStatus().label }}
         </el-tag>
       </div>
 
@@ -32,7 +35,10 @@
             </div>
 
             <div class="option">
-              <el-button type="text">
+              <el-button
+                type="text"
+                @click="handleDeleteClick"
+              >
                 Xóa nhà cung cấp
               </el-button>
             </div>
@@ -62,14 +68,14 @@
 </template>
 
 <script>
-// to-do: case hiển thị trạng thái của nhà cung cấp
-// gán dữ liệu cho các field cần thiết
-// ghép api xóa
-// thêm màn sửa - cần cf lại
+// to-do: thêm màn sửa - cần cf lại
 import { CaretBottom } from '@element-plus/icons-vue'
 import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import messageBox from '@/utils/message-box'
+
 export default {
   components: {
     CaretBottom
@@ -78,7 +84,7 @@ export default {
   setup () {
     const store = useStore()
     const route = useRoute()
-
+    const router = useRouter()
     const supplier = computed(() => {
       return store.state.supplier.supplier
     })
@@ -122,8 +128,45 @@ export default {
 
       ]
     })
+
+    const checkStatus = () => {
+      if (supplier.value.status) {
+        return {
+          type: 'success',
+          label: 'Đang giao dịch'
+        }
+      }
+      return {
+        type: 'danger',
+        label: 'Ngừng giao dịch'
+      }
+    }
+
+    const handleDeleteClick = () => {
+      messageBox.showConfirm(
+        'Bạn có đồng ý xóa nhà cung cấp này?',
+        () => {
+          store.dispatch('supplier/deleteSupplier', route.params.id).then((res) => {
+            if (res.status === 200) {
+              ElMessage({
+                type: 'success',
+                message: 'Xóa thành công'
+              })
+              router.push({ name: 'ListManufacture' })
+            }
+          })
+        },
+        {
+          confirmButtonText: 'Đồng ý',
+          cancelButtonText: 'Thoát'
+        }
+      )
+    }
+
     return {
-      data
+      data,
+      checkStatus,
+      handleDeleteClick
     }
   }
 }
@@ -161,7 +204,11 @@ export default {
 
     .element {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1.9fr;
+      font-size: 14px;
+      .element__value {
+        word-break: break-all;
+      }
     }
   }
 }

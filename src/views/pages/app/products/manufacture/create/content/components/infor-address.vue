@@ -4,13 +4,13 @@
       Thông tin địa chỉ
     </div>
     <div />
-    <div class="address__tag">
+    <!-- <div class="address__tag">
       <text-field
         label="Nhãn"
         placeholder="VD: nơi thanh toán, nơi giao hàng"
         v-model="supplier.tag"
       />
-    </div>
+    </div> -->
     <div class="address__address">
       <text-field
         label="Địa chỉ"
@@ -26,7 +26,6 @@ import { computed, toRefs } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
-
   setup (props, { emit }) {
     const store = useStore()
     const supplier = computed(() => {
@@ -42,11 +41,15 @@ export default {
 
 <style lang="scss" scoped>
 .address {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  // display: grid;
+  // grid-template-columns: 1fr 1fr;
   background: #fff;
   padding: 24px;
   gap: 24px;
+
+  .address__address {
+    margin-top: 24px;
+  }
 
   &__title {
     font-weight: bold;

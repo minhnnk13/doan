@@ -31,9 +31,9 @@
         <div>
           <el-tag
             effect="dark"
-            :type="checkStatus(prop.row)"
+            :type="checkStatus(prop.row).type"
           >
-            test
+            {{ checkStatus(prop.row).label }}
           </el-tag>
         </div>
       </template>
@@ -76,7 +76,16 @@ export default {
 
     // to-do: check điều kiện hiển thị status
     const checkStatus = (supplier) => {
-      return ''
+      if (supplier.status) {
+        return {
+          type: 'success',
+          label: 'Đang giao dịch'
+        }
+      }
+      return {
+        type: 'danger',
+        label: 'Ngừng giao dịch'
+      }
     }
 
     return {

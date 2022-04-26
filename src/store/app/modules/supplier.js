@@ -1,5 +1,5 @@
-import { API_PATH, authAxios } from '@/apis/api'
-import axios from 'axios'
+import { authAxios } from '@/apis/api'
+import { getUserInfo } from '@/utils/auth/index.js'
 
 export default {
   namespaced: true,
@@ -36,6 +36,17 @@ export default {
       return new Promise((resolve, reject) => {
         authAxios
           .post('/supplier', payload)
+          .then((res) => {
+            resolve(res)
+          })
+          .catch((err) => reject(err))
+      })
+    },
+
+    deleteSupplier: async (context, payload) => {
+      return new Promise((resolve, reject) => {
+        authAxios
+          .delete(`/supplier/${payload}`)
           .then((res) => {
             resolve(res)
           })
