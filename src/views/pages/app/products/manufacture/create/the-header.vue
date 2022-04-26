@@ -51,7 +51,7 @@ export default {
                 type: 'success',
                 message: 'Lưu thành công'
               })
-              router.push({ name: 'DetailManufacture', params: { id: res.data } })
+              router.push({ name: 'DetailManufacture', params: { id: res.data.supplierId } })
             }
           })
         },

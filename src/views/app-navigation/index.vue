@@ -187,7 +187,7 @@ export default {
 <style lang="scss" scoped>
 .navigation {
   // width: 320px;
-  height: 100vh;
+  height: 100%;
   background: $color--bg1;
   text-align: center;
   color: #fff;

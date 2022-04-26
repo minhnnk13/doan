@@ -12,7 +12,10 @@
       </router-link>
     </div>
     <div class="manage-warehouse__container">
-      <the-header v-model="inputSearch" />
+      <the-header
+        v-model="inputSearch"
+        @keyup="handleKeyUp"
+      />
       <header-table
         v-if="!isShowHeaderTable"
         v-model="checkedSelectProduct"
@@ -131,6 +134,10 @@ export default {
       store.dispatch(`${PRODUCT_MODULE}/getSuppliers`, params.value)
     }
 
+    const handleKeyUp = () => {
+      store.dispatch(`${PRODUCT_MODULE}/getSuppliers`, params.value)
+    }
+
     return {
       filterTableData,
       isShowHeaderTable,
@@ -142,7 +149,9 @@ export default {
       clearSelected,
       pageSizes,
       pageSize,
-      handleChangePageSize
+      handleChangePageSize,
+      inputSearch,
+      handleKeyUp
     }
   }
 }
