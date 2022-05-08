@@ -1,12 +1,12 @@
 <template>
   <div class="navigation">
     <div class="header">
-      CompanyName
+      Aquarium
     </div>
     <div class="items">
       <el-menu
         class=""
-        default-active="/app/dashboard"
+        default-active="/app/list-product"
         :router="true"
         text-color="#fff"
         background-color="#021266"
@@ -187,7 +187,7 @@ export default {
 <style lang="scss" scoped>
 .navigation {
   // width: 320px;
-  height: 100vh;
+  height: 100%;
   background: $color--bg1;
   text-align: center;
   color: #fff;

@@ -94,6 +94,9 @@
         <div class="value">
           {{ importProducts.renderImportPrice }}
         </div>
+        <div>
+          {{ "VNĐ" }}
+        </div>
       </div>
       <!-- <div class="amount">Tiền cần trả {{importProducts.saleQuantity}}</div> -->
     </div>
@@ -102,7 +105,7 @@
 
 <script>
 import { useStore } from 'vuex'
-import { computed, ref, reactive } from 'vue'
+import { computed, ref, reactive, watch } from 'vue'
 import { formatPrice } from '@/common/common-fn.js'
 
 export default {
@@ -115,15 +118,25 @@ export default {
     const importProducts = computed(() => {
       return store.state.import.import
     })
-
     const calculateSalePrice = (product) => {
       product.price = 0
+      let tax = 0.1
+      if (store.state.import.isTaxed) tax = 0
       if (product.saleQuantity) {
         product.price = product.unitPrice * Number(product.saleQuantity)
+        product.price += (product.price * tax)
       }
-      product.renderPrice = formatPrice(product.price)
+      product.renderPrice = `${formatPrice(product.price)} VNĐ`
       store.commit('import/calculateTotalPrice')
     }
+
+    watch(() => store.state.import.isTaxed,
+      (newVal, oldVal) => {
+        products.value.forEach(product => {
+          calculateSalePrice(product)
+        })
+      }
+    )
     return { products, calculateSalePrice, importProducts }
   }
 }

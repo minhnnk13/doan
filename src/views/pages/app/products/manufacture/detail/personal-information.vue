@@ -6,8 +6,11 @@
       </div>
 
       <div class="personal__header__status">
-        <el-tag>
-          Đang giao dịch
+        <el-tag
+          effect="dark"
+          :type="checkStatus().type"
+        >
+          {{ checkStatus().label }}
         </el-tag>
       </div>
 
@@ -32,7 +35,10 @@
             </div>
 
             <div class="option">
-              <el-button type="text">
+              <el-button
+                type="text"
+                @click="handleDeleteClick"
+              >
                 Xóa nhà cung cấp
               </el-button>
             </div>
@@ -53,7 +59,7 @@
 
         <div class="element__value">
           :
-          <span v-if="element.value">{{ element.value }}</span>
+          <span v-if="element.value !== null || element.value !== undefined || element.value !== ''">{{ element.value }}</span>
           <span v-else>...</span>
         </div>
       </div>
@@ -62,48 +68,105 @@
 </template>
 
 <script>
-
+// to-do: thêm màn sửa - cần cf lại
 import { CaretBottom } from '@element-plus/icons-vue'
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter, useRoute } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import messageBox from '@/utils/message-box'
+
 export default {
   components: {
     CaretBottom
   },
 
   setup () {
-    const data = reactive([
-      {
-        label: 'Mã',
-        value: null
-      },
-      {
-        label: 'Mô tả',
-        value: null
-      },
-      {
-        label: 'Người phụ trách',
-        value: null
-      },
-      {
-        label: 'Số điện thoại',
-        value: null
-      },
-      {
-        label: 'Email',
-        value: null
-      },
-      {
-        label: 'Nợ hiện tại',
-        value: null
-      },
-      {
-        label: 'Mã số thuê',
-        value: null
-      }
+    const store = useStore()
+    const route = useRoute()
+    const router = useRouter()
+    const supplier = computed(() => {
+      return store.state.supplier.supplier
+    })
 
-    ])
+    store.dispatch('supplier/getSupplierByID', route.params.id)
+
+    const data = computed(() => {
+      return [
+        {
+          label: 'Mã',
+          value: supplier.value.supplierCode
+        },
+        {
+          label: 'Mô tả',
+          value: supplier.value.description
+        },
+        {
+          label: 'Người phụ trách',
+          value: supplier.value.user
+        },
+        {
+          label: 'Số điện thoại',
+          value: supplier.value.phone
+        },
+        {
+          label: 'Email',
+          value: supplier.value.email
+        },
+        {
+          label: 'Nợ hiện tại',
+          value: supplier.value.dept
+        },
+        {
+          label: 'Mã số thuê',
+          value: supplier.value.taxIdentificationNumber
+        },
+        {
+          label: 'Địa chỉ',
+          value: supplier.value.address
+        }
+
+      ]
+    })
+
+    const checkStatus = () => {
+      if (supplier.value.status) {
+        return {
+          type: 'success',
+          label: 'Đang giao dịch'
+        }
+      }
+      return {
+        type: 'danger',
+        label: 'Ngừng giao dịch'
+      }
+    }
+
+    const handleDeleteClick = () => {
+      messageBox.showConfirm(
+        'Bạn có đồng ý xóa nhà cung cấp này?',
+        () => {
+          store.dispatch('supplier/deleteSupplier', route.params.id).then((res) => {
+            if (res.status === 200) {
+              ElMessage({
+                type: 'success',
+                message: 'Xóa thành công'
+              })
+              router.push({ name: 'ListManufacture' })
+            }
+          })
+        },
+        {
+          confirmButtonText: 'Đồng ý',
+          cancelButtonText: 'Thoát'
+        }
+      )
+    }
+
     return {
-      data
+      data,
+      checkStatus,
+      handleDeleteClick
     }
   }
 }
@@ -141,7 +204,11 @@ export default {
 
     .element {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1.9fr;
+      font-size: 14px;
+      .element__value {
+        word-break: break-all;
+      }
     }
   }
 }

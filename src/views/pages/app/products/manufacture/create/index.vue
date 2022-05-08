@@ -13,11 +13,21 @@
 import ContentLeft from './content/content-left.vue'
 import ContentRight from './content/content-right.vue'
 import TheHeader from './the-header.vue'
+import { onBeforeUnmount } from 'vue'
+import { useStore } from 'vuex'
 export default {
   components: {
     TheHeader,
     ContentLeft,
     ContentRight
+  },
+
+  setup () {
+    const store = useStore()
+
+    onBeforeUnmount(() => {
+      store.commit('supplier/setSupplier', {})
+    })
   }
 
 }

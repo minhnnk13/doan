@@ -1,21 +1,70 @@
-import { API_PATH, authAxios } from '@/apis/api'
-import axios from 'axios'
+import { authAxios } from '@/apis/api'
+import { getUserInfo } from '@/utils/auth/index.js'
 
 export default {
   namespaced: true,
-  state: { suppliers: [] },
+  state: {
+    suppliers: [],
+    supplier: {
+    }
+  },
   getters: {},
   mutations: {
     setSuppliers (state, suppliers) {
       state.suppliers = suppliers
+    },
+    setSupplier (state, supplier) {
+      state.supplier = supplier
     }
 
   },
   actions: {
 
-    getSuppliers: async (context) => {
-      const res = await authAxios.get('/supplier')
-      context.commit('setSuppliers', res.data)
+    getSuppliers: async (context, params) => {
+      return new Promise((resolve, reject) => {
+        authAxios
+          .get('/supplier', { params })
+          .then((res) => {
+            context.commit('setSuppliers', res.data)
+            resolve(res.data)
+          })
+          .catch((err) => reject(err))
+      })
+    },
+
+    addSupplier: async (context, payload) => {
+      return new Promise((resolve, reject) => {
+        authAxios
+          .post('/supplier', payload)
+          .then((res) => {
+            resolve(res)
+          })
+          .catch((err) => reject(err))
+      })
+    },
+
+    deleteSupplier: async (context, payload) => {
+      return new Promise((resolve, reject) => {
+        authAxios
+          .delete(`/supplier/${payload}`)
+          .then((res) => {
+            resolve(res)
+          })
+          .catch((err) => reject(err))
+      })
+    },
+
+    getSupplierByID: async (context, payload) => {
+      return new Promise((resolve, reject) => {
+        authAxios
+          .get(`/supplier/${payload}`)
+          .then((res) => {
+            context.commit('setSupplier', res.data)
+            resolve(res)
+          })
+          .catch((err) => reject(err))
+      })
     }
+
   }
 }
