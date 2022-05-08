@@ -42,6 +42,12 @@ const enumeration = {
     Contact: 2,
     Address: 3,
     Note: 4
+  },
+
+  Gender: {
+    Male: '0',
+    Female: '1',
+    Other: '2'
   }
 }
 

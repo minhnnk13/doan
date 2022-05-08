@@ -23,6 +23,10 @@
               :label="'Giá bán lẻ'"
               :value="1"
             />
+            <el-option
+              :label="'Giá bán buôn'"
+              :value="2"
+            />
           </el-select>
         </div>
       </div>
@@ -83,10 +87,15 @@ export default {
 
      &__left {
        flex: 1;
+
+       .title {
+         font-weight: 500;
+       }
      }
 
      &__right {
        .title {
+         font-weight: 500;
          margin-bottom: 4px;
        }
      }

@@ -4,17 +4,42 @@
       Thông tin khách hàng
     </div>
     <div class="customer__content">
-      <empty-customer />
+      <empty-customer
+        v-if="!hasCustomer"
+        @selectCustomer="selectCustomer"
+      />
+      <customer-selected
+        v-else
+        :customer="customer"
+        @removeCustomer="removeCustomer"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import emptyCustomer from './components/empty-customer.vue'
+import EmptyCustomer from './components/empty-customer.vue'
+import CustomerSelected from './components/customer-selected.vue'
+import { computed, ref, watch } from 'vue'
 export default {
-  components: { emptyCustomer },
+  components: { EmptyCustomer, CustomerSelected },
   setup () {
-    return {}
+    const customer = ref(null)
+    const hasCustomer = computed(() => customer.value)
+
+    const selectCustomer = value => {
+      customer.value = value
+    }
+
+    const removeCustomer = () => {
+      customer.value = null
+    }
+    return {
+      hasCustomer,
+      customer,
+      selectCustomer,
+      removeCustomer
+    }
   }
 }
 </script>
@@ -28,6 +53,7 @@ export default {
 
    &__title {
      margin-bottom: 12px;
+     font-weight: 500;
 
    }
 
