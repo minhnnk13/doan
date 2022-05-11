@@ -267,7 +267,8 @@ const routes = [
             path: 'create',
             name: 'CreateOrder',
             meta: {
-              pageName: 'Tạo đơn hàng'
+              pageName: 'Tạo đơn hàng',
+              excludeHeader: true
             },
             component: () =>
               import(/* webpackChunkName: "create-order" */ '@/pages/app/order/create')

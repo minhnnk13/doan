@@ -21,18 +21,24 @@
 import EmptyCustomer from './components/empty-customer.vue'
 import CustomerSelected from './components/customer-selected.vue'
 import { computed, ref, watch } from 'vue'
+import { useStore } from 'vuex'
+const MODULE_NAME = 'order'
+
 export default {
   components: { EmptyCustomer, CustomerSelected },
   setup () {
+    const store = useStore()
     const customer = ref(null)
     const hasCustomer = computed(() => customer.value)
-
+    const order = computed(() => store.state[MODULE_NAME].order)
     const selectCustomer = value => {
       customer.value = value
+      order.value.customer = value.customerId
     }
 
     const removeCustomer = () => {
       customer.value = null
+      order.value.customer = null
     }
     return {
       hasCustomer,
@@ -61,4 +67,5 @@ export default {
      flex: 1;
    }
 }
+
 </style>
