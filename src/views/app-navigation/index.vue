@@ -103,12 +103,11 @@ export default {
 
           ]
         },
-
         {
           name: 'Đơn hàng',
           icon: 'order',
           class: 'order',
-          // to: 'cash-book',
+          to: '/app/orders',
           subs: [
             {
               name: 'Tạo đơn hàng',
@@ -127,7 +126,18 @@ export default {
         {
           name: 'Thiết lập kho',
           icon: 'warehouse',
-          to: '/app/warehouse'
+          class: 'warehouse',
+          to: '/app/warehouse',
+          subs: [
+            {
+              name: 'Quản lý chi nhánh',
+              to: '/app/warehouse/branch-management'
+            },
+            {
+              name: 'Phân quyền vai trò',
+              to: '/app/warehouse/role-management'
+            }
+          ]
         },
         {
           name: 'Đối tác và khách hàng',

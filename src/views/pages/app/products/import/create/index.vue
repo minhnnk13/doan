@@ -48,6 +48,12 @@ export default {
       }
     })
 
+    const supplierParams = {
+      pageIndex: 0,
+      pageSize: 100,
+      search: ''
+    }
+
     const importProducts = computed(() => {
       return store.state.import.import
     })
@@ -65,7 +71,7 @@ export default {
     }
 
     store.dispatch(`${PRODUCT_MODULE}/getProductsToImport`, params.value)
-    store.dispatch('supplier/getSuppliers')
+    store.dispatch('supplier/getSuppliers', supplierParams)
 
     const handleOrderClick = async () => {
       if (!importProducts.value.importId) {
