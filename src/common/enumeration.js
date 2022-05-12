@@ -24,15 +24,6 @@ const enumeration = {
     Ordering: 0, // Đặt hàng
     Finished: 1, // Hoàn thành
     Trading: 2, // Đang giao dịch
-    Payment: 3, // Đã thanh toán
-    Imported: 4, // Đã nhập hàng
-    NotPayment: 5, // Chưa thanh toán
-    WaitForImporting: 6, // Chờ nhập hàng
-    StopTrading: 7, // Ngừng giao dịch
-    StorageChecked: 8, // Đã kiểm kho
-    StorageChecking: 9, // Đang kiểm kho
-    Balance: 10, // Đã cân bằng
-    StorageImported: 11, // Đã nhập kho
     Cancel: 12 // Đã hủy
   },
 

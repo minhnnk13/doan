@@ -90,6 +90,7 @@ export default {
       importInfo.value.status = enumeration.status.Trading
       importInfo.value.statusPayment = enumeration.status.Trading
       store.commit('import/setImportProducts', importInfo.value)
+      store.commit('import/setImportCreateStep', 2)
       setImportInfo(importInfo.value)
     }
 
@@ -114,7 +115,9 @@ export default {
       importInfo.value.status = enumeration.status.Finished
       importInfo.value.statusPayment = enumeration.status.Payment
       importInfo.value.statusImport = enumeration.status.Finished
-      store.dispatch('import/createImport', importInfo.value)
+      store.dispatch('import/createImport', importInfo.value).then(res => {
+        if (res) store.commit('import/setImportCreateStep', 4)
+      })
     }
 
     const handleImportClick = () => {
@@ -127,7 +130,7 @@ export default {
     }
 
     onBeforeUnmount(() => {
-      store.commit('import/setImportCreateStep', 1)
+      store.commit('import/setImportCreateStep', 0)
       store.commit('import/setDefaultImportProducts')
       store.commit('import/setImportSupplier', {})
       store.commit('import/setDefaultProductsToImport')
