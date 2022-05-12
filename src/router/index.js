@@ -313,30 +313,7 @@ const routes = [
             },
             component: () =>
               import(/* webpackChunkName: "role-management" */ '@/pages/app/warehouse/role-management')
-          },
-
-          {
-            path: 'returns',
-            name: 'ReturnGoods',
-            props: true,
-            meta: {
-              excludeHeader: true
-            },
-            component: () =>
-              import(/* webpackChunkName: "return-goods" */ '@/pages/app/products/import/return')
-          },
-
-          {
-            path: ':id',
-            name: 'BrowseGoods',
-            props: true,
-            meta: {
-              excludeHeader: true
-            },
-            component: () =>
-              import(/* webpackChunkName: "browse-goods" */ '@/pages/app/products/import/browse')
           }
-
         ]
       },
 
