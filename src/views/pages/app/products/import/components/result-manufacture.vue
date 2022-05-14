@@ -54,7 +54,7 @@
 
 <script>
 import { Avatar, Close } from '@element-plus/icons-vue'
-import { computed, ref, reactive } from 'vue'
+import { computed, ref, reactive, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
@@ -66,6 +66,8 @@ export default {
     const store = useStore()
 
     const supplier = computed(() => { return store.state.import.importSupplier })
+
+    onBeforeUnmount(() => { store.commit('import/setDefaultImportSupplier') })
 
     return { supplier }
   }

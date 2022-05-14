@@ -122,8 +122,7 @@ export default {
 
     const handleImportClick = () => {
       store.commit('import/setImportCreateStep', 3)
-      importInfo.value.status = 11
-      importInfo.value.statusStore = enumeration.status.Imported
+      importInfo.value.statusStore = true
       importInfo.value.readyForPayment = true
       store.commit('import/setImportProducts', importInfo.value)
       setImportInfo(importInfo.value)

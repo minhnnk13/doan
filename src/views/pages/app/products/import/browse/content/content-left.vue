@@ -28,9 +28,9 @@
       <result-product />
     </div>
 
-    <the-payment v-if="importCreateStep === 2" />
+    <the-payment v-if="importCreateStep === 3" />
 
-    <the-warehouse v-if="importCreateStep === 2 && importProduct?.statusStore" />
+    <the-warehouse v-if="importCreateStep === 3 && importProduct?.statusStore" />
   </div>
 </template>
 
