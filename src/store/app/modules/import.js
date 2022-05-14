@@ -73,6 +73,10 @@ export default {
       state.import.supplier = supplier.supplierName
     },
 
+    setDefaultImportSupplier (state) {
+      state.importSupplier = {}
+    },
+
     pushCreatingImport (state, newImport) {
       state.importList.push(newImport)
     },
