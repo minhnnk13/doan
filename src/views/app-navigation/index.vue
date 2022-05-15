@@ -131,6 +131,18 @@ export default {
           subs: [
             {
               name: 'Quản lý chi nhánh',
+              to: '/app/brands'
+            },
+            {
+              name: 'Quản lý thuế',
+              to: '/app/thue'
+            },
+            {
+              name: 'Quản lý nhân viên',
+              to: '/app/nhanvien'
+            },
+            {
+              name: 'Phân quyền vai trò',
               to: '/app/warehouse/branch-management'
             },
             {

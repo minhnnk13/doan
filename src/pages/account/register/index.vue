@@ -41,6 +41,14 @@
           />
         </div>
 
+        <div class="name">
+          <text-field
+            placeholder="Tên của bạn"
+            label="Họ và tên"
+            v-model="account.name"
+          />
+        </div>
+
         <div class="password">
           <text-field
             placeholder="Nhập mật khẩu"
