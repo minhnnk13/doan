@@ -14,7 +14,7 @@ export default {
     productsToImport: [],
     importList: [],
     importSupplier: {},
-    importCreateStep: 1,
+    importCreateStep: 0,
     isTaxed: false,
     importsOfSupplier: []
   },
@@ -73,6 +73,10 @@ export default {
       state.import.supplier = supplier.supplierName
     },
 
+    setDefaultImportSupplier (state) {
+      state.importSupplier = {}
+    },
+
     pushCreatingImport (state, newImport) {
       state.importList.push(newImport)
     },
@@ -128,7 +132,7 @@ export default {
       payload.products = payload.productsToImport
       return new Promise((resolve, reject) => {
         authAxios.post('/import', payload).then((res) => {
-          if (res) context.commit('setImportCreateStep', 4)
+          if (res) context.commit('setImportCreateStep', 3)
         })
       })
     },
@@ -156,7 +160,7 @@ export default {
                 'setImportProductsFromResponse',
                 res.data.listProduct
               )
-              context.commit('setImportCreateStep', 4)
+              context.commit('setImportCreateStep', 3)
               resolve(res.data)
             }
           })

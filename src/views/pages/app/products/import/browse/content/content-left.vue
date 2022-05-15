@@ -30,7 +30,7 @@
 
     <the-payment v-if="importCreateStep === 3" />
 
-    <the-warehouse v-if="importCreateStep === 3 && importProduct?.status === enumeration.status.StorageImported" />
+    <the-warehouse v-if="importCreateStep === 3 && importProduct?.statusStore" />
   </div>
 </template>
 

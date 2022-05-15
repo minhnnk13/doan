@@ -295,7 +295,27 @@ const routes = [
           pageName: 'Thiết lập kho'
         },
         component: () =>
-          import(/* webpackChunkName: "warehouse" */ '@/pages/app/warehouse')
+          import(/* webpackChunkName: "warehouse" */ '@/pages/app/warehouse'),
+        children: [
+          {
+            path: 'branch-management',
+            name: 'BranchManagement',
+            meta: {
+              pageName: 'Quản lý chi nhánh'
+            },
+            component: () =>
+              import(/* webpackChunkName: "branch-management" */ '@/pages/app/warehouse/branch-management')
+          },
+          {
+            path: 'role-management',
+            name: 'RoleManagement',
+            meta: {
+              pageName: 'Phân quyền vai trò'
+            },
+            component: () =>
+              import(/* webpackChunkName: "role-management" */ '@/pages/app/warehouse/role-management')
+          }
+        ]
       },
 
       {

@@ -25,19 +25,19 @@
         >
           <el-step
             title="Đặt hàng"
-            :status="importCreateStep >= 1? 'success' : 'wait'"
+            :status="importCreateStep > 0? 'success' : 'wait'"
           />
           <el-step
             title="Duyệt"
-            :status="importCreateStep >= 2? 'success' : 'wait'"
+            :status="importCreateStep > 1? 'success' : 'wait'"
           />
           <el-step
             title="Nhập kho"
-            :status="importCreateStep >= 3? 'success' : 'wait'"
+            :status="importCreateStep > 2? 'success' : 'wait'"
           />
           <el-step
             title="Hoàn thành"
-            :status="importCreateStep >= 4? 'success' : 'wait'"
+            :status="importCreateStep > 3? 'success' : 'wait'"
           />
         </el-steps>
       </div>

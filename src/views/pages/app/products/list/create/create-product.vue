@@ -27,6 +27,23 @@
     </div>
     <div class="create-content-container">
       <div class="left-container">
+        <div class="content-wrapper management-container">
+          <div class="title-container">
+            Hình thức quản lý
+          </div>
+          <el-radio-group
+            class="management-button-container"
+            v-model="product.canExpired"
+          >
+            <el-radio :label="3">
+              Sản phẩm thường
+            </el-radio>
+            <el-radio :label="6">
+              Sản phẩm theo lô date/HSD
+            </el-radio>
+          </el-radio-group>
+        </div>
+
         <div class="content-wrapper detail-container">
           <div class="title-container">
             Thông tin chung
@@ -367,6 +384,12 @@ export default {
           .img-description {
             font-weight: 700;
           }
+        }
+      }
+
+      .management-container {
+        .management-button-container {
+          padding: 12px;
         }
       }
     }

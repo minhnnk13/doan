@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
 
@@ -44,6 +44,8 @@ export default {
       name: ''
     })
     const handleClosePopupClick = () => {
+      infoInput[`${info.toLowerCase()}Name`] = ''
+      infoInput.name = ''
       dialogVisible.value = false
     }
 
