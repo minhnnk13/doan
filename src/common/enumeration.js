@@ -48,6 +48,13 @@ const enumeration = {
     Male: '0',
     Female: '1',
     Other: '2'
+  },
+
+  OrderStatus: {
+    Create: 0,
+    Browse: 1,
+    Export: 2,
+    Complete: 3
   }
 }
 

@@ -298,6 +298,16 @@ const routes = [
           import(/* webpackChunkName: "warehouse" */ '@/pages/app/warehouse')
       },
 
+      {
+        path: 'brands',
+        name: 'Brands',
+        meta: {
+          pageName: 'Quản lý chi nhánh'
+        },
+        component: () =>
+          import(/* webpackChunkName: "warehouse" */ '@/pages/app/warehouse/brands')
+      },
+
       // #region Đối tác và khách hàng
       {
         path: 'list-customer',

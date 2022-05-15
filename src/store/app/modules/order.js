@@ -22,7 +22,7 @@ export default {
     },
 
     setOrder: (state, data) => {
-      state.order = data
+      state.order = { ...state.order, ...data }
     }
 
   },
@@ -40,7 +40,6 @@ export default {
     addOrder: ({ commit }, data) => {
       return new Promise((resolve, reject) => {
         authAxios.post('/export', data).then(res => {
-          debugger
           commit('setOrder', res.data)
 
           resolve(res.data)

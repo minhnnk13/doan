@@ -101,12 +101,11 @@ export default {
 
     const order = computed(() => store.state[MODULE_NAME].order)
     const products = computed(() => order.value.products)
-    const hasProduct = computed(() => products.value.length)
+    const hasProduct = computed(() => products.value?.length)
 
     const totalProduct = computed(() => products.value.length)
 
     const totalPay = computed(() => {
-      debugger
       return products.value.reduce((prev, next) => {
         return prev + next.unitPrice * next.saleQuantity
       }, 0)

@@ -41,7 +41,6 @@ export default {
       return new Promise((resolve, reject) => {
         authAxios.post('/customer', data).then(res => {
           commit('setCustomer', res.data)
-
           resolve(res.data)
         })
       })

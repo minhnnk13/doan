@@ -1,22 +1,9 @@
 <template>
-  <div class="header">
-    <div class="label">
-      Tạo đơn hàng
-    </div>
-
-    <div class="toolbar">
-      <el-button @click="onExit">
-        Thoát
-      </el-button>
-
-      <el-button
-        type="primary"
-        @click="onCreateOrder"
-      >
-        Tạo đơn hàng
-      </el-button>
-    </div>
-  </div>
+  <the-header @onCreateOrder="onCreateOrder" />
+  <bot-header
+    :order="order"
+    v-if="hasOrder"
+  />
   <div class="create">
     <div class="create__left">
       <the-customer />
@@ -33,19 +20,30 @@
 import OrderInfomation from './components/order-infomation.vue'
 import TheCustomer from './the-customer.vue'
 import TheProduct from './the-product.vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import CommonFn from '@/common/common-fn'
 import { cloneDeep } from 'lodash'
+import Enumaration from '@/common/enumeration'
+import TheHeader from './components/the-header.vue'
+import BotHeader from './components/bot-header.vue'
+
 const MODULE_NAME = 'order'
 export default {
-  components: { TheCustomer, TheProduct, OrderInfomation },
+  components: {
+    TheCustomer,
+    TheProduct,
+    OrderInfomation,
+    TheHeader,
+    BotHeader
+  },
 
   setup () {
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
     const productComp = ref(null)
     const order = computed(() => store.state[MODULE_NAME].order)
     const onExit = () => {
@@ -59,10 +57,16 @@ export default {
         const value = handleOrder()
         const container = document.querySelector('.content')
         CommonFn.showMask(container)
-        await store.dispatch(`${MODULE_NAME}/addOrder`, value)
+        await store.dispatch(`${MODULE_NAME}/addOrder`, value).then(data => {
+          router.push({ query: { exportID: data.exportID } })
+        })
         CommonFn.hideMask()
       }
     }
+
+    const hasOrder = computed(() => {
+      return !!route.query.exportID
+    })
 
     const handleOrder = () => {
       const newOrder = cloneDeep(order.value)
@@ -75,32 +79,24 @@ export default {
       })
 
       newOrder.exportPrice = productComp.value.totalPay
+      newOrder.status = Enumaration.OrderStatus.Create
+
       return newOrder
     }
+
     return {
       onExit,
       onCreateOrder,
-      productComp
+      order,
+      productComp,
+      hasOrder
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.header {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 24px;
-  background: #fff;
-  margin: 0 -24px;
-  margin-bottom: 24px;
 
-  .label {
-    color: #2D3748;
-    font-weight: 700;
-    font-size: 30px;
-  }
-}
 .create {
   display: flex;
   gap: 24px;

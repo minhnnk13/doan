@@ -56,6 +56,7 @@ export default {
    padding: 24px;
    display: flex;
    flex-direction: column;
+   height: 280px;
 
    &__title {
      margin-bottom: 12px;
