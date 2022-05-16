@@ -113,8 +113,8 @@ export default {
     const callBackMessageBox = (action) => {
       if (action === 'cancel') return
       importInfo.value.status = enumeration.status.Finished
-      importInfo.value.statusPayment = enumeration.status.Payment
-      importInfo.value.statusImport = enumeration.status.Finished
+      importInfo.value.statusPayment = true
+
       store.dispatch('import/createImport', importInfo.value).then(res => {
         if (res) store.commit('import/setImportCreateStep', 4)
       })
