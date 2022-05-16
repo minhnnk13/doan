@@ -156,8 +156,6 @@ export default {
     }
 
     const handleShowAddWarehousePopupClick = () => {
-      // newWareHouseInfo.value.productId = product.productId
-      // newWareHouseInfo.value.price = product.salePrice
       showWarehousePopup.value.handleOpenPopupClick()
     }
 

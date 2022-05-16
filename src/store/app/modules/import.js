@@ -96,6 +96,14 @@ export default {
 
     setProductPopover (state, productPopover) {
       state.productPopover = productPopover
+    },
+
+    setDateProduct (state, warehouse) {
+      state.productsToImport.forEach((product) => {
+        if (product.productId === warehouse.productId) {
+          product.saleQuantity = warehouse.quantity
+        }
+      })
     }
   },
 
@@ -135,6 +143,7 @@ export default {
       payload.paymentType = 1
       payload.employee = getUserInfo().userId
       payload.products = payload.productsToImport
+      debugger
       return new Promise((resolve, reject) => {
         authAxios.post('/import', payload).then((res) => {
           if (res) context.commit('setImportCreateStep', 3)
@@ -177,10 +186,13 @@ export default {
 
     getImportsBySupplierId: async (context, params) => {
       return new Promise((resolve, reject) => {
-        authAxios.get('import/supplier', { params }).then(res => {
-          context.commit('setImportsOfSupplier', res.data)
-          resolve(res.data)
-        }).catch(err => reject(err))
+        authAxios
+          .get('import/supplier', { params })
+          .then((res) => {
+            context.commit('setImportsOfSupplier', res.data)
+            resolve(res.data)
+          })
+          .catch((err) => reject(err))
       })
     }
   }

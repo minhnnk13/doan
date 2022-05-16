@@ -95,6 +95,8 @@ export default {
             type: 'success',
             message: 'Lưu thành công'
           })
+          store.commit('import/setDateProduct', warehouse.value)
+          store.commit('import/calculateSalePrice')
         }
       })
 

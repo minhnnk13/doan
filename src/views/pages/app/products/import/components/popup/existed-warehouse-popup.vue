@@ -71,6 +71,7 @@ export default {
     const store = useStore()
 
     const warehouse = computed(() => store.state.warehouse.selectedWarehouse)
+    const supplier = computed(() => store.state.import.importSupplier)
 
     const handleClosePopupClick = () => {
       dialogVisible.value = false
@@ -81,12 +82,15 @@ export default {
     }
 
     const handleSaveClick = () => {
+      warehouse.value.supplierId = supplier.value.supplierId
       store.dispatch('warehouse/addWarehouse', warehouse.value).then((res) => {
         if (res) {
           ElMessage({
             type: 'success',
             message: 'Lưu thành công'
           })
+          store.commit('import/setDateProduct', warehouse.value)
+          store.commit('import/calculateSalePrice')
         }
       })
 
