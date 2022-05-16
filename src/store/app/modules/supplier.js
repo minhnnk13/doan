@@ -1,5 +1,4 @@
 import { authAxios } from '@/apis/api'
-import { getUserInfo } from '@/utils/auth/index.js'
 
 export default {
   namespaced: true,

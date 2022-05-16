@@ -4,10 +4,26 @@
     :data="products"
     ref="tableRef"
   >
-    <el-table-column
-      label="Mã SKU"
-      prop="productCode"
-    />
+    <el-table-column label="Mã SKU">
+      <template #default="prop">
+        <div class="product-code-container">
+          {{ prop.row.productCode }}
+        </div>
+        <div
+          class="add-warehouse"
+          v-if="prop.row.canExpired"
+        >
+          <!-- <el-icon class="icon-container">
+            <plus @click="handleShowAddWarehouseClick" />
+          </el-icon> -->
+          <warehouse-popover
+            @handleOpenPopoverClick="handleOpenPopoverClick(prop.row)"
+            @handleShowAddWarehouseClick="handleShowAddWarehousePopupClick"
+            @handleSelectExistedWarehouse="handleSelectExistedWarehouse"
+          />
+        </div>
+      </template>
+    </el-table-column>
     <el-table-column
       label="Tên sản phẩm"
       prop="productName"
@@ -27,6 +43,7 @@
           v-model="prop.row.saleQuantity"
           @keyup="calculateSalePrice(prop.row)"
           :is-number="true"
+          :disabled="prop.row.canExpired"
         />
       </template>
     </el-table-column>
@@ -56,10 +73,6 @@
       prop="unitPrice"
       v-else
     />
-    <!-- <el-table-column
-      label="Giá nhập"
-      prop="renderUnitPrice"
-    /> -->
 
     <el-table-column label="Thuế(%)">
       10%
@@ -101,48 +114,97 @@
       <!-- <div class="amount">Tiền cần trả {{importProducts.saleQuantity}}</div> -->
     </div>
   </div>
+  <warehouse-popup ref="showWarehousePopup" />
+  <existed-warehouse-popup ref="showExistedWarehousePopup" />
 </template>
 
 <script>
 import { useStore } from 'vuex'
 import { computed, ref, reactive, watch } from 'vue'
 import { formatPrice } from '@/common/common-fn.js'
+import WarehousePopup from '@/views/pages/app/products/import/components/popup/warehouse-popup.vue'
+import WarehousePopover from '@/views/pages/app/products/import/components/popover/warehouse-popover.vue'
+import ExistedWarehousePopup from '@/views/pages/app/products/import/components/popup/existed-warehouse-popup.vue'
 
 export default {
+  components: { WarehousePopup, WarehousePopover, ExistedWarehousePopup },
   setup () {
     const store = useStore()
     const products = computed(() => {
       return store.state.import.import.productsToImport
     })
+    const showWarehousePopup = ref(null)
+    const showExistedWarehousePopup = ref(null)
 
     const importProducts = computed(() => {
       return store.state.import.import
     })
+    const supplier = computed(() => {
+      return store.state.import.importSupplier
+    })
+
     const calculateSalePrice = (product) => {
       product.price = 0
       let tax = 0.1
       if (store.state.import.isTaxed) tax = 0
       if (product.saleQuantity) {
         product.price = product.unitPrice * Number(product.saleQuantity)
-        product.price += (product.price * tax)
+        product.price += product.price * tax
       }
       product.renderPrice = `${formatPrice(product.price)} VNĐ`
       store.commit('import/calculateTotalPrice')
     }
 
-    watch(() => store.state.import.isTaxed,
+    const handleShowAddWarehousePopupClick = () => {
+      // newWareHouseInfo.value.productId = product.productId
+      // newWareHouseInfo.value.price = product.salePrice
+      showWarehousePopup.value.handleOpenPopupClick()
+    }
+
+    const handleSelectExistedWarehouse = (warehouse) => {
+      showExistedWarehousePopup.value.handleOpenPopupClick()
+      store.commit('warehouse/setSelectedWarehouse', warehouse)
+    }
+
+    const handleOpenPopoverClick = (product) => {
+      store.commit('import/setProductPopover', product)
+    }
+
+    watch(
+      () => store.state.import.isTaxed,
       (newVal, oldVal) => {
-        products.value.forEach(product => {
+        products.value.forEach((product) => {
           calculateSalePrice(product)
         })
       }
     )
-    return { products, calculateSalePrice, importProducts }
+    return {
+      products,
+      calculateSalePrice,
+      importProducts,
+      handleShowAddWarehousePopupClick,
+      showWarehousePopup,
+      showExistedWarehousePopup,
+      handleOpenPopoverClick,
+      handleSelectExistedWarehouse
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.product-code-container {
+  margin-top: 24px;
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+.add-warehouse {
+  margin-left: 12px;
+  color: gray;
+  cursor: pointer;
+}
+
 .final-info-wrapper {
   width: 100%;
   display: flex;

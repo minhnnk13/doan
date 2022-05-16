@@ -146,13 +146,8 @@ export default {
     }
 
     const handleSelect = (product) => {
-      if (product.canExpired) {
-        showCanExpiredPopup()
-      } else store.commit('import/setProductsToImport', product)
-    }
-
-    const showCanExpiredPopup = () => {
-
+      store.commit('import/setProductsToImport', product)
+      store.dispatch('warehouse/getWarehouses', product.productId)
     }
 
     const handleSupplierSelect = (supplier) => {

@@ -16,7 +16,8 @@ export default {
     importSupplier: {},
     importCreateStep: 0,
     isTaxed: false,
-    importsOfSupplier: []
+    importsOfSupplier: [],
+    productPopover: {}
   },
 
   getters: {},
@@ -91,6 +92,10 @@ export default {
 
     setImportsOfSupplier (state, importsOfSupplier) {
       state.importsOfSupplier = importsOfSupplier
+    },
+
+    setProductPopover (state, productPopover) {
+      state.productPopover = productPopover
     }
   },
 
