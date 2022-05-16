@@ -267,7 +267,8 @@ const routes = [
             path: 'create',
             name: 'CreateOrder',
             meta: {
-              pageName: 'Tạo đơn hàng'
+              pageName: 'Tạo đơn hàng',
+              excludeHeader: true
             },
             component: () =>
               import(/* webpackChunkName: "create-order" */ '@/pages/app/order/create')
@@ -315,6 +316,16 @@ const routes = [
               import(/* webpackChunkName: "role-management" */ '@/pages/app/warehouse/role-management')
           }
         ]
+      },
+
+      {
+        path: 'brands',
+        name: 'Brands',
+        meta: {
+          pageName: 'Quản lý chi nhánh'
+        },
+        component: () =>
+          import(/* webpackChunkName: "warehouse" */ '@/pages/app/warehouse/brands')
       },
 
       // #region Đối tác và khách hàng
