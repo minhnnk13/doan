@@ -142,6 +142,9 @@
           disabled
         />
       </div>
+      <div>
+        {{ product.canExpired? "Sản phẩm lô date/HDS" : "Sản phẩm thường" }}
+      </div>
     </div>
   </div>
 </template>
