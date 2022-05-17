@@ -143,7 +143,7 @@ export default {
       payload.paymentType = 1
       payload.employee = getUserInfo().userId
       payload.products = payload.productsToImport
-      debugger
+
       return new Promise((resolve, reject) => {
         authAxios.post('/import', payload).then((res) => {
           if (res) context.commit('setImportCreateStep', 3)

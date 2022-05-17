@@ -13,7 +13,7 @@
       </template>
 
       <template #title>
-        Tạo đơn hàng
+        Tạo đơn nhập hàng
       </template>
     </the-header>
     <the-content />
