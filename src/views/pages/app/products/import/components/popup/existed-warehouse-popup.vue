@@ -5,7 +5,7 @@
     :append-to-body="true"
     :show-close="false"
     v-model="dialogVisible"
-    :title="`Nhập hàng cho lô: ${product?.productId}`"
+    :title="`Nhập hàng cho lô: ${warehouse.warehouseId}`"
     ref="dialog"
   >
     <div class="id-created-container">
@@ -46,6 +46,7 @@
         :label="'Số lượng nhập'"
         v-model="warehouse.addedQuantity"
         :is-number="true"
+        :alow-blank="false"
       />
     </div>
     <div class="button-container">
@@ -66,13 +67,14 @@ import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
 
 export default {
-  setup (props) {
+  emits: ['calculatePrice'],
+  setup (props, { emit }) {
     const dialogVisible = ref(false)
     const store = useStore()
 
     const warehouse = computed(() => store.state.warehouse.selectedWarehouse)
     const supplier = computed(() => store.state.import.importSupplier)
-
+    const currentWarehouseProduct = computed(() => store.state.warehouse.selectedProduct)
     const handleClosePopupClick = () => {
       dialogVisible.value = false
     }
@@ -83,16 +85,14 @@ export default {
 
     const handleSaveClick = () => {
       warehouse.value.supplierId = supplier.value.supplierId
-      store.dispatch('warehouse/addWarehouse', warehouse.value).then((res) => {
-        if (res) {
-          ElMessage({
-            type: 'success',
-            message: 'Lưu thành công'
-          })
-          store.commit('import/setDateProduct', warehouse.value)
-          store.commit('import/calculateSalePrice')
-        }
+
+      ElMessage({
+        type: 'success',
+        message: 'Lưu thành công'
       })
+      if (warehouse.value.addedQuantity) warehouse.value.quantity = Number(warehouse.value.quantity) + Number(warehouse.value.addedQuantity)
+      store.commit('import/setDateProduct', warehouse.value)
+      emit('calculatePrice', currentWarehouseProduct.value)
 
       handleClosePopupClick()
     }

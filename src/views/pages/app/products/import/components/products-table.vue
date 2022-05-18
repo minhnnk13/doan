@@ -115,7 +115,10 @@
     </div>
   </div>
   <warehouse-popup ref="showWarehousePopup" />
-  <existed-warehouse-popup ref="showExistedWarehousePopup" />
+  <existed-warehouse-popup
+    ref="showExistedWarehousePopup"
+    @calculatePrice="calculateSalePrice"
+  />
 </template>
 
 <script>
