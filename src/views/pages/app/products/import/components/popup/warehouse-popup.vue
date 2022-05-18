@@ -66,11 +66,13 @@ import { ElMessage } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 export default {
   components: { Delete },
-  setup (props) {
+  emits: ['calculatePrice'],
+  setup (props, { emit }) {
     const dialogVisible = ref(false)
     const store = useStore()
     const product = computed(() => store.state.import.productPopover)
     const supplier = computed(() => store.state.import.importSupplier)
+    const currentWarehouseProduct = computed(() => store.state.warehouse.selectedProduct)
     const warehouse = reactive({
       createdDate: '',
       expiredDate: '',
@@ -89,17 +91,14 @@ export default {
       warehouse.price = product.value.unitPrice
       warehouse.productId = product.value.productId
       warehouse.supplierId = supplier.value.supplierId
-      store.dispatch('warehouse/addWarehouse', warehouse).then((res) => {
-        if (res) {
-          ElMessage({
-            type: 'success',
-            message: 'Lưu thành công'
-          })
-          store.commit('import/setDateProduct', warehouse.value)
-          store.commit('import/calculateSalePrice')
-        }
-      })
 
+      ElMessage({
+        type: 'success',
+        message: 'Lưu thành công'
+      })
+      store.commit('import/setDateProduct', warehouse.value)
+      store.commit('import/setSelectedWarehouse', warehouse.value)
+      emit('calculatePrice', currentWarehouseProduct.value)
       handleClosePopupClick()
     }
 

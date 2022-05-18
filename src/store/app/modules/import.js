@@ -146,8 +146,9 @@ export default {
 
       return new Promise((resolve, reject) => {
         authAxios.post('/import', payload).then((res) => {
-          if (res) context.commit('setImportCreateStep', 3)
-        })
+          // if (res) context.commit('setImportCreateStep', 3)
+          resolve(res.data)
+        }).catch(err => reject(err))
       })
     },
 

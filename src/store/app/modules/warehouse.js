@@ -2,7 +2,7 @@ import { authAxios } from '@/apis/api'
 import { getUserInfo } from '@/utils/auth/index.js'
 export default {
   namespaced: true,
-  state: { warehouses: [], selectedWarehouse: {} },
+  state: { warehouses: [], selectedWarehouse: {}, selectedProduct: {} },
   getters: {},
   mutations: {
     setWarehouses (state, warehouses) {
@@ -11,13 +11,16 @@ export default {
 
     setSelectedWarehouse (state, selectedWarehouse) {
       state.selectedWarehouse = selectedWarehouse
+    },
+
+    setSelectedProduct (state, selectedProduct) {
+      state.selectedProduct = selectedProduct
     }
   },
   actions: {
     addWarehouse: async (context, payload) => {
       payload.createdBy = getUserInfo().userId
       payload.updatedBy = getUserInfo().userId
-      if (payload.addedQuantity) payload.quantity = Number(payload.quantity) + Number(payload.addedQuantity)
       const res = await authAxios.post('/warehouse', payload)
       context.dispatch('getWarehouses', payload.productId)
       return res

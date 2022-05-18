@@ -8,8 +8,11 @@
         {{ supplier.supplierName }}
       </div>
 
-      <div class="debt">
-        Công nợ hiện tại <span class="title">{{ supplier.dept }}</span>
+      <div
+        class="close-icon"
+        @click="handleDeleteClick"
+      >
+        <el-icon><close-bold /></el-icon>
       </div>
     </div>
 
@@ -48,18 +51,22 @@
           Địa chỉ: {{ supplier.address }}
         </div>
       </div>
+      <div class="debt">
+        Công nợ hiện tại <span class="title">{{ supplier.dept }}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { Avatar, Close } from '@element-plus/icons-vue'
+import { Avatar, CloseBold } from '@element-plus/icons-vue'
 import { computed, ref, reactive, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
   components: {
-    Avatar
+    Avatar,
+    CloseBold
   },
 
   setup () {
@@ -67,9 +74,13 @@ export default {
 
     const supplier = computed(() => { return store.state.import.importSupplier })
 
+    const handleDeleteClick = () => {
+      store.commit('import/setImportSupplier', {})
+    }
+
     onBeforeUnmount(() => { store.commit('import/setDefaultImportSupplier') })
 
-    return { supplier }
+    return { supplier, handleDeleteClick }
   }
 }
 </script>
@@ -100,12 +111,16 @@ export default {
             color: #000;
             }
         }
+
+        .close-icon {
+          cursor: pointer;
+        }
     }
 
     .bot {
         margin-top: 16px;
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
 
         .bot-element {
             display: flex;
