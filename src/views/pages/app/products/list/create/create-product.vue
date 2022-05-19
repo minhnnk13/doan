@@ -33,12 +33,12 @@
           </div>
           <el-radio-group
             class="management-button-container"
-            v-model="product.canExpired"
+            v-model="canExpired"
           >
-            <el-radio :label="3">
+            <el-radio :label="0">
               Sản phẩm thường
             </el-radio>
-            <el-radio :label="6">
+            <el-radio :label="1">
               Sản phẩm theo lô date/HSD
             </el-radio>
           </el-radio-group>
@@ -203,7 +203,18 @@ export default {
     store.dispatch('unit/getUnits')
 
     const product = computed(() => store.state.product.product)
+    const canExpired = computed({
+      get () {
+        if (product.value.canExpired === true) return 1
+        if (product.value.canExpired === false) return 0
+        return product.value.canExpired
+      },
 
+      set (newVal) {
+        if (newVal) product.value.canExpired = true
+        else product.value.canExpired = false
+      }
+    })
     const handleShowAddInfoClick = () => {
       addInfoDialog.value.handleOpenPopupClick()
     }
@@ -273,7 +284,8 @@ export default {
       handleShowAddInfoClick,
       infoAdd,
       addInfoDialog,
-      routerBack
+      routerBack,
+      canExpired
     }
   },
 

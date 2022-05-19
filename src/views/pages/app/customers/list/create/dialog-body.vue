@@ -15,12 +15,14 @@
       <text-field
         label="Số điện thoại"
         v-model="data.customerPhone"
+        :allow-blank="false"
         :is-phone="data.customerPhone"
         :allow-blank="false"
       />
       <text-field
         label="Email"
         v-model="data.customerEmail"
+        :allow-blank="false"
         :is-email="true"
         :allow-blank="false"
       />

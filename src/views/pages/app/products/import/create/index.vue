@@ -13,7 +13,7 @@
       </template>
 
       <template #title>
-        Tạo đơn hàng
+        Tạo đơn nhập hàng
       </template>
     </the-header>
     <the-content />
@@ -29,6 +29,7 @@ import { setImportInfo, getImportInfo } from '@/utils/import-storage.js'
 import { useRouter, useRoute } from 'vue-router'
 import dayjs from 'dayjs'
 import enumeration from '@/common/enumeration.js'
+import { ElMessage } from 'element-plus'
 
 const PRODUCT_MODULE = 'product'
 
@@ -57,13 +58,19 @@ export default {
     const importProducts = computed(() => {
       return store.state.import.import
     })
-
+    const warehouse = computed(() => store.state.warehouse.selectedWarehouse)
     store.dispatch(`${PRODUCT_MODULE}/getProductsToImport`, params.value)
     store.dispatch('supplier/getSuppliers', supplierParams)
 
     const handleOrderClick = async () => {
+      if (!importProducts.value.supplierId) {
+        ElMessage({
+          type: 'error',
+          message: 'Vui lòng chọn nhà cung cấp'
+        })
+        return
+      }
       if (!importProducts.value.importId) {
-        importProducts.value.importId = 1
         importProducts.value.status = 0
         importProducts.value.createdDate = dayjs(new Date()).format('DD/MM/YYYY HH:mm')
         importProducts.value.statusPayment = false
@@ -74,8 +81,12 @@ export default {
       }
 
       await setImportInfo(importProducts.value)
-      router.push({ name: 'BrowseGoods', params: { id: importProducts.value?.importId } })
+
       store.commit('import/setImportCreateStep', 1)
+      store.dispatch('warehouse/addWarehouse', warehouse.value)
+      store.dispatch('import/createImport', importProducts.value).then(res => {
+        if (res) router.push({ name: 'BrowseGoods', params: { id: res.importId } })
+      })
     }
 
     return { handleOrderClick }
