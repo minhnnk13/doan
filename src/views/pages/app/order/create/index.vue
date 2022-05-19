@@ -1,12 +1,21 @@
 <template>
-  <the-header @onCreateOrder="onCreateOrder" />
+  <the-header
+    @onCreateOrder="onCreateOrder"
+    @onDestroyOrder="onDestroyOrder"
+    @onEditOrder="onEditOrder"
+    @onBrowseOrder="onBrowseOrder"
+    @onExportOrder="onExportOrder"
+    @onExchangeOrder="onExchangeOrder"
+    @onExit="onExit"
+    :order="order"
+  />
   <bot-header
     :order="order"
     v-if="hasOrder"
   />
   <div class="create">
     <div class="create__left">
-      <the-customer />
+      <the-customer ref="customerComp" />
       <the-product ref="productComp" />
     </div>
 
@@ -22,7 +31,7 @@ import TheCustomer from './the-customer.vue'
 import TheProduct from './the-product.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, provide, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import CommonFn from '@/common/common-fn'
 import { cloneDeep } from 'lodash'
@@ -31,6 +40,7 @@ import TheHeader from './components/the-header.vue'
 import BotHeader from './components/bot-header.vue'
 
 const MODULE_NAME = 'order'
+const CUSTOMER_MODULE_NAME = 'customer'
 export default {
   components: {
     TheCustomer,
@@ -45,9 +55,11 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const productComp = ref(null)
+    const customerComp = ref(null)
     const order = computed(() => store.state[MODULE_NAME].order)
+    const container = document.querySelector('.content')
     const onExit = () => {
-      router.push({ name: 'ListProduct' })
+      router.push({ name: 'ListOrder' })
     }
 
     const onCreateOrder = async () => {
@@ -55,7 +67,7 @@ export default {
         ElMessage.error('Vui lòng chọn thông tin khách hàng và sản phẩm vào đơn hàng')
       } else {
         const value = handleOrder()
-        const container = document.querySelector('.content')
+
         CommonFn.showMask(container)
         await store.dispatch(`${MODULE_NAME}/addOrder`, value).then(data => {
           router.push({ query: { exportID: data.exportID } })
@@ -67,6 +79,8 @@ export default {
     const hasOrder = computed(() => {
       return !!route.query.exportID
     })
+
+    provide('hasOrder', hasOrder)
 
     const handleOrder = () => {
       const newOrder = cloneDeep(order.value)
@@ -84,12 +98,34 @@ export default {
       return newOrder
     }
 
+    onMounted(async () => {
+      if (hasOrder.value) {
+        CommonFn.showMask(container)
+        const orderID = route.query.exportID
+        const data = await store.dispatch(`${MODULE_NAME}/getOrder`, orderID)
+        if (!customerComp.value.customer) {
+          const customer = await store.dispatch(`${CUSTOMER_MODULE_NAME}/getCustomer`, data.customerID)
+          customerComp.value.customer = customer
+        }
+        CommonFn.hideMask()
+      }
+    })
+
+    const onBrowseOrder = async () => {
+      const newOrder = cloneDeep(order.value)
+      newOrder.status = Enumaration.OrderStatus.Browse
+      CommonFn.showMask(container)
+      await store.dispatch(`${MODULE_NAME}/addOrder`, newOrder)
+      CommonFn.hideMask()
+    }
     return {
       onExit,
       onCreateOrder,
       order,
       productComp,
-      hasOrder
+      customerComp,
+      hasOrder,
+      onBrowseOrder
     }
   }
 }

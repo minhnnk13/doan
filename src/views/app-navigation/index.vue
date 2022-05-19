@@ -158,11 +158,11 @@ export default {
           subs: [
             {
               name: 'Danh sách khách hàng',
-              to: 'list-customer'
+              to: '/app/list-customer'
             },
             {
               name: 'Nhóm khách hàng',
-              to: 'group-customer'
+              to: '/app/group-customer'
             }
           ]
         },

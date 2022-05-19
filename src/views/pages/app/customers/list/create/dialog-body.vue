@@ -16,11 +16,13 @@
         label="Số điện thoại"
         v-model="data.customerPhone"
         :is-phone="data.customerPhone"
+        :allow-blank="false"
       />
       <text-field
         label="Email"
         v-model="data.customerEmail"
         :is-email="true"
+        :allow-blank="false"
       />
 
       <div class="address">

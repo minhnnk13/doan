@@ -30,8 +30,6 @@ export default {
     getCustomers: ({ commit }) => {
       return new Promise((resolve, reject) => {
         authAxios.get('/customer').then(res => {
-          commit('setCustomers', res.data)
-
           resolve(res.data)
         })
       })
@@ -45,6 +43,25 @@ export default {
           resolve(res.data)
         })
       })
+    },
+
+    getOrder: ({ commit }, id) => {
+      return new Promise((resolve, reject) => {
+        authAxios.get(`/export/${id}`).then(res => {
+          commit('setOrder', res.data)
+          resolve(res.data)
+        })
+      })
+    },
+
+    getOrders: ({ commit }, param) => {
+      return new Promise((resolve, reject) => {
+        authAxios.get(`/export?pageIndex=${param.pageIndex}&pageSize=${param.pageSize}`).then(res => {
+          commit('setOrders', res.data)
+          resolve(res.data)
+        })
+      })
     }
+
   }
 }

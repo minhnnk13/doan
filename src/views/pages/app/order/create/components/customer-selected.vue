@@ -11,6 +11,7 @@
       </div>
 
       <div
+        v-if="!hasOrder"
         class="customer-selected__head__remove"
         @click="$emit('removeCustomer')"
       >
@@ -69,7 +70,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, defineEmits } from 'vue'
+import { computed, defineProps, defineEmits, inject } from 'vue'
 import { useStore } from 'vuex'
 import { CloseBold } from '@element-plus/icons-vue'
 const MODULENAME = 'customer'
@@ -82,6 +83,8 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['removeCustomer'])
+
+const hasOrder = inject('hasOrder')
 </script>
 
  <style lang="scss" scoped>
