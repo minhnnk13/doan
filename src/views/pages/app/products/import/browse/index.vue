@@ -65,9 +65,6 @@ export default {
     const store = useStore()
     const router = useRouter()
 
-    if (!Number.isNaN(Number(route.params.id))) {
-      store.dispatch('import/getImportDetail', route.params.id)
-    }
     let importInfo = computed(() => {
       return store.state.import.import
     })
@@ -84,6 +81,8 @@ export default {
     onMounted(() => {
       // importProducts.value.statusImport = importProducts.value.status
       // importProducts.value.statusStore = importProducts.value.sttStore
+      store.dispatch('import/getImportDetail', route.params.id)
+      
     })
 
     const handleConfirmClick = () => {
