@@ -169,13 +169,14 @@ export default {
                   Number(productInfo.unitPrice)
                 )
               })
+
               res.data.renderImportPrice = formatPrice(res.data.importPrice)
               context.commit('setImportProducts', res.data)
               context.commit(
                 'setImportProductsFromResponse',
                 res.data.listProduct
               )
-              context.commit('setImportCreateStep', 3)
+              // context.commit('setImportCreateStep', 3)
               resolve(res.data)
             }
           })
