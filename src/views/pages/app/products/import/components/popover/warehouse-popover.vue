@@ -29,7 +29,7 @@
         @click="$emit('handleSelectExistedWarehouse', warehouse)"
       >
         <div class="warehouse-code">
-          {{ `${warehouse.warehouseId} |` }}
+          {{ `${warehouse.productBatchId} |` }}
         </div>
         <div class="created-date">
           {{ `${warehouse.createdDate} |` }}
@@ -64,5 +64,9 @@ export default {
 .warehouses-container {
   display: flex;
   cursor: pointer;
+
+  div {
+    margin-left: 4px;
+  }
 }
 </style>

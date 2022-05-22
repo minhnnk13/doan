@@ -11,6 +11,19 @@
         </div>
         <div
           class="add-warehouse"
+          v-if="prop.row.canExpired && isWarehouseSelected(prop.row.productId)"
+        >
+          <el-tag
+            closable
+            @close="handleDeleteBatch(prop.row)"
+          >
+            {{
+              `${warehouse(prop.row.productId).productBatchId} | ${warehouse(prop.row.productId).createdDate} | ${warehouse(prop.row.productId).quantity}`
+            }}
+          </el-tag>
+        </div>
+        <div
+          class="add-warehouse"
           v-if="prop.row.canExpired"
         >
           <!-- <el-icon class="icon-container">
@@ -134,7 +147,7 @@ export default {
   setup () {
     const store = useStore()
     const products = computed(() => {
-      return store.state.import.import.productsToImport
+      return store.state.import.productsToImport
     })
     const showWarehousePopup = ref(null)
     const showExistedWarehousePopup = ref(null)
@@ -142,9 +155,25 @@ export default {
     const importProducts = computed(() => {
       return store.state.import.import
     })
-    const supplier = computed(() => {
-      return store.state.import.importSupplier
+
+    const warehouse = (productId) => {
+      return warehouses.value.find((batch) => {
+        return batch.productId === productId
+      })
+    }
+
+    const warehouses = computed(() => {
+      return store.state.warehouse.selectedWarehouses
     })
+
+    const isWarehouseSelected = (productId) => {
+      const batchCheck = warehouse(productId)
+      return (
+        batchCheck &&
+        Object.keys(batchCheck).length !== 0 &&
+        Object.getPrototypeOf(batchCheck) === Object.prototype
+      )
+    }
 
     const calculateSalePrice = (product) => {
       product.price = 0
@@ -169,6 +198,14 @@ export default {
 
     const handleOpenPopoverClick = (product) => {
       store.commit('import/setProductPopover', product)
+      store.dispatch('warehouse/getWarehouses', product.productId)
+    }
+
+    const handleDeleteBatch = (product) => {
+      store.dispatch('warehouse/getWarehouses', product.productId)
+      store.commit('import/setDefaultSaleQuantity', product.productId)
+      calculateSalePrice(product)
+      store.commit('warehouse/deleteSelectedWarehouse', product.productId)
     }
 
     watch(
@@ -187,7 +224,10 @@ export default {
       showWarehousePopup,
       showExistedWarehousePopup,
       handleOpenPopoverClick,
-      handleSelectExistedWarehouse
+      handleSelectExistedWarehouse,
+      isWarehouseSelected,
+      warehouse,
+      handleDeleteBatch
     }
   }
 }

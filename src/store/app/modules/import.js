@@ -41,9 +41,14 @@ export default {
 
     setProductsToImport (state, importProduct) {
       importProduct.unitName = importProduct.unitId.unitName
-      state.productsToImport.push(importProduct)
 
-      state.import.productsToImport = state.productsToImport
+      const foundProducts = state.productsToImport.find(product => {
+        return product.productId === importProduct.productId
+      })
+      if (!foundProducts) {
+        state.productsToImport.push(importProduct)
+        state.import.productsToImport = state.productsToImport
+      }
     },
 
     setDefaultProductsToImport (state) {
@@ -104,6 +109,15 @@ export default {
           product.saleQuantity = warehouse.quantity
         }
       })
+    },
+
+    setDefaultSaleQuantity (state, productId) {
+      const foundInd = state.productsToImport.findIndex(prod => {
+        return prod.productId === productId
+      })
+
+      state.productsToImport[foundInd].saleQuantity = ''
+      state.import.productsToImport = state.productsToImport
     }
   },
 
@@ -176,7 +190,7 @@ export default {
                 'setImportProductsFromResponse',
                 res.data.listProduct
               )
-              // context.commit('setImportCreateStep', 3)
+              if (res.data.status === enumeration.status.Trading && !res.data.sttStore && !res.data.statusPayment) context.commit('setImportCreateStep', 1)
               resolve(res.data)
             }
           })

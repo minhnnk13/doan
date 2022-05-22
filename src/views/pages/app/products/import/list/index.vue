@@ -105,7 +105,9 @@ export default {
     }
 
     const handleChangePageSize = () => {
-      store.dispatch('import/getImports', params.value)
+      loadData().then((res) => {
+        tableData.value = res
+      })
     }
 
     return {

@@ -92,14 +92,14 @@ export default {
       warehouse.productId = product.value.productId
       warehouse.supplierId = supplier.value.supplierId
 
+      store.commit('import/setDateProduct', warehouse)
+      store.commit('import/setSelectedWarehouse', warehouse)
+      emit('calculatePrice', currentWarehouseProduct.value)
+      handleClosePopupClick()
       ElMessage({
         type: 'success',
         message: 'Lưu thành công'
       })
-      store.commit('import/setDateProduct', warehouse.value)
-      store.commit('import/setSelectedWarehouse', warehouse.value)
-      emit('calculatePrice', currentWarehouseProduct.value)
-      handleClosePopupClick()
     }
 
     const handleDeleteClick = () => {}
