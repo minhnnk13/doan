@@ -89,6 +89,10 @@ export default {
       })
     }
 
+    onBeforeUnmount(() => {
+      store.commit('import/setDefaultImportProducts')
+    })
+
     return { handleOrderClick }
   }
 }

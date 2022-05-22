@@ -4,7 +4,7 @@
       <template #toolbar>
         <div
           class="toolbar"
-          v-if="importInfo.status === 0"
+          v-if="importCreateStep === 1 && importInfo.status === $enumeration.status.Trading"
         >
           <el-button
             type="primary"
@@ -17,12 +17,7 @@
           class="toolbar"
           v-else
         >
-          <!-- to-do: thêm hàm check điều kiện để convert status -->
-          <!-- v-if="!importInfo?.statusPayment?.toLowerCase().includes('đã thanh toán')" -->
-          <el-button
-
-            @click="handlePaymentClick"
-          >
+          <el-button @click="handlePaymentClick">
             Xác nhận thanh toán
           </el-button>
           <el-button
@@ -57,6 +52,7 @@ import { useStore } from 'vuex'
 import enumeration from '@/common/enumeration.js'
 import { computed, onBeforeUnmount, onMounted } from 'vue'
 import messageBox from '@/utils/message-box'
+
 // to-do: Nếu sản phẩm chưa được lưu vào DB thì sẽ case theo status trong action để hiển thị đúng step
 export default {
   components: { TheHeader, TheContent },
@@ -82,12 +78,10 @@ export default {
       // importProducts.value.statusImport = importProducts.value.status
       // importProducts.value.statusStore = importProducts.value.sttStore
       store.dispatch('import/getImportDetail', route.params.id)
-      
     })
 
     const handleConfirmClick = () => {
-      importInfo.value.status = enumeration.status.Trading
-      importInfo.value.statusPayment = enumeration.status.Trading
+      importInfo.value.status = enumeration.status.Confirmed
       store.commit('import/setImportProducts', importInfo.value)
       store.commit('import/setImportCreateStep', 2)
       setImportInfo(importInfo.value)
@@ -114,7 +108,7 @@ export default {
       importInfo.value.status = enumeration.status.Finished
       importInfo.value.statusPayment = true
 
-      store.dispatch('import/createImport', importInfo.value).then(res => {
+      store.dispatch('import/createImport', importInfo.value).then((res) => {
         if (res) store.commit('import/setImportCreateStep', 4)
       })
     }
@@ -134,12 +128,16 @@ export default {
       store.commit('import/setDefaultProductsToImport')
     })
 
-    return { handleConfirmClick, importInfo, handleImportClick, handlePaymentClick, importCreateStep }
+    return {
+      handleConfirmClick,
+      importInfo,
+      handleImportClick,
+      handlePaymentClick,
+      importCreateStep
+    }
   }
-
 }
 </script>
 
 <style>
-
 </style>

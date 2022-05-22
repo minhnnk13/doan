@@ -5,13 +5,13 @@
     :append-to-body="true"
     :show-close="false"
     v-model="dialogVisible"
-    :title="`Nhập hàng cho lô: ${warehouse.warehouseId}`"
+    :title="`Nhập hàng cho lô: ${warehouse.productBatchId}`"
     ref="dialog"
   >
     <div class="id-created-container">
       <div class="created-date">
         <text-field
-          v-model="warehouse.warehouseId"
+          v-model="warehouse.productBatchId"
           :label="'Số lô'"
           disabled
         />
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { ref, computed, reactive, onUnmounted } from 'vue'
+import { ref, computed, reactive, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
 
@@ -77,6 +77,7 @@ export default {
     const currentWarehouseProduct = computed(() => store.state.warehouse.selectedProduct)
     const handleClosePopupClick = () => {
       dialogVisible.value = false
+      store.commit('warehouse/setDefaultAddedQuantity')
     }
 
     const handleOpenPopupClick = () => {
@@ -92,6 +93,7 @@ export default {
       })
       if (warehouse.value.addedQuantity) warehouse.value.quantity = Number(warehouse.value.quantity) + Number(warehouse.value.addedQuantity)
       store.commit('import/setDateProduct', warehouse.value)
+      store.commit('warehouse/setSelectedWarehouses', warehouse.value)
       emit('calculatePrice', currentWarehouseProduct.value)
 
       handleClosePopupClick()
