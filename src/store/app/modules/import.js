@@ -191,6 +191,9 @@ export default {
                 res.data.listProduct
               )
               if (res.data.status === enumeration.status.Trading && !res.data.sttStore && !res.data.statusPayment) context.commit('setImportCreateStep', 1)
+              if (res.data.status === enumeration.status.Confirmed && !res.data.sttStore && !res.data.statusPayment) context.commit('setImportCreateStep', 2)
+              if (res.data.sttStore || res.data.statusPayment) context.commit('setImportCreateStep', 3)
+              if (res.data.status === enumeration.status.Finished && res.data.statusPayment) context.commit('setImportCreateStep', 4)
               resolve(res.data)
             }
           })

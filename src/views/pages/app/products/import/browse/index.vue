@@ -81,8 +81,7 @@ export default {
     })
 
     const handleConfirmClick = () => {
-      importInfo.value.status = enumeration.status.Trading
-      importInfo.value.statusPayment = enumeration.status.Trading
+      importInfo.value.status = enumeration.status.Confirmed
       store.commit('import/setImportProducts', importInfo.value)
       store.commit('import/setImportCreateStep', 2)
       setImportInfo(importInfo.value)
