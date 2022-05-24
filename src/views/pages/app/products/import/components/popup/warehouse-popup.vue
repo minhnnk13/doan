@@ -36,7 +36,7 @@
 
       <div class="created-date">
         <text-field
-          :only-border-bottom="true"
+          :allow-blank="false"
           v-model="warehouse.quantity"
         />
       </div>
