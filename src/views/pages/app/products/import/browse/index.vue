@@ -4,7 +4,10 @@
       <template #toolbar>
         <div
           class="toolbar"
-          v-if="importCreateStep === 1 && importInfo.status === $enumeration.status.Trading"
+          v-if="
+            importCreateStep === 1 &&
+              importInfo.status === $enumeration.status.Trading
+          "
         >
           <el-button
             type="primary"
@@ -50,8 +53,9 @@ import { setImportInfo, getImportInfo } from '@/utils/import-storage.js'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import enumeration from '@/common/enumeration.js'
-import { computed, onBeforeUnmount, onMounted } from 'vue'
+import { computed, onBeforeUnmount, onMounted, watch } from 'vue'
 import messageBox from '@/utils/message-box'
+import { formatPrice } from '@/common/common-fn.js'
 
 // to-do: Nếu sản phẩm chưa được lưu vào DB thì sẽ case theo status trong action để hiển thị đúng step
 export default {
@@ -73,17 +77,41 @@ export default {
       return store.state.import.importCreateStep
     })
 
+    const products = computed(() => {
+      return store.state.import.productsToImport
+    })
+
+    const calculateSalePrice = (product) => {
+      product.price = 0
+      let tax = 0.1
+      if (store.state.import.isTaxed) tax = 0
+      if (product.saleQuantity) {
+        product.price = product.unitPrice * Number(product.saleQuantity)
+        product.price += product.price * tax
+      }
+      product.renderPrice = `${formatPrice(product.price)} VNĐ`
+      store.commit('import/calculateTotalPrice')
+    }
+
     // to-do: sửa lại format hiển thị id và ngày tháng
     onMounted(() => {
       // importProducts.value.statusImport = importProducts.value.status
       // importProducts.value.statusStore = importProducts.value.sttStore
-      store.dispatch('import/getImportDetail', route.params.id)
+      store.dispatch('import/getImportDetail', route.params.id).then((res) => {
+        if (res) {
+          res.productsToImport.forEach((product) => {
+            calculateSalePrice(product)
+          })
+        }
+      })
     })
 
     const handleConfirmClick = () => {
       importInfo.value.status = enumeration.status.Confirmed
       store.commit('import/setImportProducts', importInfo.value)
-      store.commit('import/setImportCreateStep', 2)
+      store.dispatch('import/createImport', importInfo.value).then((res) => {
+        if (res) store.commit('import/setImportCreateStep', 2)
+      })
       setImportInfo(importInfo.value)
     }
 
@@ -118,6 +146,9 @@ export default {
       importInfo.value.statusStore = true
       importInfo.value.readyForPayment = true
       store.commit('import/setImportProducts', importInfo.value)
+      store.dispatch('import/createImport', importInfo.value).then((res) => {
+        if (res) store.commit('import/setImportCreateStep', 3)
+      })
       setImportInfo(importInfo.value)
     }
 
@@ -127,6 +158,15 @@ export default {
       store.commit('import/setImportSupplier', {})
       store.commit('import/setDefaultProductsToImport')
     })
+
+    watch(
+      () => store.state.import.isTaxed,
+      (newVal, oldVal) => {
+        products.value.forEach((product) => {
+          calculateSalePrice(product)
+        })
+      }
+    )
 
     return {
       handleConfirmClick,
