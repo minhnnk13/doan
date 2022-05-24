@@ -19,7 +19,7 @@
     <div class="bot-header__right">
       <div class="bot-header__right__steps">
         <el-steps
-          :active="1"
+          :active="order.status + 1"
           align-center
         >
           <el-step title="Đặt hàng" />
