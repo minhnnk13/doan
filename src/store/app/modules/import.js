@@ -174,7 +174,8 @@ export default {
             if (res.data) {
               res.data.statusImport = res.data.status
               res.data.statusStore = res.data.sttStore
-              res.data.productsToImport = res.data.listProduct
+              res.data.productsToImport = res.data.products
+
               res.data.productsToImport.forEach((productInfo) => {
                 productInfo.renderPrice = formatPrice(
                   Number(productInfo.price)
@@ -188,8 +189,13 @@ export default {
               context.commit('setImportProducts', res.data)
               context.commit(
                 'setImportProductsFromResponse',
-                res.data.listProduct
+                res.data.products
               )
+              const supplier = {
+                supplierId: res.data.supplierId,
+                supplierName: res.data.supplier
+              }
+              context.commit('setImportSupplier', res.data.supplier)
               if (res.data.status === enumeration.status.Trading && !res.data.sttStore && !res.data.statusPayment) context.commit('setImportCreateStep', 1)
               if (res.data.status === enumeration.status.Confirmed && !res.data.sttStore && !res.data.statusPayment) context.commit('setImportCreateStep', 2)
               if (res.data.sttStore || res.data.statusPayment) context.commit('setImportCreateStep', 3)

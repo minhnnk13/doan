@@ -24,7 +24,7 @@
         </div>
         <div
           class="add-warehouse"
-          v-if="prop.row.canExpired"
+          v-if="prop.row.canExpired && !importCreateStep"
         >
           <!-- <el-icon class="icon-container">
             <plus @click="handleShowAddWarehouseClick" />
@@ -166,6 +166,8 @@ export default {
       return store.state.warehouse.selectedWarehouses
     })
 
+    const importCreateStep = computed(() => store.state.import.importCreateStep)
+
     const isWarehouseSelected = (productId) => {
       const batchCheck = warehouse(productId)
       return (
@@ -227,7 +229,8 @@ export default {
       handleSelectExistedWarehouse,
       isWarehouseSelected,
       warehouse,
-      handleDeleteBatch
+      handleDeleteBatch,
+      importCreateStep
     }
   }
 }
