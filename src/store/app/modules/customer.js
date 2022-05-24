@@ -44,6 +44,15 @@ export default {
           resolve(res.data)
         })
       })
+    },
+
+    getCustomer: ({ commit }, id) => {
+      return new Promise((resolve, reject) => {
+        authAxios.get(`/customer/${id}`).then(res => {
+          commit('setCustomer', res.data)
+          resolve(res.data)
+        })
+      })
     }
   }
 }

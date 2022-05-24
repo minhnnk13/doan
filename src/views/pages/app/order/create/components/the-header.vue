@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { computed, defineEmits, defineProps, reactive } from 'vue'
+import { computed, defineEmits, defineProps, inject, reactive } from 'vue'
 import Enumeration from '@/common/enumeration'
 import { ArrowLeft } from '@element-plus/icons-vue'
 defineEmits([
@@ -39,7 +39,9 @@ defineEmits([
   'onEditOrder',
   'onBrowseOrder',
   'onExportOrder',
-  'onExchangeOrder'
+  'onExchangeOrder',
+  'onCancelEdit',
+  'onSaveEdit'
 ])
 const props = defineProps({
   order: {
@@ -64,7 +66,7 @@ const buttons = reactive(
       ]
     },
     {
-      displayStatus: Enumeration.OrderStatus.Create,
+      displayStatus: [Enumeration.OrderStatus.Create],
       items: [
         {
           label: 'Hủy đơn hàng',
@@ -84,7 +86,7 @@ const buttons = reactive(
       ]
     },
     {
-      displayStatus: Enumeration.OrderStatus.Browse,
+      displayStatus: [Enumeration.OrderStatus.Browse],
       items: [
         {
           label: 'Hủy đơn hàng',
@@ -99,7 +101,7 @@ const buttons = reactive(
       ]
     },
     {
-      displayStatus: Enumeration.OrderStatus.Complete,
+      displayStatus: [Enumeration.OrderStatus.Complete, Enumeration.OrderStatus.Export],
       items: [
         {
           label: 'Đổi trả hàng',
@@ -111,8 +113,25 @@ const buttons = reactive(
   ]
 )
 
+const editMode = inject('editMode')
 const activeButtons = computed(() => {
-  const index = buttons.findIndex(item => item.displayStatus === props.order?.status)
+  const index = buttons.findIndex(item => item.displayStatus?.includes(props.order?.status))
+  if (editMode.value) {
+    return {
+      items: [
+        {
+          type: '',
+          label: 'Hủy ',
+          onClick: 'onCancelEdit'
+        },
+        {
+          label: 'Sửa',
+          type: 'primary',
+          onClick: 'onSaveEdit'
+        }
+      ]
+    }
+  }
   let data = null
   if (index === -1) {
     data = buttons[0]
@@ -121,6 +140,7 @@ const activeButtons = computed(() => {
   }
   return data
 })
+
 </script>
 
 <style lang="scss" scoped>

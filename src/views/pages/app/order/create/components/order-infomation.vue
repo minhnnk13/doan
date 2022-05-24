@@ -40,7 +40,7 @@
           Ngày bán:
         </div>
         <div class="content">
-          {{ formatDate(order.createdDate) }}
+          {{ formatDate(order.exportTime) }}
         </div>
       </div>
 

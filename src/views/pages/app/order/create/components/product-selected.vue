@@ -33,6 +33,7 @@
           :only-border-bottom="true"
           v-model="prop.row.saleQuantity"
           :is-number="true"
+          :disabled="!editMode && (typeof order.status === 'number')"
         />
       </template>
     </el-table-column>
@@ -82,23 +83,29 @@
 
 <script>
 import { useStore } from 'vuex'
-import { computed, ref, reactive, watch, toRefs, nextTick } from 'vue'
+import { computed, ref, reactive, watch, toRefs, nextTick, inject } from 'vue'
 import { formatPrice } from '@/common/common-fn.js'
 const MODULE_NAME = 'order'
 export default {
-
+  props: {
+    order: {
+      type: Object,
+      default: () => {}
+    }
+  },
   setup (props) {
     const store = useStore()
 
     const products = computed(() => store.state[MODULE_NAME].order.products)
-
+    const editMode = inject('editMode')
     const deleteRow = (index) => {
       products.value.splice(index, 1)
     }
     return {
       products,
       deleteRow,
-      formatPrice
+      formatPrice,
+      editMode
     }
   }
 }
