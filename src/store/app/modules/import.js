@@ -158,7 +158,7 @@ export default {
       payload.employee = getUserInfo().userId
       payload.supplierId = context.state.importSupplier.supplierId
       payload.products = payload.productsToImport
-      payload.statusImport = payload.status
+      if (payload.status) payload.statusImport = payload.status
       return new Promise((resolve, reject) => {
         authAxios.post('/import', payload).then((res) => {
           // if (res) context.commit('setImportCreateStep', 3)
