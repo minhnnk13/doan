@@ -18,7 +18,9 @@
             @close="handleDeleteBatch(prop.row)"
           >
             {{
-              `${warehouse(prop.row.productId).productBatchId} | ${warehouse(prop.row.productId).createdDate} | ${warehouse(prop.row.productId).quantity}`
+              `${warehouse(prop.row.productId).productBatchId} | ${
+                warehouse(prop.row.productId).createdDate
+              } | ${warehouse(prop.row.productId).quantity}`
             }}
           </el-tag>
         </div>
@@ -127,7 +129,10 @@
       <!-- <div class="amount">Tiền cần trả {{importProducts.saleQuantity}}</div> -->
     </div>
   </div>
-  <warehouse-popup ref="showWarehousePopup" />
+  <warehouse-popup
+    ref="showWarehousePopup"
+    @calculatePrice="calculateSalePrice"
+  />
   <existed-warehouse-popup
     ref="showExistedWarehousePopup"
     @calculatePrice="calculateSalePrice"
@@ -166,7 +171,9 @@ export default {
       return store.state.warehouse.selectedWarehouses
     })
 
-    const importCreateStep = computed(() => store.state.import.importCreateStep)
+    const importCreateStep = computed(
+      () => store.state.import.importCreateStep
+    )
 
     const isWarehouseSelected = (productId) => {
       const batchCheck = warehouse(productId)

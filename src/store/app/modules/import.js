@@ -156,8 +156,9 @@ export default {
       payload.branchId = 1
       payload.paymentType = 1
       payload.employee = getUserInfo().userId
+      payload.supplierId = context.state.importSupplier.supplierId
       payload.products = payload.productsToImport
-
+      payload.statusImport = payload.status
       return new Promise((resolve, reject) => {
         authAxios.post('/import', payload).then((res) => {
           // if (res) context.commit('setImportCreateStep', 3)
@@ -191,11 +192,9 @@ export default {
                 'setImportProductsFromResponse',
                 res.data.products
               )
-              const supplier = {
-                supplierId: res.data.supplierId,
-                supplierName: res.data.supplier
-              }
-              context.commit('setImportSupplier', res.data.supplier)
+              const supplier = res.data.supplierId
+              context.commit('setImportSupplier', supplier)
+
               if (res.data.status === enumeration.status.Trading && !res.data.sttStore && !res.data.statusPayment) context.commit('setImportCreateStep', 1)
               if (res.data.status === enumeration.status.Confirmed && !res.data.sttStore && !res.data.statusPayment) context.commit('setImportCreateStep', 2)
               if (res.data.sttStore || res.data.statusPayment) context.commit('setImportCreateStep', 3)
