@@ -11,7 +11,7 @@
       </div>
 
       <div
-        v-if="!hasOrder"
+        v-if="!$route.query.exportID || editMode"
         class="customer-selected__head__remove"
         @click="$emit('removeCustomer')"
       >
@@ -84,7 +84,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['removeCustomer'])
 
-const hasOrder = inject('hasOrder')
+const editMode = inject('editMode')
 </script>
 
  <style lang="scss" scoped>

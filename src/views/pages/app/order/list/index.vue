@@ -134,7 +134,10 @@
               <el-icon><Check /></el-icon>
             </div>
 
-            <div class="not-done">
+            <div
+              class="not-done"
+              v-else
+            >
               <el-icon><CloseBold /></el-icon>
             </div>
           </template>

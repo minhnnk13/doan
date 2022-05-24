@@ -58,6 +58,7 @@
       <product-selected
         v-else
         @deleteRow="deleteRow"
+        :order="order"
       />
     </div>
 
@@ -152,7 +153,8 @@ export default {
       price,
       textSearch,
       deleteRow,
-      formatPrice
+      formatPrice,
+      order
     }
   }
 }

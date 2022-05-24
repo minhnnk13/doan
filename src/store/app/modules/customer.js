@@ -50,7 +50,6 @@ export default {
       return new Promise((resolve, reject) => {
         authAxios.get(`/customer/${id}`).then(res => {
           commit('setCustomer', res.data)
-          debugger
           resolve(res.data)
         })
       })
