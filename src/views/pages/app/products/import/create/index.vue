@@ -85,9 +85,13 @@ export default {
       store.commit('import/setImportCreateStep', 1)
       store.dispatch('warehouse/addWarehouse', warehouse.value)
       store.dispatch('import/createImport', importProducts.value).then(res => {
-        if (res) router.push({ name: 'BrowseGoods', params: { id: res.importId } })
+        if (res) router.push({ name: 'BrowseGoods', params: { id: res.importID } })
       })
     }
+
+    onBeforeUnmount(() => {
+      store.commit('import/setDefaultImportProducts')
+    })
 
     return { handleOrderClick }
   }

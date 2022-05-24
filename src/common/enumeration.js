@@ -24,6 +24,7 @@ const enumeration = {
     Ordering: 0, // Đặt hàng
     Finished: 1, // Hoàn thành
     Trading: 2, // Đang giao dịch
+    Confirmed: 3, // Đã duyệt
     Cancel: 12 // Đã hủy
   },
 

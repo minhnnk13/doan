@@ -41,9 +41,14 @@ export default {
 
     setProductsToImport (state, importProduct) {
       importProduct.unitName = importProduct.unitId.unitName
-      state.productsToImport.push(importProduct)
 
-      state.import.productsToImport = state.productsToImport
+      const foundProducts = state.productsToImport.find(product => {
+        return product.productId === importProduct.productId
+      })
+      if (!foundProducts) {
+        state.productsToImport.push(importProduct)
+        state.import.productsToImport = state.productsToImport
+      }
     },
 
     setDefaultProductsToImport (state) {
@@ -104,6 +109,15 @@ export default {
           product.saleQuantity = warehouse.quantity
         }
       })
+    },
+
+    setDefaultSaleQuantity (state, productId) {
+      const foundInd = state.productsToImport.findIndex(prod => {
+        return prod.productId === productId
+      })
+
+      state.productsToImport[foundInd].saleQuantity = ''
+      state.import.productsToImport = state.productsToImport
     }
   },
 
@@ -160,7 +174,8 @@ export default {
             if (res.data) {
               res.data.statusImport = res.data.status
               res.data.statusStore = res.data.sttStore
-              res.data.productsToImport = res.data.listProduct
+              res.data.productsToImport = res.data.products
+
               res.data.productsToImport.forEach((productInfo) => {
                 productInfo.renderPrice = formatPrice(
                   Number(productInfo.price)
@@ -169,13 +184,22 @@ export default {
                   Number(productInfo.unitPrice)
                 )
               })
+
               res.data.renderImportPrice = formatPrice(res.data.importPrice)
               context.commit('setImportProducts', res.data)
               context.commit(
                 'setImportProductsFromResponse',
-                res.data.listProduct
+                res.data.products
               )
-              context.commit('setImportCreateStep', 3)
+              const supplier = {
+                supplierId: res.data.supplierId,
+                supplierName: res.data.supplier
+              }
+              context.commit('setImportSupplier', res.data.supplier)
+              if (res.data.status === enumeration.status.Trading && !res.data.sttStore && !res.data.statusPayment) context.commit('setImportCreateStep', 1)
+              if (res.data.status === enumeration.status.Confirmed && !res.data.sttStore && !res.data.statusPayment) context.commit('setImportCreateStep', 2)
+              if (res.data.sttStore || res.data.statusPayment) context.commit('setImportCreateStep', 3)
+              if (res.data.status === enumeration.status.Finished && res.data.statusPayment) context.commit('setImportCreateStep', 4)
               resolve(res.data)
             }
           })

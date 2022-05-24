@@ -20,6 +20,7 @@
       <text-field
         label="Email"
         :is-email="true"
+        :allow-blank="false"
         v-model="supplier.email"
       />
     </div>
@@ -27,6 +28,7 @@
       <text-field
         label="Số điện thoại"
         :is-phone="true"
+        :allow-blank="false"
         v-model="supplier.phone"
       />
     </div>

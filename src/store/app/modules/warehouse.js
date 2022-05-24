@@ -2,11 +2,15 @@ import { authAxios } from '@/apis/api'
 import { getUserInfo } from '@/utils/auth/index.js'
 export default {
   namespaced: true,
-  state: { warehouses: [], selectedWarehouse: {}, selectedProduct: {} },
+  state: { warehouses: [], selectedWarehouse: {}, selectedProduct: {}, selectedWarehouses: [] },
   getters: {},
   mutations: {
     setWarehouses (state, warehouses) {
       state.warehouses = warehouses
+    },
+
+    setSelectedWarehouses (state, selectedWarehouse) {
+      state.selectedWarehouses.push(selectedWarehouse)
     },
 
     setSelectedWarehouse (state, selectedWarehouse) {
@@ -15,6 +19,17 @@ export default {
 
     setSelectedProduct (state, selectedProduct) {
       state.selectedProduct = selectedProduct
+    },
+
+    setDefaultAddedQuantity (state) {
+      state.selectedWarehouse.addedQuantity = ''
+    },
+
+    deleteSelectedWarehouse (state, productId) {
+      const index = state.selectedWarehouses.findIndex(warehouse => {
+        return warehouse.productId === productId
+      })
+      state.selectedWarehouses.splice(index, 1)
     }
   },
   actions: {
