@@ -131,7 +131,9 @@ export default {
     }
 
     const handleChangePageSize = () => {
-      store.dispatch(`${PRODUCT_MODULE}/getSuppliers`, params.value)
+      loadData().then((res) => {
+        tableData.value = res
+      })
     }
 
     const handleKeyUp = () => {
