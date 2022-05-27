@@ -244,7 +244,7 @@ export default {
           product.value.createdDate = dayjs(new Date()).format('YYYY-MM-DD')
         }
         product.value.modifyCreate = dayjs(new Date()).format('YYYY-MM-DD')
-        product.value.supplierId = 1
+        product.value.saleQuantity = 0
 
         if (isEdit.value) {
           product.value.isSale = product.value.sale

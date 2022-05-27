@@ -20,9 +20,19 @@
           class="toolbar"
           v-else
         >
-          <el-button @click="handlePaymentClick">
+          <el-button
+            @click="handlePaymentClick"
+            v-if="importCreateStep !== 4"
+          >
             Xác nhận thanh toán
           </el-button>
+          <el-button
+            @click="handleEditClick"
+            v-if="isLastStep"
+          >
+            Chỉnh sửa đơn nhập hàng
+          </el-button>
+
           <el-button
             type="primary"
             v-if="importCreateStep === 2"
@@ -56,6 +66,7 @@ import enumeration from '@/common/enumeration.js'
 import { computed, onBeforeUnmount, onMounted, watch } from 'vue'
 import messageBox from '@/utils/message-box'
 import { formatPrice } from '@/common/common-fn.js'
+import { ElMessage } from 'element-plus'
 
 // to-do: Nếu sản phẩm chưa được lưu vào DB thì sẽ case theo status trong action để hiển thị đúng step
 export default {
@@ -79,6 +90,13 @@ export default {
 
     const products = computed(() => {
       return store.state.import.productsToImport
+    })
+
+    const isLastStep = computed(() => {
+      return (
+        importInfo.value.status === enumeration.status.Finished ||
+        importInfo.value.statusImport === enumeration.status.Finished
+      )
     })
 
     const calculateSalePrice = (product) => {
@@ -109,10 +127,10 @@ export default {
     const handleConfirmClick = () => {
       importInfo.value.status = enumeration.status.Confirmed
       store.commit('import/setImportProducts', importInfo.value)
+
       store.dispatch('import/createImport', importInfo.value).then((res) => {
         if (res) store.commit('import/setImportCreateStep', 2)
       })
-      setImportInfo(importInfo.value)
     }
 
     const handlePaymentClick = () => {
@@ -149,7 +167,13 @@ export default {
       store.dispatch('import/createImport', importInfo.value).then((res) => {
         if (res) store.commit('import/setImportCreateStep', 3)
       })
-      setImportInfo(importInfo.value)
+    }
+
+    const handleEditClick = () => {
+      ElMessage({
+        type: 'warning',
+        message: 'Tính năng đang phát triển'
+      })
     }
 
     onBeforeUnmount(() => {
@@ -173,7 +197,9 @@ export default {
       importInfo,
       handleImportClick,
       handlePaymentClick,
-      importCreateStep
+      importCreateStep,
+      isLastStep,
+      handleEditClick
     }
   }
 }

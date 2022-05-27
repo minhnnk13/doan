@@ -37,15 +37,16 @@
       <div class="created-date">
         <text-field
           :only-border-bottom="true"
+          :allow-blank="false"
           v-model="warehouse.quantity"
         />
       </div>
-      <div
+      <!-- <div
         class="delete-icon"
         @click="handleDeleteClick"
       >
         <el-icon><delete :style="{ height: '100%' }" /></el-icon>
-      </div>
+      </div> -->
     </div>
     <div class="button-container">
       <span class="dialog-footer">
@@ -63,16 +64,18 @@
 import { ref, computed, reactive, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
-import { Delete } from '@element-plus/icons-vue'
+// import { Delete } from '@element-plus/icons-vue'
 export default {
-  components: { Delete },
+  // components: { Delete },
   emits: ['calculatePrice'],
   setup (props, { emit }) {
     const dialogVisible = ref(false)
     const store = useStore()
     const product = computed(() => store.state.import.productPopover)
     const supplier = computed(() => store.state.import.importSupplier)
-    const currentWarehouseProduct = computed(() => store.state.warehouse.selectedProduct)
+    const currentWarehouseProduct = computed(
+      () => store.state.warehouse.selectedProduct
+    )
     const warehouse = reactive({
       createdDate: '',
       expiredDate: '',
@@ -123,20 +126,28 @@ export default {
 }
 .input-title {
   display: flex;
+  justify-content: space-between;
   background-color: #f3f3f3;
   line-height: 24px;
   padding: 12px;
 
   div {
-    width: 33%;
+    width: 30%;
   }
 }
 
 .input-value {
   display: flex;
+  justify-content: space-between;
   div {
     margin-top: 12px;
     margin-right: 12px;
+  }
+
+  .created-date,
+  .expired-date {
+    display: flex;
+    align-items: center;
   }
 
   .delete-icon {
