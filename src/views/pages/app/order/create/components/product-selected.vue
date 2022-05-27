@@ -13,11 +13,21 @@
       label="Ảnh"
     >
       <template #default="prop">
-        <img
-          :src="prop.row.image"
-          width="100"
-          height="60"
-        >
+        <div class="image">
+          <img
+            :src="prop.row.image"
+            width="100"
+            height="60"
+          >
+
+          <el-button
+            v-if="!prop.row.canExpired"
+            type="text"
+            @click="onExpired(prop.row)"
+          >
+            Chọn lô
+          </el-button>
+        </div>
       </template>
     </el-table-column>
     <el-table-column
@@ -101,7 +111,12 @@ export default {
     const deleteRow = (index) => {
       products.value.splice(index, 1)
     }
+
+    const onExpired = (product) => {
+      alert(product.productName)
+    }
     return {
+      onExpired,
       products,
       deleteRow,
       formatPrice,
@@ -127,6 +142,16 @@ export default {
       display: flex;
       margin-top: 12px;
     }
+  }
+}
+
+.image {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+
+  .el-button {
+    width: 52px;
   }
 }
 </style>
