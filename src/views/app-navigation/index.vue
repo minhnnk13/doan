@@ -9,7 +9,7 @@
         default-active="/app/list-product"
         :router="true"
         text-color="#fff"
-        background-color="#021266"
+        background-color="#353b76"
         active-text-color="#3182CE"
       >
         <sub-nav
@@ -67,10 +67,22 @@ export default {
           to: '/app/dashboard'
         },
         {
-          name: 'Báo cáo',
-          icon: 'report',
-          to: '/app/report'
+          name: 'Đơn hàng',
+          icon: 'order',
+          class: 'order',
+          to: '/app/orders',
+          subs: [
+            {
+              name: 'Tạo đơn hàng',
+              to: '/app/orders/create'
+            },
+            {
+              name: 'Danh sách đơn hàng',
+              to: '/app/orders'
+            }
+          ]
         },
+
         {
           name: 'Sản phẩm',
           icon: 'product',
@@ -89,10 +101,6 @@ export default {
               to: '/app/import'
             },
             {
-              name: 'Kiểm hàng',
-              to: '/app/control'
-            },
-            {
               name: 'Nhà cung cấp',
               to: '/app/manufacture'
             }
@@ -103,23 +111,51 @@ export default {
 
           ]
         },
+
         {
-          name: 'Đơn hàng',
-          icon: 'order',
-          class: 'order',
-          to: '/app/orders',
+          name: 'Khách hàng',
+          icon: 'customer',
+          to: '/app/customer',
           subs: [
             {
-              name: 'Tạo đơn hàng',
-              to: '/app/orders/create'
+              name: 'Danh sách khách hàng',
+              to: '/app/list-customer'
+            }
+          ]
+        },
+        {
+          name: 'Sổ quỹ',
+          icon: 'cash-book',
+          class: 'cash-book',
+          to: '/app/cash-book',
+          // to: 'cash-book',
+          subs: [
+            // {
+            //   name: 'Phiếu thu',
+            //   to: 'receipt'
+            // },
+            // {
+            //   name: 'Phiếu chi',
+            //   to: 'payment'
+            // },
+            {
+              name: 'Sổ quỹ',
+              to: '/app/cash-book/cash-book'
+            }
+          ]
+        },
+        {
+          name: 'Báo cáo',
+          icon: 'report',
+          to: '/app/report',
+          subs: [
+            {
+              name: 'Báo cáo kho',
+              to: '/app/report/ware-house'
             },
             {
-              name: 'Danh sách đơn hàng',
-              to: '/app/orders'
-            },
-            {
-              name: 'Khách trả hàng',
-              to: '/app/orders/returns'
+              name: 'Báo cáo khách hàng',
+              to: '/app/report/customer'
             }
           ]
         },
@@ -129,10 +165,10 @@ export default {
           class: 'warehouse',
           to: '/app/warehouse',
           subs: [
-            {
-              name: 'Quản lý chi nhánh',
-              to: '/app/brands'
-            },
+            // {
+            //   name: 'Quản lý chi nhánh',
+            //   to: '/app/brands'
+            // },
             {
               name: 'Quản lý thuế',
               to: '/app/thue'
@@ -148,41 +184,6 @@ export default {
             {
               name: 'Phân quyền vai trò',
               to: '/app/warehouse/role-management'
-            }
-          ]
-        },
-        {
-          name: 'Đối tác và khách hàng',
-          icon: 'customer',
-          to: '/app/customer',
-          subs: [
-            {
-              name: 'Danh sách khách hàng',
-              to: '/app/list-customer'
-            },
-            {
-              name: 'Nhóm khách hàng',
-              to: '/app/group-customer'
-            }
-          ]
-        },
-        {
-          name: 'Sổ quỹ',
-          icon: 'cash-book',
-          to: '/app/cash-book',
-          // to: 'cash-book',
-          subs: [
-            {
-              name: 'Phiếu thu',
-              to: 'receipt'
-            },
-            {
-              name: 'Phiếu chi',
-              to: 'payment'
-            },
-            {
-              name: 'Sổ quỹ',
-              to: 'cash-book'
             }
           ]
         }
@@ -237,20 +238,22 @@ export default {
   .el-menu {
     background: $color--bg1;
 
-    :deep(.order) {
-
-        .el-icon {
+    :deep(.cash-book) {
+      .el-icon:first-child {
+        position: relative;
+        left: -8px;
           img {
-            background: #fff;
+            width: 50px;
+            height: 50px;
           }
         }
-
     }
   }
 
   .chatting {
     padding-top: 20px;
     position: relative;
+    padding-bottom: 12px;
 
     &::before {
       content: '';
@@ -263,8 +266,12 @@ export default {
     }
 
     .thumbnail {
-      margin-top: 24px;
+      margin-top: 12px;
       cursor: pointer;
+
+      img {
+        width: 120px;
+      }
     }
 
     a {
