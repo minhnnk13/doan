@@ -120,8 +120,8 @@ export default {
       router.push({ name: 'BrowseGoods', params: { id: importInfo.importID } })
     }
 
-    const checkPaymentStatus = (supplier) => {
-      if (supplier.status) {
+    const checkPaymentStatus = (importInfo) => {
+      if (importInfo.statusPayment) {
         return {
           type: 'success',
           label: 'Hoàn thành'
@@ -132,8 +132,8 @@ export default {
       }
     }
 
-    const checkStoreStatus = (supplier) => {
-      if (supplier.sttStore) {
+    const checkStoreStatus = (importInfo) => {
+      if (importInfo.sttStore) {
         return {
           type: 'success',
           label: 'Đã nhập kho'
@@ -144,8 +144,8 @@ export default {
       }
     }
 
-    const checkStatus = (supplier) => {
-      switch (supplier.status) {
+    const checkStatus = (importInfo) => {
+      switch (importInfo.status) {
         default: return {
           type: 'danger',
           label: 'Đã hủy'
@@ -154,6 +154,7 @@ export default {
           type: 'success',
           label: 'Hoàn thành'
         }
+        case enumeration.status.Confirmed:
         case enumeration.status.Trading: return {
           type: 'warning',
           label: 'Đang giao dịch'
