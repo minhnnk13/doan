@@ -32,8 +32,7 @@
         Thuế
       </div>
       <el-checkbox
-        v-model="importProducts.isTaxed"
-        @change="store.commit('import/reCalculateAllPrice')"
+        v-model="store.state.import.isTaxed"
       >
         Giá bao gồm thuế
       </el-checkbox>
@@ -53,9 +52,14 @@ export default {
       return store.state.import.import
     })
 
+    const isTaxed = computed(() => {
+      return store.state.import.isTaxed
+    })
+
     return {
       importProducts,
-      store
+      store,
+      isTaxed
     }
   }
 }

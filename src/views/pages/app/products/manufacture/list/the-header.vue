@@ -10,6 +10,7 @@
         size="large"
         placeholder="Tìm kiếm theo mã nhà cung cấp, tên nhà cung cấp, SĐT"
         :prefix-icon="searchIcon"
+        @keyup="handleSearchInput"
       />
     </div>
   </div>
@@ -18,8 +19,10 @@
 <script>
 import { Search } from '@element-plus/icons-vue'
 import { computed, ref, toRefs } from 'vue'
+import debounce from 'lodash'
+
 export default {
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'keyup'],
 
   props: {
     modelValue: {
@@ -36,9 +39,15 @@ export default {
         emit('update:modelValue', value)
       }
     })
+
+    const handleSearchInput = debounce(() => {
+      emit('keyup')
+    }, 5000)
+
     return {
       searchIcon,
-      productSearchValue
+      productSearchValue,
+      handleSearchInput
     }
   }
 }

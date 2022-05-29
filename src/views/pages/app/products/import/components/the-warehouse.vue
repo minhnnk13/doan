@@ -53,7 +53,7 @@
             :key="index"
             class="content"
           >
-            {{ `${product.quantity} x ${product.productName}` }}
+            {{ `${product.saleQuantity} x ${product.productName}` }}
           </div>
         </div>
       </div>

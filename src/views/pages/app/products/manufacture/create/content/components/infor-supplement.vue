@@ -4,22 +4,20 @@
       Thông tin bổ sung
     </div>
     <div />
-    <div class="supplement__fax">
-      <text-field
-        label="Số fax"
-        v-model="fax"
-      />
-    </div>
     <div class="supplement__taxCode">
       <text-field
         label="Mã số thuế"
-        v-model="taxCode"
+        :is-number="true"
+        v-model="supplier.taxIdentificationNumber"
       />
     </div>
-    <div class="supplement__website">
-      <text-field
-        label="Website"
-        v-model="website"
+    <div class="supplement-status">
+      <div class="state-title">
+        Đang giao dịch
+      </div>
+      <el-checkbox
+        size="large"
+        v-model="supplier.status"
       />
     </div>
   </div>
@@ -27,57 +25,19 @@
 
 <script>
 import { computed, toRefs } from 'vue'
-
-const UPDATE = 'update:modelValue'
+import { useStore } from 'vuex'
 
 export default {
-
-  emits: [UPDATE],
-
-  props: {
-    modelValue: {
-      type: Object,
-      default: () => {}
-    }
-  },
-
   setup (props, { emit }) {
     const { modelValue } = toRefs(props)
-    const fax = computed({
-      get: () => modelValue.value.fax,
+    const store = useStore()
 
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.fax = value
-        emit(UPDATE, model)
-      }
-    })
-
-    const taxCode = computed({
-      get: () => modelValue.value.taxCode,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.taxCode = value
-        emit(UPDATE, model)
-      }
-    })
-
-    const website = computed({
-      get: () => modelValue.value.website,
-
-      set: (value) => {
-        const model = { ...modelValue.value }
-        model.website = value
-        emit(UPDATE, model)
-      }
+    const supplier = computed(() => {
+      return store.state.supplier.supplier
     })
 
     return {
-      fax,
-      taxCode,
-      website
-
+      supplier
     }
   }
 }
@@ -85,15 +45,27 @@ export default {
 
 <style lang="scss" scoped>
 .supplement {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  // display: grid;
+  // grid-template-columns: 1fr 1fr;
   background: #fff;
   padding: 24px;
-  gap: 24px;
 
   &__title {
-      font-weight: bold;
+    font-weight: bold;
   }
 
+  .supplement__taxCode {
+    margin-top: 24px;
+  }
+
+  .supplement-status {
+    display: flex;
+    align-items: center;
+    margin-top: 24px;
+
+    .state-title {
+      margin-right: 24px;
+    }
+  }
 }
 </style>

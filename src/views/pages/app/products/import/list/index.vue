@@ -55,7 +55,7 @@ export default {
   setup () {
     const store = useStore()
     const pageSizes = reactive([5, 25, 50, 75, 100])
-    const pageSize = ref(500)
+    const pageSize = ref(5)
 
     const params = computed(() => {
       return {
@@ -105,7 +105,9 @@ export default {
     }
 
     const handleChangePageSize = () => {
-      store.dispatch('import/getImports', params.value)
+      loadData().then((res) => {
+        tableData.value = res
+      })
     }
 
     return {

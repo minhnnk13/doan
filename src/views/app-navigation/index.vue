@@ -1,15 +1,15 @@
 <template>
   <div class="navigation">
     <div class="header">
-      CompanyName
+      Aquarium
     </div>
     <div class="items">
       <el-menu
         class=""
-        default-active="/app/dashboard"
+        default-active="/app/list-product"
         :router="true"
         text-color="#fff"
-        background-color="#021266"
+        background-color="#353b76"
         active-text-color="#3182CE"
       >
         <sub-nav
@@ -67,10 +67,22 @@ export default {
           to: '/app/dashboard'
         },
         {
-          name: 'Báo cáo',
-          icon: 'report',
-          to: '/app/report'
+          name: 'Đơn hàng',
+          icon: 'order',
+          class: 'order',
+          to: '/app/orders',
+          subs: [
+            {
+              name: 'Tạo đơn hàng',
+              to: '/app/orders/create'
+            },
+            {
+              name: 'Danh sách đơn hàng',
+              to: '/app/orders'
+            }
+          ]
         },
+
         {
           name: 'Sản phẩm',
           icon: 'product',
@@ -89,73 +101,89 @@ export default {
               to: '/app/import'
             },
             {
-              name: 'Kiểm hàng',
-              to: '/app/control'
-            },
-            {
               name: 'Nhà cung cấp',
               to: '/app/manufacture'
             }
+            // {
+            //   name: 'Điều chỉnh giá vốn',
+            //   to: '/app/capital'
+            // }
+
           ]
         },
 
         {
-          name: 'Đơn hàng',
-          icon: 'order',
-          class: 'order',
-          // to: 'cash-book',
-          subs: [
-            {
-              name: 'Tạo đơn hàng',
-              to: '/app/orders/create'
-            },
-            {
-              name: 'Danh sách đơn hàng',
-              to: '/app/orders'
-            },
-            {
-              name: 'Khách trả hàng',
-              to: '/app/orders/returns'
-            }
-          ]
-        },
-        {
-          name: 'Thiết lập kho',
-          icon: 'warehouse',
-          to: '/app/warehouse'
-        },
-        {
-          name: 'Đối tác và khách hàng',
+          name: 'Khách hàng',
           icon: 'customer',
           to: '/app/customer',
           subs: [
             {
               name: 'Danh sách khách hàng',
-              to: 'list-customer'
-            },
-            {
-              name: 'Nhóm khách hàng',
-              to: 'group-customer'
+              to: '/app/list-customer'
             }
           ]
         },
         {
           name: 'Sổ quỹ',
           icon: 'cash-book',
+          class: 'cash-book',
           to: '/app/cash-book',
           // to: 'cash-book',
           subs: [
-            {
-              name: 'Phiếu thu',
-              to: 'receipt'
-            },
-            {
-              name: 'Phiếu chi',
-              to: 'payment'
-            },
+            // {
+            //   name: 'Phiếu thu',
+            //   to: 'receipt'
+            // },
+            // {
+            //   name: 'Phiếu chi',
+            //   to: 'payment'
+            // },
             {
               name: 'Sổ quỹ',
-              to: 'cash-book'
+              to: '/app/cash-book/cash-book'
+            }
+          ]
+        },
+        {
+          name: 'Báo cáo',
+          icon: 'report',
+          to: '/app/report',
+          subs: [
+            {
+              name: 'Báo cáo kho',
+              to: '/app/report/ware-house'
+            },
+            {
+              name: 'Báo cáo khách hàng',
+              to: '/app/report/customer'
+            }
+          ]
+        },
+        {
+          name: 'Thiết lập kho',
+          icon: 'warehouse',
+          class: 'warehouse',
+          to: '/app/warehouse',
+          subs: [
+            // {
+            //   name: 'Quản lý chi nhánh',
+            //   to: '/app/brands'
+            // },
+            {
+              name: 'Quản lý thuế',
+              to: '/app/thue'
+            },
+            {
+              name: 'Quản lý nhân viên',
+              to: '/app/nhanvien'
+            },
+            {
+              name: 'Phân quyền vai trò',
+              to: '/app/warehouse/branch-management'
+            },
+            {
+              name: 'Phân quyền vai trò',
+              to: '/app/warehouse/role-management'
             }
           ]
         }
@@ -182,7 +210,7 @@ export default {
 <style lang="scss" scoped>
 .navigation {
   // width: 320px;
-  height: 100vh;
+  height: 100%;
   background: $color--bg1;
   text-align: center;
   color: #fff;
@@ -190,6 +218,7 @@ export default {
   padding-bottom: 40px;
   overflow-y: auto;
   overflow-x: hidden;
+  width: 270px;
 
   .header {
     padding: 20px;
@@ -209,20 +238,22 @@ export default {
   .el-menu {
     background: $color--bg1;
 
-    :deep(.order) {
-
-        .el-icon {
+    :deep(.cash-book) {
+      .el-icon:first-child {
+        position: relative;
+        left: -8px;
           img {
-            background: #fff;
+            width: 50px;
+            height: 50px;
           }
         }
-
     }
   }
 
   .chatting {
     padding-top: 20px;
     position: relative;
+    padding-bottom: 12px;
 
     &::before {
       content: '';
@@ -235,8 +266,12 @@ export default {
     }
 
     .thumbnail {
-      margin-top: 24px;
+      margin-top: 12px;
       cursor: pointer;
+
+      img {
+        width: 120px;
+      }
     }
 
     a {

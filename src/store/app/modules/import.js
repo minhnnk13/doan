@@ -14,7 +14,10 @@ export default {
     productsToImport: [],
     importList: [],
     importSupplier: {},
-    importCreateStep: 1
+    importCreateStep: 0,
+    isTaxed: false,
+    importsOfSupplier: [],
+    productPopover: {}
   },
 
   getters: {},
@@ -30,6 +33,7 @@ export default {
 
     setDefaultImportProducts (state) {
       state.import = {}
+      state.productsToImport = []
     },
 
     setProduct (state, product) {
@@ -37,29 +41,22 @@ export default {
     },
 
     setProductsToImport (state, importProduct) {
-      const findExisted = state.productsToImport.findIndex((product) => {
+      importProduct.unitName = importProduct.unitId.unitName
+
+      const foundProducts = state.productsToImport.find(product => {
         return product.productId === importProduct.productId
       })
-      if (findExisted >= 0) {
-        state.productsToImport[findExisted].quantity =
-          Number(state.productsToImport[findExisted].saleQuantity) + 1
-        state.productsToImport[findExisted].price += Number(
-          importProduct.unitPrice
-        )
-        state.import.importPrice = 0
-        state.import.saleQuantity = 0
-        state.import.productsToImport.map((product) => {
-          if (!state.import.isTaxed) {
-            product.price += product.price * 0.1
-          } else {
-            product.price += product.price
-          }
-          state.import.importPrice += product.price
-          state.import.saleQuantity += Number(product.saleQuantity)
-        })
-      } else {
+      if (!foundProducts) {
         state.productsToImport.push(importProduct)
+        state.import.productsToImport = state.productsToImport
       }
+    },
+
+    deleteProductsToImport (state, productId) {
+      const foundProducts = state.productsToImport.findIndex(product => {
+        return product.productId === productId
+      })
+      state.productsToImport.splice(foundProducts, 1)
       state.import.productsToImport = state.productsToImport
     },
 
@@ -72,31 +69,8 @@ export default {
       state.import.saleQuantity = 0
       state.import.renderImportPrice = 0
       state.import.productsToImport.map((product) => {
-        if (!state.import.isTaxed) {
-          product.price += product.price * 0.1
-        } else {
-          product.price += product.price
-        }
-
         state.import.importPrice += product.price
         state.import.saleQuantity += Number(product.saleQuantity)
-      })
-
-      state.import.renderImportPrice = formatPrice(
-        Number(state.import.importPrice)
-      )
-    },
-
-    reCalculateAllPrice (state) {
-      state.import.importPrice = 0
-      state.import.renderImportPrice = 0
-      state.import.productsToImport.map((product) => {
-        if (!state.import.isTaxed) {
-          product.price += product.price * 0.1
-        } else {
-          product.price -= product.price / 11
-        }
-        state.import.importPrice += product.price
       })
 
       state.import.renderImportPrice = formatPrice(
@@ -114,12 +88,46 @@ export default {
       state.import.supplier = supplier.supplierName
     },
 
+    setDefaultImportSupplier (state) {
+      state.importSupplier = {}
+    },
+
     pushCreatingImport (state, newImport) {
       state.importList.push(newImport)
     },
 
     setImportCreateStep (state, importCreateStep) {
       state.importCreateStep = importCreateStep
+    },
+
+    setIsTaxed (state, isTaxed) {
+      state.isTaxed = isTaxed
+    },
+
+    setImportsOfSupplier (state, importsOfSupplier) {
+      state.importsOfSupplier = importsOfSupplier
+    },
+
+    setProductPopover (state, productPopover) {
+      state.productPopover = productPopover
+    },
+
+    setDateProduct (state, warehouse) {
+      state.productsToImport.forEach((product) => {
+        if (product.productId === warehouse.productId) {
+          product.saleQuantity = warehouse.addedQuantity
+          product.productBatchId = warehouse.productBatchId
+        }
+      })
+    },
+
+    setDefaultSaleQuantity (state, productId) {
+      const foundInd = state.productsToImport.findIndex(prod => {
+        return prod.productId === productId
+      })
+
+      state.productsToImport[foundInd].saleQuantity = ''
+      state.import.productsToImport = state.productsToImport
     }
   },
 
@@ -158,11 +166,14 @@ export default {
       payload.branchId = 1
       payload.paymentType = 1
       payload.employee = getUserInfo().userId
+      payload.supplierId = context.state.importSupplier.supplierId
       payload.products = payload.productsToImport
+      if (payload.status) payload.statusImport = payload.status
       return new Promise((resolve, reject) => {
         authAxios.post('/import', payload).then((res) => {
-          if (res) context.commit('setImportCreateStep', 4)
-        })
+          // if (res) context.commit('setImportCreateStep', 3)
+          resolve(res.data)
+        }).catch(err => reject(err))
       })
     },
 
@@ -174,7 +185,8 @@ export default {
             if (res.data) {
               res.data.statusImport = res.data.status
               res.data.statusStore = res.data.sttStore
-              res.data.productsToImport = res.data.listProduct
+              res.data.productsToImport = res.data.products
+
               res.data.productsToImport.forEach((productInfo) => {
                 productInfo.renderPrice = formatPrice(
                   Number(productInfo.price)
@@ -183,19 +195,38 @@ export default {
                   Number(productInfo.unitPrice)
                 )
               })
+
               res.data.renderImportPrice = formatPrice(res.data.importPrice)
               context.commit('setImportProducts', res.data)
               context.commit(
                 'setImportProductsFromResponse',
-                res.data.listProduct
+                res.data.products
               )
-              context.commit('setImportCreateStep', 4)
+              const supplier = res.data.supplierId
+              context.commit('setImportSupplier', supplier)
+
+              if (res.data.status === enumeration.status.Trading && !res.data.sttStore && !res.data.statusPayment) context.commit('setImportCreateStep', 1)
+              if (res.data.status === enumeration.status.Confirmed && !res.data.sttStore && !res.data.statusPayment) context.commit('setImportCreateStep', 2)
+              if (res.data.sttStore || res.data.statusPayment) context.commit('setImportCreateStep', 3)
+              if (res.data.status === enumeration.status.Finished && res.data.statusPayment) context.commit('setImportCreateStep', 4)
               resolve(res.data)
             }
           })
           .catch((err) => {
             reject(err)
           })
+      })
+    },
+
+    getImportsBySupplierId: async (context, params) => {
+      return new Promise((resolve, reject) => {
+        authAxios
+          .get('import/supplier', { params })
+          .then((res) => {
+            context.commit('setImportsOfSupplier', res.data)
+            resolve(res.data)
+          })
+          .catch((err) => reject(err))
       })
     }
   }

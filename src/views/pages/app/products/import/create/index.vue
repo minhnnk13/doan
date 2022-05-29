@@ -13,7 +13,7 @@
       </template>
 
       <template #title>
-        Tạo đơn hàng
+        Tạo đơn nhập hàng
       </template>
     </the-header>
     <the-content />
@@ -29,6 +29,7 @@ import { setImportInfo, getImportInfo } from '@/utils/import-storage.js'
 import { useRouter, useRoute } from 'vue-router'
 import dayjs from 'dayjs'
 import enumeration from '@/common/enumeration.js'
+import { ElMessage } from 'element-plus'
 
 const PRODUCT_MODULE = 'product'
 
@@ -39,7 +40,7 @@ export default {
     const inputSearch = ref('')
     const store = useStore()
     const router = useRouter()
-
+    const orderConfirmed = false
     const params = computed(() => {
       return {
         pageIndex: 0,
@@ -48,41 +49,49 @@ export default {
       }
     })
 
+    const supplierParams = {
+      pageIndex: 0,
+      pageSize: 100,
+      search: ''
+    }
+
     const importProducts = computed(() => {
       return store.state.import.import
     })
-
-    const importCode = (length = 7) => {
-      var result = ''
-      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-      var charactersLength = characters.length
-      for (var i = 0; i < length; i++) {
-        result += characters.charAt(
-          Math.floor(Math.random() * charactersLength)
-        )
-      }
-      return result
-    }
-
+    const warehouse = computed(() => store.state.warehouse.selectedWarehouse)
     store.dispatch(`${PRODUCT_MODULE}/getProductsToImport`, params.value)
-    store.dispatch('supplier/getSuppliers')
+    store.dispatch('supplier/getSuppliers', supplierParams)
 
     const handleOrderClick = async () => {
+      if (!importProducts.value.supplierId) {
+        ElMessage({
+          type: 'error',
+          message: 'Vui lòng chọn nhà cung cấp'
+        })
+        return
+      }
       if (!importProducts.value.importId) {
-        importProducts.value.importId = importCode()
-        importProducts.value.status = 0
         importProducts.value.createdDate = dayjs(new Date()).format('DD/MM/YYYY HH:mm')
-        importProducts.value.statusPayment = enumeration.status.NotPayment
-        importProducts.value.statusStore = enumeration.status.WaitForImporting
+        importProducts.value.statusPayment = false
+        importProducts.value.statusStore = false
         importProducts.value.statusImport = enumeration.status.Trading
 
         // to-do: xử lí đổi enum thành text
       }
 
       await setImportInfo(importProducts.value)
-      router.push({ name: 'BrowseGoods', params: { id: importProducts.value?.importId } })
-      store.commit('import/setImportCreateStep', 2)
+
+      store.commit('import/setImportCreateStep', 1)
+      // Ktra nếu là sản phẩm thường thì sẽ không gọi api warehouse
+      // store.dispatch('warehouse/addWarehouse', warehouse.value)
+      store.dispatch('import/createImport', importProducts.value).then(res => {
+        if (res) router.push({ name: 'BrowseGoods', params: { id: res.importID } })
+      })
     }
+
+    onBeforeUnmount(() => {
+      store.commit('import/setDefaultImportProducts')
+    })
 
     return { handleOrderClick }
   }

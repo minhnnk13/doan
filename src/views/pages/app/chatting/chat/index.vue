@@ -6,24 +6,23 @@
       @scroll="onScroll"
     >
       <chat-space
-        v-for="(topic, index) in topics"
+        v-for="(topic) in topics"
         :key="topic"
-        :id="`chat-${index}`"
+        :id="`chat-${topic.topicId}`"
         @addMessage="addMessage"
         :topic="topic"
-        @showComments="$emit('showComments', topic.topicId)"
       />
 
-      <el-button
+      <!-- <el-button
         type="text"
         class="view-more"
         @click="$emit('loadMoreTopic')"
-        v-if="topics.length"
+        v-if="topics.length && !isLastPage"
       >
         Xem thêm
-      </el-button>
+      </el-button> -->
       <div
-        v-else
+        v-if="!topics.length"
         class="empty"
         style="text-align: center"
       >
@@ -43,6 +42,8 @@
 <script>
 import ChatSpace from './chat-space.vue'
 import NewThread from './new-thread.vue'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 export default {
   components: {
     ChatSpace,
@@ -59,6 +60,7 @@ export default {
   },
 
   setup (props, { emit }) {
+    const store = useStore()
     const addMessage = (message, id) => {
       emit('addMessage', message, id)
     }
@@ -66,6 +68,8 @@ export default {
     const addNewChat = (message) => {
       emit('addNewChat', message)
     }
+
+    const isLastPage = computed(() => store.getters['chat/isLastPage'])
 
     const onScroll = (event) => {
       const El = event.target
@@ -77,7 +81,8 @@ export default {
     return {
       addMessage,
       addNewChat,
-      onScroll
+      onScroll,
+      isLastPage
     }
   }
 }
@@ -99,7 +104,7 @@ export default {
     .container {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 32px;
       height: calc(100% - 120px);
       overflow: auto;
       margin: 0 -16px;

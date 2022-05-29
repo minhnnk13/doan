@@ -11,7 +11,7 @@ const routes = [
 
     redirect (to) {
       return {
-        path: `${to.path}/dashboard`
+        path: `${to.path}/list-product`
       }
     },
     component: PageIndex,
@@ -215,32 +215,32 @@ const routes = [
         component: () =>
           import(
             /* webpackChunkName: "capital" */ '@/pages/app/products/capital'
-          ),
+          )
 
-        children: [
-          {
-            path: '',
-            name: 'DetailManufacture',
-            meta: {
-              excludeHeader: true
-            },
-            component: () =>
-              import(
-                /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
-              )
-          },
-          {
-            path: ':id',
-            name: 'DetailManufacture',
-            meta: {
-              excludeHeader: true
-            },
-            component: () =>
-              import(
-                /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
-              )
-          }
-        ]
+        // children: [
+        //   {
+        //     path: '',
+        //     name: 'DetailManufacture',
+        //     meta: {
+        //       excludeHeader: true
+        //     },
+        //     component: () =>
+        //       import(
+        //         /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
+        //       )
+        //   },
+        //   {
+        //     path: ':id',
+        //     name: 'DetailManufacture',
+        //     meta: {
+        //       excludeHeader: true
+        //     },
+        //     component: () =>
+        //       import(
+        //         /* webpackChunkName: "detail-manufacture" */ '@/pages/app/products/manufacture/detail'
+        //       )
+        //   }
+        // ]
       },
 
       // #endregion
@@ -267,7 +267,8 @@ const routes = [
             path: 'create',
             name: 'CreateOrder',
             meta: {
-              pageName: 'Tạo đơn hàng'
+              pageName: 'Tạo đơn hàng',
+              excludeHeader: true
             },
             component: () =>
               import(/* webpackChunkName: "create-order" */ '@/pages/app/order/create')
@@ -294,7 +295,37 @@ const routes = [
           pageName: 'Thiết lập kho'
         },
         component: () =>
-          import(/* webpackChunkName: "warehouse" */ '@/pages/app/warehouse')
+          import(/* webpackChunkName: "warehouse" */ '@/pages/app/warehouse'),
+        children: [
+          {
+            path: 'branch-management',
+            name: 'BranchManagement',
+            meta: {
+              pageName: 'Quản lý chi nhánh'
+            },
+            component: () =>
+              import(/* webpackChunkName: "branch-management" */ '@/pages/app/warehouse/branch-management')
+          },
+          {
+            path: 'role-management',
+            name: 'RoleManagement',
+            meta: {
+              pageName: 'Phân quyền vai trò'
+            },
+            component: () =>
+              import(/* webpackChunkName: "role-management" */ '@/pages/app/warehouse/role-management')
+          }
+        ]
+      },
+
+      {
+        path: 'brands',
+        name: 'Brands',
+        meta: {
+          pageName: 'Quản lý chi nhánh'
+        },
+        component: () =>
+          import(/* webpackChunkName: "warehouse" */ '@/pages/app/warehouse/brands')
       },
 
       // #region Đối tác và khách hàng

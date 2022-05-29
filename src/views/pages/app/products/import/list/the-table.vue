@@ -31,15 +31,44 @@
     <el-table-column
       label="Trạng thái"
       prop="status"
-    />
+    >
+      <template #default="prop">
+        <div>
+          <el-tag
+            :type="checkStatus(prop.row).type"
+          >
+            {{ checkStatus(prop.row).label }}
+          </el-tag>
+        </div>
+      </template>
+    </el-table-column>
     <el-table-column
       label="Thanh toán"
       prop="statusPayment"
-    />
+    >
+      <template #default="prop">
+        <div>
+          <el-tag
+            :type="checkPaymentStatus(prop.row).type"
+          >
+            {{ checkPaymentStatus(prop.row).label }}
+          </el-tag>
+        </div>
+      </template>
+    </el-table-column>
     <el-table-column
       label="Nhập kho"
-      prop="sttStore"
-    />
+    >
+      <template #default="prop">
+        <div>
+          <el-tag
+            :type="checkStoreStatus(prop.row).type"
+          >
+            {{ checkStoreStatus(prop.row).label }}
+          </el-tag>
+        </div>
+      </template>
+    </el-table-column>
     <el-table-column
       label="Giá nhập"
       prop="renderImportPrice"
@@ -61,6 +90,8 @@
 import { ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import enumeration from '@/common/enumeration.js'
+
 export default {
   emits: ['handleSelectionChange'],
 
@@ -89,10 +120,55 @@ export default {
       router.push({ name: 'BrowseGoods', params: { id: importInfo.importID } })
     }
 
+    const checkPaymentStatus = (importInfo) => {
+      if (importInfo.statusPayment) {
+        return {
+          type: 'success',
+          label: 'Hoàn thành'
+        }
+      }
+      return {
+        label: 'Chưa thanh toán'
+      }
+    }
+
+    const checkStoreStatus = (importInfo) => {
+      if (importInfo.sttStore) {
+        return {
+          type: 'success',
+          label: 'Đã nhập kho'
+        }
+      }
+      return {
+        label: 'Chưa hoàn thành'
+      }
+    }
+
+    const checkStatus = (importInfo) => {
+      switch (importInfo.status) {
+        default: return {
+          type: 'danger',
+          label: 'Đã hủy'
+        }
+        case enumeration.status.Finished: return {
+          type: 'success',
+          label: 'Hoàn thành'
+        }
+        case enumeration.status.Confirmed:
+        case enumeration.status.Trading: return {
+          type: 'warning',
+          label: 'Đang giao dịch'
+        }
+      }
+    }
+
     return {
       tableHeight,
       tableRef,
-      handleDetailClick
+      handleDetailClick,
+      checkPaymentStatus,
+      checkStoreStatus,
+      checkStatus
     }
   }
 }

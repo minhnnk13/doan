@@ -4,34 +4,40 @@
     header-cell-class-name="table-head"
     :data="data"
     :max-height="tableHeight"
-    @selection-change="$emit('handleSelectionChange', $event)"
     :show-header="isShowHeaderTable"
+    @row-click="handleDetailClick"
     ref="tableRef"
   >
     <el-table-column
-      type="selection"
-      align="center"
-    />
-    <el-table-column
       label="Mã nhà cung cấp"
-      prop="productName"
+      prop="supplierCode"
     />
     <el-table-column
       label="Tên nhà cung cấp"
-      prop="saleQuantity"
+      prop="supplierName"
     />
     <el-table-column
       label="Email"
-      prop="stockQuantity"
+      prop="email"
     />
     <el-table-column
       label="Số điện thoại"
-      prop="createdDate"
+      prop="phone"
     />
     <el-table-column
       label="Trạng thái"
-      prop="retailPrice"
-    />
+    >
+      <template #default="prop">
+        <div>
+          <el-tag
+            effect="dark"
+            :type="checkStatus(prop.row).type"
+          >
+            {{ checkStatus(prop.row).label }}
+          </el-tag>
+        </div>
+      </template>
+    </el-table-column>
 
     <template #append>
       <slot name="pagination" />
@@ -40,9 +46,9 @@
 </template>
 
 <script>
-
 import baseStore from '@/views/pages/base/base-store'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 export default {
   emits: ['handleSelectionChange'],
 
@@ -58,33 +64,52 @@ export default {
     }
   },
 
-  setup () {
-    const tableHeight = ref(
-      window.innerHeight - 300
-    )
+  setup (props) {
+    const tableHeight = ref(window.innerHeight - 300)
     const tableRef = ref(null)
+
+    const router = useRouter()
+
+    const handleDetailClick = (supplier) => {
+      router.push({ name: 'DetailManufacture', params: { id: supplier?.supplierId } })
+    }
+
+    // to-do: check điều kiện hiển thị status
+    const checkStatus = (supplier) => {
+      if (supplier.status) {
+        return {
+          type: 'success',
+          label: 'Đang giao dịch'
+        }
+      }
+      return {
+        type: 'danger',
+        label: 'Ngừng giao dịch'
+      }
+    }
 
     return {
       tableHeight,
-      tableRef
+      tableRef,
+      handleDetailClick,
+      checkStatus
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
 :deep(.el-table__inner-wrapper) {
-    .table-head {
-      background: rgba(217, 218, 218, 0.8);
-    }
-
-    .el-table__append-wrapper {
-      display: flex;
-      justify-content: flex-end;
-      position: fixed;
-      right: 24px;
-      bottom: 24px;
-    }
+  .table-head {
+    background: rgba(217, 218, 218, 0.8);
   }
+
+  .el-table__append-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+  }
+}
 </style>

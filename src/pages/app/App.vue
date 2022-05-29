@@ -18,27 +18,36 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import AppNavigation from '@/views/app-navigation'
 import AppHeader from '@/views/app-header'
 import { setImportsInfo } from '@/utils/import-storage.js'
+import { onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { removeAuthToken } from '@/utils/auth'
+import { redirectToApp } from '@/common/common-fn'
+import { App } from '@/common/constant'
 
-export default {
-  components: {
-    AppNavigation,
-    AppHeader
-  },
-  mounted () {
-    setImportsInfo()
-  }
-}
+const MODULE_NAME = 'auth'
+
+const store = useStore()
+onMounted(async () => {
+  // const isDestroyApp = await store.dispatch(`${MODULE_NAME}/checkToken`)
+  // if (isDestroyApp) {
+  //   redirectToApp(App.account)
+  //   removeAuthToken()
+  // }
+  setImportsInfo()
+})
+
 </script>
 
 <style lang="scss" scoped>
 .app {
   height: 100vh;
   width: 100vw;
-  display: flex;
+  display: grid;
+  grid-template-columns: 270px calc(100vw - 270px);
 
   #content-header {
     flex: 1;
