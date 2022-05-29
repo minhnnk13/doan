@@ -9,7 +9,7 @@
       <div
         class="close-icon"
         @click="handleDeleteClick"
-        v-if="importCreateStep !== 4"
+        v-if="importCreateStep === 0"
       >
         <el-icon><close-bold /></el-icon>
       </div>
