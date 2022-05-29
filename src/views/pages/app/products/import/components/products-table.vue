@@ -96,7 +96,7 @@
       label="Thành tiền"
       prop="renderPrice"
     />
-    <el-table-column>
+    <el-table-column v-if="importCreateStep === 0">
       <template #default="prop">
         <el-icon
           class="delete-icon"
