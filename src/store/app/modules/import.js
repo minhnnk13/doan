@@ -115,7 +115,7 @@ export default {
     setDateProduct (state, warehouse) {
       state.productsToImport.forEach((product) => {
         if (product.productId === warehouse.productId) {
-          product.saleQuantity = warehouse.addedQuantity
+          product.saleQuantity = Number(warehouse.quantity)
           product.productBatchId = warehouse.productBatchId
         }
       })
@@ -168,6 +168,9 @@ export default {
       payload.employee = getUserInfo().userId
       payload.supplierId = context.state.importSupplier.supplierId
       payload.products = payload.productsToImport
+      payload.products.forEach(product => {
+        product.unitPrice = parseInt(product.unitPrice)
+      })
       if (payload.status) payload.statusImport = payload.status
       return new Promise((resolve, reject) => {
         authAxios.post('/import', payload).then((res) => {

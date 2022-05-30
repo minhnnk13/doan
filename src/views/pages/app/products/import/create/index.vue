@@ -71,7 +71,9 @@ export default {
         return
       }
       if (!importProducts.value.importId) {
-        importProducts.value.createdDate = dayjs(new Date()).format('DD/MM/YYYY HH:mm')
+        importProducts.value.createdDate = dayjs(new Date()).format(
+          'DD/MM/YYYY HH:mm'
+        )
         importProducts.value.statusPayment = false
         importProducts.value.statusStore = false
         importProducts.value.statusImport = enumeration.status.Trading
@@ -83,9 +85,13 @@ export default {
 
       store.commit('import/setImportCreateStep', 1)
       // Ktra nếu là sản phẩm thường thì sẽ không gọi api warehouse
-      // store.dispatch('warehouse/addWarehouse', warehouse.value)
-      store.dispatch('import/createImport', importProducts.value).then(res => {
-        if (res) router.push({ name: 'BrowseGoods', params: { id: res.importID } })
+      store.dispatch('warehouse/addWarehouse', warehouse.value).then((res) => {
+        store.commit('import/setDateProduct', res)
+        store
+          .dispatch('import/createImport', importProducts.value)
+          .then((res) => {
+            if (res) { router.push({ name: 'BrowseGoods', params: { id: res.importID } }) }
+          })
       })
     }
 
