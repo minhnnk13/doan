@@ -115,7 +115,8 @@ export default {
     setDateProduct (state, warehouse) {
       state.productsToImport.forEach((product) => {
         if (product.productId === warehouse.productId) {
-          product.saleQuantity = warehouse.quantity
+          product.saleQuantity = warehouse.addedQuantity
+          product.productBatchId = warehouse.productBatchId
         }
       })
     },

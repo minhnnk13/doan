@@ -59,7 +59,13 @@
 
         <div class="element__value">
           :
-          <span v-if="element.value !== null || element.value !== undefined || element.value !== ''">{{ element.value }}</span>
+          <span
+            v-if="
+              element.value !== null ||
+                element.value !== undefined ||
+                element.value !== ''
+            "
+          >{{ element.value }}</span>
           <span v-else>...</span>
         </div>
       </div>
@@ -125,7 +131,6 @@ export default {
           label: 'Địa chỉ',
           value: supplier.value.address
         }
-
       ]
     })
 
@@ -145,16 +150,20 @@ export default {
     const handleDeleteClick = () => {
       messageBox.showConfirm(
         'Bạn có đồng ý xóa nhà cung cấp này?',
-        () => {
-          store.dispatch('supplier/deleteSupplier', route.params.id).then((res) => {
-            if (res.status === 200) {
-              ElMessage({
-                type: 'success',
-                message: 'Xóa thành công'
+        (action) => {
+          if (action === 'confirm') {
+            store
+              .dispatch('supplier/deleteSupplier', route.params.id)
+              .then((res) => {
+                if (res.status === 200) {
+                  ElMessage({
+                    type: 'success',
+                    message: 'Xóa thành công'
+                  })
+                  router.push({ name: 'ListManufacture' })
+                }
               })
-              router.push({ name: 'ListManufacture' })
-            }
-          })
+          }
         },
         {
           confirmButtonText: 'Đồng ý',
@@ -188,12 +197,10 @@ export default {
     }
 
     &__toolbar {
-
       .el-button {
         color: $color--primary;
       }
     }
-
   }
 
   &__content {
@@ -235,10 +242,8 @@ export default {
 
       .el-button {
         color: $color--primary;
-
       }
     }
   }
-
 }
 </style>
