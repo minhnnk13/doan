@@ -38,129 +38,129 @@ const table = () => {
           prop: ''
         }
       ]
+    },
+
+    {
+      tabActive: Enumeration.ManufactureTabs.Debt,
+      columns: [
+        {
+          name: 'Mã phiếu',
+          prop: ''
+        },
+        {
+          name: 'Người tạo',
+          prop: ''
+        },
+        {
+          name: 'Ngày tạo',
+          prop: ''
+        },
+        {
+          name: 'Ngày ghi nhận',
+          prop: ''
+        },
+        {
+          name: 'Ghi chú',
+          prop: ''
+        },
+        {
+          name: 'Giá trị thay đổi',
+          prop: ''
+        },
+        {
+          name: 'Công nợ',
+          prop: ''
+        }
+
+      ]
+    },
+
+    {
+      tabActive: Enumeration.ManufactureTabs.Contact,
+      columns: [
+        {
+          name: 'Tên liên hệ',
+          prop: ''
+        },
+        {
+          name: 'Số điện thoại',
+          prop: ''
+        },
+        {
+          name: 'Email',
+          prop: ''
+        },
+        {
+          name: 'Chức vụ',
+          prop: ''
+        },
+        {
+          name: 'Bộ phận',
+          prop: ''
+        }
+
+      ]
+    },
+
+    {
+      tabActive: Enumeration.ManufactureTabs.Address,
+      columns: [
+        {
+          name: 'Nhãn',
+          prop: ''
+        },
+        {
+          name: 'Địa chỉ',
+          prop: ''
+        },
+        {
+          name: 'Phường xã',
+          prop: ''
+        },
+        {
+          name: 'Quận huyện',
+          prop: ''
+        },
+        {
+          name: 'Tỉnh thành phố',
+          prop: ''
+        },
+        {
+          name: 'Mã bưu điện',
+          prop: ''
+        },
+        {
+          name: 'Số điện thoại',
+          prop: ''
+        },
+        {
+          name: 'Email',
+          prop: ''
+        }
+
+      ]
+    },
+
+    {
+      tabActive: Enumeration.ManufactureTabs.Note,
+      columns: [
+        {
+          name: 'Ghi chú',
+          prop: ''
+        },
+
+        {
+          name: 'Người thêm',
+          prop: ''
+        },
+
+        {
+          name: 'Thời gian',
+          prop: ''
+        }
+
+      ]
     }
-
-    // {
-    //   tabActive: Enumeration.ManufactureTabs.Debt,
-    //   columns: [
-    //     {
-    //       name: 'Mã phiếu',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Người tạo',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Ngày tạo',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Ngày ghi nhận',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Ghi chú',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Giá trị thay đổi',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Công nợ',
-    //       prop: ''
-    //     }
-
-    //   ]
-    // },
-
-    // {
-    //   tabActive: Enumeration.ManufactureTabs.Contact,
-    //   columns: [
-    //     {
-    //       name: 'Tên liên hệ',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Số điện thoại',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Email',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Chức vụ',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Bộ phận',
-    //       prop: ''
-    //     }
-
-    //   ]
-    // },
-
-    // {
-    //   tabActive: Enumeration.ManufactureTabs.Address,
-    //   columns: [
-    //     {
-    //       name: 'Nhãn',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Địa chỉ',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Phường xã',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Quận huyện',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Tỉnh thành phố',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Mã bưu điện',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Số điện thoại',
-    //       prop: ''
-    //     },
-    //     {
-    //       name: 'Email',
-    //       prop: ''
-    //     }
-
-    //   ]
-    // },
-
-    // {
-    //   tabActive: Enumeration.ManufactureTabs.Note,
-    //   columns: [
-    //     {
-    //       name: 'Ghi chú',
-    //       prop: ''
-    //     },
-
-    //     {
-    //       name: 'Người thêm',
-    //       prop: ''
-    //     },
-
-    //     {
-    //       name: 'Thời gian',
-    //       prop: ''
-    //     }
-
-    //   ]
-    // }
 
   ])
 

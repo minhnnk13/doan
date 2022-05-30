@@ -47,7 +47,6 @@ export default {
 <style lang="scss" scoped>
 
 .el-sub-menu {
-
   :deep(.el-sub-menu__title) {
     &:hover {
       background: $color--gradient;
@@ -55,8 +54,6 @@ export default {
   }
 }
 .item {
-  margin: 16px 0 ;
-
   &:hover {
     background: $color--gradient;
   }
@@ -70,11 +67,6 @@ export default {
       width: 100%;
       height: 100%;
     }
-  }
-
-  :deep(.el-sub-menu__icon-arrow) {
-    color: #298ee6;
-    font-size: 20px;
   }
 }
 </style>

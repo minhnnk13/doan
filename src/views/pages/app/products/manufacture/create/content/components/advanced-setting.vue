@@ -6,26 +6,28 @@
 
     <div class="setting__default-cost">
       <div class="label">
-        Sử dụng giá mặc định là giá nhập
+        Giá mặc định
       </div>
-      <!-- <el-select>
+      <el-select>
         <el-option>Giá nhập</el-option>
-      </el-select> -->
+      </el-select>
     </div>
 
-    <!-- <div class="setting__default-tax">
+    <div class="setting__default-tax">
       <div class="label">
         Thuế mặc định
       </div>
       <el-select>
         <el-option>Chọn thuế mặc định</el-option>
       </el-select>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+
+}
 </script>
 
 <style lang="scss" scoped>
@@ -37,7 +39,7 @@ export default {}
   gap: 24px;
 
   &__title {
-    font-weight: bold;
+      font-weight: bold;
   }
 
   .label {

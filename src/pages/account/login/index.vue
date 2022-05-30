@@ -9,7 +9,7 @@
       </div>
 
       <div class="logo">
-        Aquarium
+        CompanyName
       </div>
 
       <base-form

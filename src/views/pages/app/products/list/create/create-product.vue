@@ -5,7 +5,7 @@
         class="back-container"
         @click="handleBackClick"
       >
-        {{ routerBack }}
+        {{ "Quay lại danh sách sản phẩm " }}
       </div>
       <div class="btn-container">
         <el-button @click="handleBackClick">
@@ -27,23 +27,6 @@
     </div>
     <div class="create-content-container">
       <div class="left-container">
-        <div class="content-wrapper management-container">
-          <div class="title-container">
-            Hình thức quản lý
-          </div>
-          <el-radio-group
-            class="management-button-container"
-            v-model="canExpired"
-          >
-            <el-radio :label="0">
-              Sản phẩm thường
-            </el-radio>
-            <el-radio :label="1">
-              Sản phẩm theo lô date/HSD
-            </el-radio>
-          </el-radio-group>
-        </div>
-
         <div class="content-wrapper detail-container">
           <div class="title-container">
             Thông tin chung
@@ -193,7 +176,6 @@ export default {
     const store = useStore()
     const isEdit = ref(false)
     const addInfoDialog = ref(null)
-    const routerBack = '< Quay lại danh sách sản phẩm '
     const infoAdd = 3
 
     if (route.params?.productId) {
@@ -203,18 +185,7 @@ export default {
     store.dispatch('unit/getUnits')
 
     const product = computed(() => store.state.product.product)
-    const canExpired = computed({
-      get () {
-        if (product.value.canExpired === true) return 1
-        if (product.value.canExpired === false) return 0
-        return product.value.canExpired
-      },
 
-      set (newVal) {
-        if (newVal) product.value.canExpired = true
-        else product.value.canExpired = false
-      }
-    })
     const handleShowAddInfoClick = () => {
       addInfoDialog.value.handleOpenPopupClick()
     }
@@ -244,7 +215,7 @@ export default {
           product.value.createdDate = dayjs(new Date()).format('YYYY-MM-DD')
         }
         product.value.modifyCreate = dayjs(new Date()).format('YYYY-MM-DD')
-        product.value.saleQuantity = 0
+        product.value.supplierId = 1
 
         if (isEdit.value) {
           product.value.isSale = product.value.sale
@@ -283,9 +254,7 @@ export default {
       callbackMessageBox,
       handleShowAddInfoClick,
       infoAdd,
-      addInfoDialog,
-      routerBack,
-      canExpired
+      addInfoDialog
     }
   },
 
@@ -396,12 +365,6 @@ export default {
           .img-description {
             font-weight: 700;
           }
-        }
-      }
-
-      .management-container {
-        .management-button-container {
-          padding: 12px;
         }
       }
     }

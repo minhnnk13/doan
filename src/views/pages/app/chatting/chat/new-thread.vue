@@ -22,7 +22,7 @@
           Cuộc trò chuyện mới
         </div>
 
-        <!-- <div class="assign">
+        <div class="assign">
           <div class="label">
             Giao việc
           </div>
@@ -37,7 +37,7 @@
               :value="user.id"
             />
           </el-select>
-        </div> -->
+        </div>
         <div
           class="close"
           @click="handleComponent(false)"
@@ -76,6 +76,10 @@ export default {
     const isActive = ref(false)
     const handleComponent = (value) => {
       isActive.value = value
+
+      if (value) {
+        store.dispatch(`${USER_MODULE}/getUsers`)
+      }
     }
     const userID = ref(
       getUserInfo().userId

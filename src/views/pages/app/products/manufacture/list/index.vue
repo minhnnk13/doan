@@ -12,10 +12,7 @@
       </router-link>
     </div>
     <div class="manage-warehouse__container">
-      <the-header
-        v-model="inputSearch"
-        @keyup="handleKeyUp"
-      />
+      <the-header v-model="inputSearch" />
       <header-table
         v-if="!isShowHeaderTable"
         v-model="checkedSelectProduct"
@@ -30,6 +27,14 @@
         ref="tableRef"
       >
         <template #pagination>
+          <!-- <el-pagination
+          v-model:currentPage="currentPage4"
+          v-model:page-size="pageSize4"
+          :default-page-size="5"
+          :pager-count="4"
+          layout="prev, pager, next"
+          :total="100"
+        /> -->
           <div class="paging-container">
             <div style="margin-right: 12px; margin-top: 6px">
               {{ "Hiển thị" }}
@@ -64,7 +69,7 @@ import TheTable from './the-table.vue'
 import baseStore from '@/views/pages/base/base-store'
 import { useStore } from 'vuex'
 
-const PRODUCT_MODULE = 'supplier'
+const PRODUCT_MODULE = 'product'
 
 export default {
   components: { theHeader, HeaderTable, TheTable },
@@ -80,13 +85,13 @@ export default {
     })
 
     const inputSearch = ref('')
-    const pageSizes = reactive([5, 25, 50, 75, 100])
+    const pageSizes = reactive([5, 10, 15, 20, 25, 30, 35, 40, 50, 55])
     const store = useStore()
     const config = reactive({
       storeConfig: {
-        moduleName: 'supplier',
+        moduleName: 'product',
         entityKey: params,
-        entityName: 'Suppliers'
+        entityName: 'Products'
       }
     })
     const { loadData } = baseStore(config)
@@ -131,13 +136,7 @@ export default {
     }
 
     const handleChangePageSize = () => {
-      loadData().then((res) => {
-        tableData.value = res
-      })
-    }
-
-    const handleKeyUp = () => {
-      store.dispatch(`${PRODUCT_MODULE}/getSuppliers`, params.value)
+      store.dispatch(`${PRODUCT_MODULE}/getProducts`, params.value)
     }
 
     return {
@@ -151,9 +150,7 @@ export default {
       clearSelected,
       pageSizes,
       pageSize,
-      handleChangePageSize,
-      inputSearch,
-      handleKeyUp
+      handleChangePageSize
     }
   }
 }

@@ -33,12 +33,6 @@ const formatPrice = (value) => {
   return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 }
 
-const formatDate = (value) => {
-  const option = { timeZone: 'UTC' }
-
-  const date = new Date(value)
-  return date.toLocaleString('en-GB', option)
-}
 class CommonFn {
   showMask (container) {
     const loadingInstance = ElLoading.service({
@@ -56,9 +50,4 @@ class CommonFn {
 }
 export default new CommonFn()
 
-export {
-  focusFirstControl,
-  redirectToApp,
-  formatPrice,
-  formatDate
-}
+export { focusFirstControl, redirectToApp, formatPrice }

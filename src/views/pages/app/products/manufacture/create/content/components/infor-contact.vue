@@ -5,31 +5,28 @@
         label="Tên nhà cung cấp"
         :allow-blank="false"
         placeholder="Nhập tên nhà cung cấp"
-        v-model="supplier.supplierName"
+        v-model="name"
       />
     </div>
     <div class="contact__code">
       <text-field
         label="Mã nhà cung cấp"
         :allow-blank="false"
-        :is-number="true"
-        v-model="supplier.supplierCode"
+        v-model="code"
       />
     </div>
     <div class="contact__email">
       <text-field
         label="Email"
         :is-email="true"
-        :allow-blank="false"
-        v-model="supplier.email"
+        v-model="email"
       />
     </div>
     <div class="contact__phone">
       <text-field
         label="Số điện thoại"
         :is-phone="true"
-        :allow-blank="false"
-        v-model="supplier.phone"
+        v-model="phoneNumber"
       />
     </div>
   </div>
@@ -37,17 +34,66 @@
 
 <script>
 import { computed, toRefs } from 'vue'
-import { useStore } from 'vuex'
+
+const UPDATE = 'update:modelValue'
 
 export default {
 
+  emits: [UPDATE],
+
+  props: {
+    modelValue: {
+      type: Object,
+      default: () => {}
+    }
+  },
+
   setup (props, { emit }) {
-    const store = useStore()
-    const supplier = computed(() => {
-      return store.state.supplier.supplier
+    const { modelValue } = toRefs(props)
+    const name = computed({
+      get: () => modelValue.value.name,
+
+      set: (value) => {
+        const model = { ...modelValue.value }
+        model.name = value
+        emit(UPDATE, model)
+      }
+    })
+
+    const code = computed({
+      get: () => modelValue.value.code,
+
+      set: (value) => {
+        const model = { ...modelValue.value }
+        model.code = value
+        emit(UPDATE, model)
+      }
+    })
+
+    const email = computed({
+      get: () => modelValue.value.email,
+
+      set: (value) => {
+        const model = { ...modelValue.value }
+        model.email = value
+        emit(UPDATE, model)
+      }
+    })
+
+    const phone = computed({
+      get: () => modelValue.value.phone,
+
+      set: (value) => {
+        const model = { ...modelValue.value }
+        model.phone = value
+        emit(UPDATE, model)
+      }
     })
     return {
-      supplier
+      name,
+      code,
+      email,
+      phone
     }
   }
 }

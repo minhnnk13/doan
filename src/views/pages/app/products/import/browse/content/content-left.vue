@@ -30,7 +30,7 @@
 
     <the-payment v-if="importCreateStep === 3" />
 
-    <the-warehouse v-if="importCreateStep === 3 && importProduct?.statusStore" />
+    <the-warehouse v-if="importCreateStep === 3 && importProduct?.status === 11" />
   </div>
 </template>
 
@@ -43,7 +43,6 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { setImportInfo, getImportInfo } from '@/utils/import-storage.js'
 import { useRouter, useRoute } from 'vue-router'
-import enumeration from '@/common/enumeration.js'
 
 export default {
   components: {

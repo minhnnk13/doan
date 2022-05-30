@@ -147,8 +147,6 @@ export default {
 
     const handleSelect = (product) => {
       store.commit('import/setProductsToImport', product)
-      store.dispatch('warehouse/getWarehouses', product.productId)
-      store.commit('warehouse/setSelectedProduct', product)
     }
 
     const handleSupplierSelect = (supplier) => {

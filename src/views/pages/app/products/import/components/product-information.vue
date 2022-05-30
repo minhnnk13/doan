@@ -55,22 +55,23 @@ export default {
     const importProducts = computed(() => {
       return store.state.import.import
     })
-    const importCreateStep = computed(() => {
-      return store.state.import.importCreateStep
-    })
     const importProductTag = computed(() => {
       if (importProducts.value.statusImport === enumeration.status.Finished) {
         return { type: 'success', title: 'Hoàn thành' }
       }
 
-      if (importCreateStep.value === 1) {
-        return { type: '', title: 'Đặt hàng' }
+      if (importProducts.value.statusPayment === enumeration.status.Trading) {
+        return { type: 'warning', title: 'Đang giao dịch' }
       }
 
-      return { type: 'warning', title: 'Đang giao dịch' }
+      return { type: '', title: 'Đặt hàng' }
+
+      // case enumeration.status.Cancel:
+
+      //   return { type: 'danger', title: 'Đã hủy' }
     })
 
-    return { importProductTag, importCreateStep }
+    return { importProductTag }
   }
 }
 </script>

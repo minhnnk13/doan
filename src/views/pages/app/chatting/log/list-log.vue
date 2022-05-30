@@ -27,47 +27,12 @@
       />
       <el-table-column
         label="Ngày"
-        prop="createdDate"
-      >
-        <template #default="props">
-          {{ formatDate(props.row.createdDate) }}
-        </template>
-      </el-table-column>
+        prop="date"
+      />
       <el-table-column
         label="Người được giao"
         prop="assign"
-      >
-        <template #default="props">
-          <el-popover
-            placement="bottom"
-            :width="200"
-            trigger="click"
-            :ref="`poper-${props.row.topicId}`"
-          >
-            <template #reference>
-              <el-button type="text">
-                {{ props.row.assignTo }}
-              </el-button>
-            </template>
-
-            <template #default>
-              <div class="select-assign">
-                <div
-                  class="option"
-                  v-for="(user, index) in users"
-                  :key="index"
-                  @click="() => {
-                    this.$refs[`poper-${props.row.topicId}`].hide()
-                    editAssignTopic(props.row, user)
-                  }"
-                >
-                  {{ user.name }}
-                </div>
-              </div>
-            </template>
-          </el-popover>
-        </template>
-      </el-table-column>
+      />
       <el-table-column
         width="100"
         align="center"
@@ -110,10 +75,9 @@
 <script>
 import { Checked, ChatDotRound, Delete } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
-import { computed, onMounted, ref } from 'vue-demi'
-import { getUserInfo } from '@/utils/auth'
+import { computed } from 'vue-demi'
 const MODULE_NAME = 'chat'
-const USER_MODULE = 'user'
+
 export default {
   components: {
     Checked,
@@ -121,54 +85,18 @@ export default {
     Delete
   },
 
-  emits: ['onCheck', 'redirectChat', 'deleteChat', 'onAssignTopic'],
+  emits: ['onCheck', 'redirectChat', 'deleteChat'],
 
   setup () {
     const store = useStore()
 
-    onMounted(async () => {
-      await store.dispatch(`${USER_MODULE}/getUsers`)
-    })
-    const users = computed(() => store.state[USER_MODULE].users)
     const topics = computed(() => store.getters[`${MODULE_NAME}/notDoneTopics`])
-    const userID = ref(
-      getUserInfo().userId
-    )
-    const formatDate = createdDate => {
-      const date = new Date(createdDate)
-
-      return date.toLocaleString()
-    }
-
-    const editAssignTopic = async (topic, user) => {
-      const param = { ...topic }
-      param.createBy = userID.value
-      param.assignTo = user.id
-
-      await store.dispatch(`${MODULE_NAME}/editTopic`, param)
-    }
-
     return {
-      topics,
-      formatDate,
-      users,
-      editAssignTopic
+      topics
     }
   }
 }
 </script>
-
-<style lang="scss">
-.select-assign {
-  .option {
-      padding: 4px;
-      cursor: pointer;
-      &:hover {
-        background: #ccc;
-      }
-    }
-}
-</style>
 <style lang="scss" scoped>
 .logs {
   .action {
@@ -190,6 +118,5 @@ export default {
     gap: 12px;
     justify-content: center;
   }
-
 }
 </style>

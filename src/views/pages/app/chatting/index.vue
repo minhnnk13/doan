@@ -58,7 +58,7 @@ export default {
       getUserInfo().userId
     )
     const isLoading = ref(false)
-    const isLastPage = computed(() => store.getters[`${config.storeConfig.moduleName}/isLastPage`])
+    const isLastPage = computed(() => false)
     const { store } = baseStore(config)
 
     const chats = computed(() => store.state[config.storeConfig.moduleName].topics)
@@ -82,7 +82,6 @@ export default {
         topicId: id,
         createBy: userID.value
       }
-
       store.dispatch(`${config.storeConfig.moduleName}/addComment`, params)
     }
 
@@ -97,12 +96,17 @@ export default {
       store.dispatch(`${config.storeConfig.moduleName}/deleteTopic`, id)
     }
     const redirectChat = id => {
+      const index = chats.value.findIndex(chat => chat.id === id)
       const chatContainerEL = document.querySelector('#chat-container')
-      const chatEl = document.querySelector(`#chat-${id}`)
+      const chatEl = document.querySelector(`#chat-${index}`)
       activeTab.value = 'chat'
       nextTick(() => {
         chatContainerEL.scrollTo({ top: chatEl.offsetTop, behavior: 'smooth' })
       })
+    }
+
+    const showComments = (topicId) => {
+      store.dispatch(`${config.storeConfig.moduleName}/getChat`, topicId)
     }
 
     const loadMoreTopic = async () => {
@@ -124,6 +128,7 @@ export default {
       onCheck,
       deleteChat,
       redirectChat,
+      showComments,
       loadMoreTopic
 
     }

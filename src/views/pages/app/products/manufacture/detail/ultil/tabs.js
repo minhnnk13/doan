@@ -5,23 +5,23 @@ const tabs = () => {
     {
       label: 'Lịch sử nhập hàng',
       value: Enumeration.ManufactureTabs.History
+    },
+    {
+      label: 'Công nợ',
+      value: Enumeration.ManufactureTabs.Debt
+    },
+    {
+      label: 'Liên hệ',
+      value: Enumeration.ManufactureTabs.Contact
+    },
+    {
+      label: 'Địa chỉ',
+      value: Enumeration.ManufactureTabs.Address
+    },
+    {
+      label: 'Ghi chú',
+      value: Enumeration.ManufactureTabs.Note
     }
-    // {
-    //   label: 'Công nợ',
-    //   value: Enumeration.ManufactureTabs.Debt
-    // },
-    // {
-    //   label: 'Liên hệ',
-    //   value: Enumeration.ManufactureTabs.Contact
-    // },
-    // {
-    //   label: 'Địa chỉ',
-    //   value: Enumeration.ManufactureTabs.Address
-    // },
-    // {
-    //   label: 'Ghi chú',
-    //   value: Enumeration.ManufactureTabs.Note
-    // }
   ])
 
   return {

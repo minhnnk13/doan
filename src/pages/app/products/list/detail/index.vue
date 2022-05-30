@@ -142,14 +142,6 @@
           disabled
         />
       </div>
-      <div>
-        <div class="key">
-          Hình thức quản lý
-        </div>
-        <div class="value">
-          {{ product.canExpired ? "Sản phẩm lô date/HDS" : "Sản phẩm thường" }}
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -288,19 +280,12 @@ export default {
   padding: 12px;
 
   .common-info {
+    display: flex;
+    justify-content: space-between;
     width: 100%;
     margin-top: 12px;
-    margin-left: 12px;
-
     div {
       width: 100%;
-      display: flex;
-    }
-    .key {
-      font-weight: 700;
-    }
-    .value {
-      margin-left: 24px;
     }
     .el-checkbox {
       width: 40%;

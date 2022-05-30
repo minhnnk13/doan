@@ -18,7 +18,7 @@ module.exports = {
       // the source template
       template: 'public/index.html',
       // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-      title: 'Aquarium',
+      title: 'App',
       // chunks to include on this page, by default includes
       // extracted common chunks and vendor chunks.
       chunks: ['chunk-vendors', 'chunk-common', 'app']
