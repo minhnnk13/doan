@@ -14,7 +14,7 @@
           v-if="prop.row.canExpired && isWarehouseSelected(prop.row.productId)"
         >
           <el-tag
-            closable
+            :closable="importCreateStep === 0"
             @close="handleDeleteBatch(prop.row)"
           >
             {{
