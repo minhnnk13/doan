@@ -21,7 +21,7 @@
           >
 
           <el-button
-            v-if="!prop.row.canExpired"
+            v-if="prop.row.canExpired"
             type="text"
             @click="onExpired(prop.row)"
           >
@@ -33,6 +33,7 @@
     <el-table-column
       label="Tên sản phẩm"
       prop="productName"
+      width="300"
     />
     <el-table-column
       label="Số lượng"
@@ -43,7 +44,7 @@
           :only-border-bottom="true"
           v-model="prop.row.saleQuantity"
           :is-number="true"
-          :disabled="!editMode && (typeof order.status === 'number')"
+          :disabled="prop.row.canExpired || (!editMode && (typeof order.status === 'number'))"
         />
       </template>
     </el-table-column>
@@ -89,14 +90,28 @@
       </template>
     </el-table-column>
   </el-table>
+
+  <ChooseBatchPopup ref="popup" />
+  <ChooseQuantityPopup
+    ref="quantityPopup"
+    @onSaved="onSave"
+  />
 </template>
 
 <script>
 import { useStore } from 'vuex'
 import { computed, ref, reactive, watch, toRefs, nextTick, inject } from 'vue'
-import { formatPrice } from '@/common/common-fn.js'
+import CommonFn, { formatPrice } from '@/common/common-fn.js'
+import ChooseBatchPopup from './choose-batch-popup'
+import ChooseQuantityPopup from './choose-batch-popup/choose-quantity-popup.vue'
+
 const MODULE_NAME = 'order'
 export default {
+  components: {
+    ChooseBatchPopup,
+    ChooseQuantityPopup
+  },
+
   props: {
     order: {
       type: Object,
@@ -107,20 +122,44 @@ export default {
     const store = useStore()
 
     const products = computed(() => store.state[MODULE_NAME].order.products)
+    const toggleBatchQuantityPopup = computed(() => store.state[MODULE_NAME].toggleBatchQuantityPopup)
     const editMode = inject('editMode')
+    const container = document.querySelector('.content')
+    const popup = ref(null)
+    const quantityPopup = ref(null)
+
     const deleteRow = (index) => {
       products.value.splice(index, 1)
     }
 
-    const onExpired = (product) => {
-      alert(product.productName)
+    const onExpired = async (product) => {
+      CommonFn.showMask(container)
+      await store.dispatch('order/getProductBatch', product.productId).then((res) => {
+        popup.value.openPopup()
+      })
+      CommonFn.hideMask()
+    }
+
+    watch(toggleBatchQuantityPopup, () => {
+      quantityPopup.value.openPopup()
+    })
+
+    const onSave = (batch) => {
+      const productIndex = products.value.findIndex(product => product.productId === batch.productId)
+      products.value[productIndex].saleQuantity = batch.saleQuantity
+      products.value[productIndex].productBatch = batch.productBatchId
+      popup.value.closePopup()
     }
     return {
       onExpired,
       products,
       deleteRow,
       formatPrice,
-      editMode
+      editMode,
+      popup,
+      quantityPopup,
+      onSave
+
     }
   }
 }

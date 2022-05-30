@@ -13,6 +13,7 @@
             @select="handleSelect"
             :prefix-icon="searchIcon"
             :popper-append-to-body="true"
+            :disabled="!(!$route.query.exportID || editMode)"
           >
             <template #default="{ item }">
               <div class="product-p">
@@ -79,7 +80,7 @@
 
 <script>
 import EmptyProduct from './components/empty-product.vue'
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, inject } from 'vue'
 import { useStore } from 'vuex'
 import { Search } from '@element-plus/icons-vue'
 import ProductSelected from './components/product-selected.vue'
@@ -124,7 +125,7 @@ export default {
       manuafacture.value === 1
         ? product.retailPrice
         : product.wholesalePrice
-      product.saleQuantity = 1
+      product.saleQuantity = 0
       products.value.push(product)
     }
 
@@ -140,6 +141,7 @@ export default {
     const deleteRow = (index) => {
       products.value.splice(index, 1)
     }
+    const editMode = inject('editMode')
 
     return {
       products,
@@ -155,7 +157,8 @@ export default {
       textSearch,
       deleteRow,
       formatPrice,
-      order
+      order,
+      editMode
     }
   }
 }
