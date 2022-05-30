@@ -43,7 +43,7 @@ export default {
 
       const res = await authAxios.post('/product_batch', payload)
       context.dispatch('getAllWarehouses')
-      return res
+      return res.data
     },
 
     getWarehouses: async (context, params) => {
