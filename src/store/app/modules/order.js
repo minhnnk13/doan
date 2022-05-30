@@ -11,7 +11,13 @@ export default {
       amountPaid: 0
     },
 
-    orders: []
+    orders: [],
+
+    batchs: [],
+
+    batch: {},
+
+    toggleBatchQuantityPopup: false
   },
   getters: {
 
@@ -32,6 +38,18 @@ export default {
         statusPayment: false,
         amountPaid: 0
       }
+    },
+
+    setBatchs: (state, data) => {
+      state.batchs = data
+    },
+
+    setBatch: (state, batch) => {
+      state.batch = batch
+    },
+
+    setToggleBatchQuantityPopup: (state) => {
+      state.toggleBatchQuantityPopup = !state.toggleBatchQuantityPopup
     }
 
   },
@@ -44,7 +62,7 @@ export default {
       })
     },
 
-    addOrder: ({ commit }, data) => {
+    addOrder: (context, data) => {
       return new Promise((resolve, reject) => {
         if (data.exportID) {
           if (data.customerID) {
@@ -52,20 +70,25 @@ export default {
           }
           delete data.customerName
           data.products = data.products.map(product => {
-            const model = {}
+            const { productBranchId, productId, saleQuantity, productBatch } = product
+            const model = { productId, saleQuantity, price: product.saleQuantity * Number(product.unitPrice) }
+            if (productBranchId) {
+              model.productBranchId = productBranchId
+            }
 
-            model.productId = product.productId
-            model.saleQuantity = product.saleQuantity
-            model.totalPrice = product.saleQuantity * Number(product.unitPrice)
+            if (productBatch) {
+              model.productBatch = productBatch
+            }
 
             return model
           })
         }
 
-        authAxios.post('/export', data).then(res => {
-          commit('setOrder', res.data)
-
-          resolve(res.data)
+        authAxios.post('/export', data).then(res1 => {
+          const order = res1.data
+          context.dispatch('getOrder', order.exportID).then(order => {
+            resolve(order)
+          })
         })
       })
     },
@@ -78,6 +101,10 @@ export default {
           if (!order.products?.length) {
             order.products = order.listProduct
           }
+          order.products = order.products.map(product => {
+            product.unitPrice = Number(product.unitPrice) / Number(product.saleQuantity)
+            return product
+          })
           commit('setOrder', order)
           resolve(res.data)
         })
@@ -90,6 +117,18 @@ export default {
           commit('setOrders', res.data)
           resolve(res.data)
         })
+      })
+    },
+
+    getProductBatch: ({ commit }, productId) => {
+      return new Promise((resolve, reject) => {
+        authAxios
+          .get(`/product_batch/${productId}`)
+          .then((res) => {
+            commit('setBatchs', res.data)
+            resolve(res.data)
+          })
+          .catch((err) => reject(err))
       })
     }
 

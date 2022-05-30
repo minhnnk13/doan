@@ -97,9 +97,12 @@ export default {
       const newOrder = cloneDeep(order.value)
       newOrder.products = newOrder.products.map(product => {
         const model = {}
-        model.totalPrice = product.unitPrice * Number(product.saleQuantity)
+        model.price = product.unitPrice * Number(product.saleQuantity)
         model.productId = product.productId
         model.saleQuantity = Number(product.saleQuantity)
+        model.productBranchId = product.productBranchId
+        model.unitPrice = product.unitPrice
+        model.productBatch = product.productBatch
         return model
       })
 
