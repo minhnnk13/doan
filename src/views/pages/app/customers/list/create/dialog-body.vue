@@ -6,6 +6,7 @@
     <base-form
       ref="form"
       class="form"
+      :auto-focus="false"
     >
       <text-field
         label="Tên khách hàng"
