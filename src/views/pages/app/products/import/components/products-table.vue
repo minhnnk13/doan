@@ -96,6 +96,16 @@
       label="Thành tiền"
       prop="renderPrice"
     />
+    <el-table-column v-if="importCreateStep === 0">
+      <template #default="prop">
+        <el-icon
+          class="delete-icon"
+          @click="handleDeleteProductClick(prop.row)"
+        >
+          <close-bold />
+        </el-icon>
+      </template>
+    </el-table-column>
   </el-table>
   <div class="final-info-wrapper">
     <div class="final-info-container">
@@ -146,9 +156,15 @@ import { formatPrice } from '@/common/common-fn.js'
 import WarehousePopup from '@/views/pages/app/products/import/components/popup/warehouse-popup.vue'
 import WarehousePopover from '@/views/pages/app/products/import/components/popover/warehouse-popover.vue'
 import ExistedWarehousePopup from '@/views/pages/app/products/import/components/popup/existed-warehouse-popup.vue'
+import { CloseBold } from '@element-plus/icons-vue'
 
 export default {
-  components: { WarehousePopup, WarehousePopover, ExistedWarehousePopup },
+  components: {
+    WarehousePopup,
+    WarehousePopover,
+    ExistedWarehousePopup,
+    CloseBold
+  },
   setup () {
     const store = useStore()
     const products = computed(() => {
@@ -217,6 +233,10 @@ export default {
       store.commit('warehouse/deleteSelectedWarehouse', product.productId)
     }
 
+    const handleDeleteProductClick = (product) => {
+      store.commit('import/deleteProductsToImport', product.productId)
+    }
+
     watch(
       () => store.state.import.isTaxed,
       (newVal, oldVal) => {
@@ -237,7 +257,8 @@ export default {
       isWarehouseSelected,
       warehouse,
       handleDeleteBatch,
-      importCreateStep
+      importCreateStep,
+      handleDeleteProductClick
     }
   }
 }
@@ -272,5 +293,9 @@ export default {
       margin-top: 12px;
     }
   }
+}
+
+.delete-icon {
+  cursor: pointer;
 }
 </style>

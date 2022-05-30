@@ -33,6 +33,7 @@ export default {
 
     setDefaultImportProducts (state) {
       state.import = {}
+      state.productsToImport = []
     },
 
     setProduct (state, product) {
@@ -49,6 +50,14 @@ export default {
         state.productsToImport.push(importProduct)
         state.import.productsToImport = state.productsToImport
       }
+    },
+
+    deleteProductsToImport (state, productId) {
+      const foundProducts = state.productsToImport.findIndex(product => {
+        return product.productId === productId
+      })
+      state.productsToImport.splice(foundProducts, 1)
+      state.import.productsToImport = state.productsToImport
     },
 
     setDefaultProductsToImport (state) {

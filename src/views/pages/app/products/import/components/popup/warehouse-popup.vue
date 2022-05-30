@@ -96,7 +96,7 @@ export default {
       warehouse.supplierId = supplier.value.supplierId
 
       store.commit('import/setDateProduct', warehouse)
-      store.commit('import/setSelectedWarehouse', warehouse)
+      store.commit('warehouse/setSelectedWarehouse', warehouse)
       emit('calculatePrice', currentWarehouseProduct.value)
       handleClosePopupClick()
       ElMessage({
