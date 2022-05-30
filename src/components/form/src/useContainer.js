@@ -27,7 +27,6 @@ const useContainer = (autoFocus) => {
 
   onMounted(() => {
     const formElement = form.value
-
     if (autoFocus && formElement) {
       focusFirstControl(formElement)
     }

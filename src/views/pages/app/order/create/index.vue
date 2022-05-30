@@ -111,7 +111,7 @@ export default {
 
     onBeforeRouteUpdate((to, from) => {
       // only fetch the user if the id changed as maybe only the query or the hash changed
-      if (to.query.exportID !== from.query.exportID) {
+      if (to.query.exportID !== from.query.exportID && Number(to.query.exportID) !== order.value.exportID) {
         store.commit(`${MODULE_NAME}/clearData`)
         customerComp.value.customer = null
       }

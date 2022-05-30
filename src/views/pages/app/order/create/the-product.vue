@@ -124,6 +124,7 @@ export default {
       manuafacture.value === 1
         ? product.retailPrice
         : product.wholesalePrice
+      product.saleQuantity = 1
       products.value.push(product)
     }
 
