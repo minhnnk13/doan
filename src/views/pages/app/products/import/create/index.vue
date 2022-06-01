@@ -59,6 +59,10 @@ export default {
       return store.state.import.import
     })
     const warehouse = computed(() => store.state.warehouse.selectedWarehouse)
+    const warehouses = computed(() => {
+      return store.state.warehouse.selectedWarehouses
+    })
+
     store.dispatch(`${PRODUCT_MODULE}/getProductsToImport`, params.value)
     store.dispatch('supplier/getSuppliers', supplierParams)
 
@@ -85,18 +89,21 @@ export default {
 
       store.commit('import/setImportCreateStep', 1)
       // Ktra nếu là sản phẩm thường thì sẽ không gọi api warehouse
-      if (warehouse.value.productId) {
-      
-      store.dispatch('warehouse/addWarehouse', warehouse.value).then((res) => {
-        store.commit('import/setDateProduct', res)
-
-      })
-      } 
-              store
-          .dispatch('import/createImport', importProducts.value)
+      warehouses.value.map(prodBatch => {
+        store
+          .dispatch('warehouse/addWarehouse', prodBatch)
           .then((res) => {
-            if (res) { router.push({ name: 'BrowseGoods', params: { id: res.importID } }) }
+            store.commit('import/setDateProduct', res)
           })
+      })
+
+      store
+        .dispatch('import/createImport', importProducts.value)
+        .then((res) => {
+          if (res) {
+            router.push({ name: 'BrowseGoods', params: { id: res.importID } })
+          }
+        })
     }
 
     onBeforeUnmount(() => {

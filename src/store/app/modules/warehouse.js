@@ -40,7 +40,7 @@ export default {
     addWarehouse: async (context, payload) => {
       payload.createdBy = getUserInfo().userId
       payload.updatedBy = getUserInfo().userId
-      p
+
       const res = await authAxios.post('/product_batch', payload)
       context.dispatch('getAllWarehouses')
       return res.data
