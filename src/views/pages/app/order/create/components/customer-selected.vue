@@ -20,9 +20,9 @@
     </div>
     <div class="customer-selected__ship">
       Địa chỉ giao hàng
-      <el-button type="text">
+      <!-- <el-button type="text">
         Thay đổi
-      </el-button>
+      </el-button> -->
     </div>
     <div class="customer-selected__content">
       <div>
@@ -110,6 +110,7 @@ const editMode = inject('editMode')
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-top: 12px;
   }
 
   &__content {
