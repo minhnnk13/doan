@@ -85,14 +85,18 @@ export default {
 
       store.commit('import/setImportCreateStep', 1)
       // Ktra nếu là sản phẩm thường thì sẽ không gọi api warehouse
+      if (warehouse.value.productId) {
+      
       store.dispatch('warehouse/addWarehouse', warehouse.value).then((res) => {
         store.commit('import/setDateProduct', res)
-        store
+
+      })
+      } 
+              store
           .dispatch('import/createImport', importProducts.value)
           .then((res) => {
             if (res) { router.push({ name: 'BrowseGoods', params: { id: res.importID } }) }
           })
-      })
     }
 
     onBeforeUnmount(() => {
