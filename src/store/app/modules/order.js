@@ -77,7 +77,8 @@ export default {
             }
 
             if (productBatch) {
-              model.productBatchId = productBatch
+              const { productBatchId } = productBatch
+              model.productBatchId = productBatchId
             }
 
             return model

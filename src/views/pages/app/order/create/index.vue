@@ -175,9 +175,9 @@ export default {
     }
 
     const onDestroyOrder = async () => {
-      debugger
       CommonFn.showMask(container)
       await store.dispatch(`${MODULE_NAME}/deleteOrder`, order.value.exportID).then(() => {
+        ElMessage.success('Xóa đơn hàng thành công!')
         router.push({ name: 'ListOrder' })
       })
       CommonFn.hideMask()
