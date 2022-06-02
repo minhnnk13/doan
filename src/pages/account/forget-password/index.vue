@@ -5,6 +5,12 @@
       ref="container"
     >
       <div
+        class="back"
+        @click="$router.go(-1)"
+      >
+        <el-icon><Back /></el-icon>
+      </div>
+      <div
         class="title"
       >
         {{ componentActive.title }}
@@ -55,6 +61,7 @@ import { useRouter } from 'vue-router'
 
 import baseStore from '@/views/pages/base/base-store'
 import { ElMessage } from 'element-plus'
+import { Back } from '@element-plus/icons-vue'
 const MODULE_NAME = 'auth'
 
 const component = {
@@ -66,7 +73,8 @@ export default {
 
   components: {
     TheContainer,
-    CheckEmail
+    CheckEmail,
+    Back
   },
 
   setup () {
@@ -173,6 +181,27 @@ export default {
   align-items: center;
   gap: 24px;
   width: 820px;
+  position: relative;
+
+  .back {
+    position: absolute;
+    top: -8px;
+    left: 0px;
+    font-size: 24px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgb(236, 236, 236);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      transform: scale(1.1);
+      transition: all .3s;
+    }
+  }
 
   .title {
     font-size: 28px;
