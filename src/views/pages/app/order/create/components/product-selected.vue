@@ -21,9 +21,10 @@
           >
 
           <el-button
-            v-if="prop.row.canExpired"
+            v-if="prop.row.canExpired "
             type="text"
             @click="onExpired(prop.row)"
+            :disabled="!editMode && (typeof order.status === 'number')"
           >
             Chọn lô
           </el-button>
@@ -84,6 +85,7 @@
         <el-button
           type="text"
           @click.prevent="deleteRow(scope.$index)"
+          :disabled="!editMode && (typeof order.status === 'number')"
         >
           X
         </el-button>

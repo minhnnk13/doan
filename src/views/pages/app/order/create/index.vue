@@ -102,7 +102,7 @@ export default {
         model.saleQuantity = Number(product.saleQuantity)
         model.productBranchId = product.productBranchId
         model.unitPrice = product.unitPrice
-        model.productBatch = product.productBatch
+        model.productBatchId = product.productBatch
         return model
       })
 
@@ -174,6 +174,15 @@ export default {
       CommonFn.hideMask()
     }
 
+    const onDestroyOrder = async () => {
+      CommonFn.showMask(container)
+      await store.dispatch(`${MODULE_NAME}/deleteOrder`, order.value.exportID).then(() => {
+        ElMessage.success('Xóa đơn hàng thành công!')
+        router.push({ name: 'ListOrder' })
+      })
+      CommonFn.hideMask()
+    }
+
     return {
       onExit,
       onCreateOrder,
@@ -186,7 +195,8 @@ export default {
       onSaveEdit,
       onCancelEdit,
       onExportOrder,
-      onPay
+      onPay,
+      onDestroyOrder
     }
   }
 }

@@ -222,6 +222,7 @@ export default {
 
   &__avatar {
     height: 42px;
+    width: 42px;
 
     img {
       object-fit: contain;

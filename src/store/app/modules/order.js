@@ -77,7 +77,8 @@ export default {
             }
 
             if (productBatch) {
-              model.productBatch = productBatch
+              const { productBatchId } = productBatch
+              model.productBatchId = productBatchId
             }
 
             return model
@@ -116,6 +117,15 @@ export default {
         authAxios.get(`/export?pageIndex=${param.pageIndex}&pageSize=${param.pageSize}`).then(res => {
           commit('setOrders', res.data)
           resolve(res.data)
+        })
+      })
+    },
+
+    deleteOrder: ({ commit }, id) => {
+      return new Promise((resolve, reject) => {
+        authAxios.delete(`/export/${id}`).then(res => {
+          commit('clearData')
+          resolve(res)
         })
       })
     },
