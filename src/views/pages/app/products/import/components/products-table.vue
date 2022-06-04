@@ -151,7 +151,7 @@
 
 <script>
 import { useStore } from 'vuex'
-import { computed, ref, reactive, watch } from 'vue'
+import { computed, ref, reactive, watch, onBeforeUnmount } from 'vue'
 import { formatPrice } from '@/common/common-fn.js'
 import WarehousePopup from '@/views/pages/app/products/import/components/popup/warehouse-popup.vue'
 import WarehousePopover from '@/views/pages/app/products/import/components/popover/warehouse-popover.vue'
@@ -236,6 +236,10 @@ export default {
     const handleDeleteProductClick = (product) => {
       store.commit('import/deleteProductsToImport', product.productId)
     }
+
+    onBeforeUnmount(() => {
+      store.commit('warehouse/clearState')
+    })
 
     watch(
       () => store.state.import.isTaxed,
