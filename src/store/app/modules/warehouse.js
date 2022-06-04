@@ -26,6 +26,7 @@ export default {
     },
 
     deleteSelectedWarehouse (state, productId) {
+      debugger
       const index = state.selectedWarehouses.findIndex(warehouse => {
         return warehouse.productId === productId
       })
@@ -34,6 +35,12 @@ export default {
 
     setAllWarehouse (state, allWarehouse) {
       state.allWarehouse = allWarehouse
+    },
+
+    clearState (state) {
+      state.allWarehouse = []
+      state.selectedWarehouse = {}
+      state.warehouses = []
     }
   },
   actions: {
